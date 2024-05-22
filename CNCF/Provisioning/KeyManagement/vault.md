@@ -20,11 +20,11 @@ export PATH=$PATH:/opt/vault/bin
 # option1: start dev
 vault server -dev
 export VAULT_ADDR='http://127.0.0.1:8200'
-export VAULT_TOKEN="hvs.kKFtHhTfcZ43JiD1YLpDsIT1"
+export VAULT_TOKEN="xxx.xxx"
 # option2: start dev with tls
 vault server -dev-tls
 export VAULT_ADDR='https://127.0.0.1:8200'
-export VAULT_TOKEN="hvs.kKFtHhTfcZ43JiD1YLpDsIT1"
+export VAULT_TOKEN="xxx.xxx"
 export VAULT_CACERT='/tmp/vault-tls3372431693/vault-ca.pem'
 # option3: start with config file
 cat > /opt/vault/config.hcl << "EOF"
@@ -49,7 +49,7 @@ vault operator init
 vault operator unseal
 vault operator unseal
 vault operator unseal
-export VAULT_TOKEN="hvs.5Jf4Y4AVOKA1bGCKrsDRVeSq"
+export VAULT_TOKEN="xxx.xxx"
 
 # verify 
 vault status
@@ -82,14 +82,14 @@ vault secrets enable -path=aws aws
 
 # Authentication
 vault token create
-export VAULT_TOKEN="hvs.EaUojM0AOq1g8lG68VqwbVsv"
+export VAULT_TOKEN="xxx.xxxx"
 vault token login 
 vault token revoke $VAULT_TOKEN
 # github organization
 vault auth enable github
 vault write auth/github/config organization=andyinp-org
 vault write auth/github/map/teams/andyinp value=default,applications
-vault auth list VAULT_TOKEN="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"
+vault auth list VAULT_TOKEN="xxx_xxx_xxx"
 
 # Policies
 vault policy list
