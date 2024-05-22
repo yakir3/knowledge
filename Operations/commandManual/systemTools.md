@@ -6,6 +6,9 @@ apt install openssl
 # get crt info
 openssl x509 -dates -text -noout -in xxx.crt
 
+# email test
+openssl s_client -connect mail.example.com:25
+openssl s_client -starttls smtp -connect mail.example.com:25
 ```
 
 ##### sar

@@ -6,32 +6,50 @@
 package main
 
 import (
-    "fmt"
-    //"log"
+    //"fmt"
     "encoding/json"
+    "log"
     "io"
     "net/http"
     "os"
     //"reflect"
 )
 
-
 type RealipData struct {
     Cloudflare []string `json:"cloudflare"`
     Cloudfront []string `json:"cloudfront"`
 }
 
+// log config
+var (
+    dlogger   *log.Logger
+    //Info      *log.Logger
+    //Error     *log.Logger
+    logFile   *os.File
+)
+func init() {
+    logFile, err := os.OpenFile("./all.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+    if err != nil {
+        panic("Error creating or open log file")
+    }
+    dlogger = log.New(os.Stdout, "Log: ", log.Ldate|log.Ltime|log.Lshortfile)
+    //dlogger = log.New(logFile, "Log: ", log.Ldate|log.Ltime|log.Lshortfile)
+    //dlogger = log.New(io.MultiWriter(os.Stdout, logFile), "Log: ", log.Ldate|log.Ltime|log.Lshortfile)
+}
 
 //func getCloudflare() {
 //
 //}
 
 func getCloudfront() {
+    dlogger.Println(logFile)
+    defer logFile.Close()
+
     // 定义 cloudfront 接口地址以及发起 http 请求
     cfURL := "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
     resp, err := http.Get(cfURL)
     if err != nil {
-        fmt.Println("Error request to cloudfront api:", err)
+        dlogger.Fatal("Error request to cloudfront api:", err)
         return
     }
     defer resp.Body.Close()
@@ -39,28 +57,28 @@ func getCloudfront() {
     // 解析 response body 反序列化为 map 对象,合并 IP 数组为 cloudfront 切片 newSlice
     body, err := io.ReadAll(resp.Body)
     if err != nil {
-        fmt.Println("Error reading response:", err)
+        dlogger.Fatal("Error reading response:", err)
         return
     }
-    var cfRespData = make(map[string][]string)
-    if err := json.Unmarshal(body, &cfRespData); err != nil {
-        fmt.Println("Error decoding JSON:", err)
+    var respData = make(map[string][]string)
+    if err := json.Unmarshal(body, &respData); err != nil {
+        dlogger.Fatal("Error decoding JSON:", err)
         return
     }
     var newSlice = make([]string, 0)
-    newSlice = append(append(newSlice, cfRespData["CLOUDFRONT_GLOBAL_IP_LIST"]...), cfRespData["CLOUDFRONT_REGIONAL_EDGE_IP_LIST"]...)
+    newSlice = append(append(newSlice, respData["CLOUDFRONT_GLOBAL_IP_LIST"]...), respData["CLOUDFRONT_REGIONAL_EDGE_IP_LIST"]...)
 
     // 已读写方式打开 realip.json 文件
     file, err := os.OpenFile("./realip.json", os.O_CREATE|os.O_RDWR, 0644)
     if err != nil {
-        fmt.Println("Error creating or open file:", err)
+        dlogger.Println("Error creating or open file:", err)
         return
     }
     defer file.Close()
     oldContent := make([]byte, 10240)
     n, err := file.Read(oldContent)
     if err != nil {
-        fmt.Println("Error reading file:", err)
+        dlogger.Println("Error reading file:", err)
         return
     }
     oldContentStr := string(oldContent[:n])
@@ -68,18 +86,18 @@ func getCloudfront() {
     // 初始化 RealipData 结构体, 将文件内容序列化为结构体数据类型, 获取 cloudfront 数据切片 oldSlice
     var realipData RealipData
     if err := json.Unmarshal([]byte(oldContentStr), &realipData); err != nil {
-        fmt.Println("Error decoding JSON:", err)
+        dlogger.Println("Error decoding JSON:", err)
         return
     }
-    //fmt.Println(realipData)
+    //dlogger.Println(realipData)
     oldSlice := realipData.Cloudfront
 
     // 对比 oldSlice 与 newSlice 切片是否有差值. 有差值: 发出通知邮件, 邮件发送成功更新接口内容到文件中
     var diff = diffSlice(oldSlice, newSlice)
     if len(diff) == 0 {
-        fmt.Println("AWS Cloudfront RealIP 无更新.")
+        dlogger.Println("AWS Cloudfront RealIP 无更新.")
     } else {
-        fmt.Println(len(diff))
+        dlogger.Println(len(diff))
         // 发送通知邮件
         // sendEmail()
         //log.Fatal(err)
@@ -88,21 +106,24 @@ func getCloudfront() {
         realipData.Cloudfront = newSlice
         realipDataByte, err := json.Marshal(realipData)
         if err != nil {
-            fmt.Println("Error encoding JSON:", err)
-            return
+            dlogger.Println("Error encoding JSON:", err)
         }
 
+        dlogger.Println(realipDataByte)
+
         // 结构体数据 realipData 回写文件 real.json
-        //// option1: io.WriteString
+        /*
+        // option1: io.WriteString
         //if _, err := io.WriteString(file, string(realipDataByte)); err != nil {
-        //    fmt.Println("Error writing file:", err)
+        //    dlogger.Println("Error writing file:", err)
         //}
+        /*
         // option2: file.WriteAt
-        _, err = file.WriteAt(realipDataByte, 0)
-        if err != nil {
-            fmt.Println("Error writing file:", err)
-            return
-        }
+        //_, err = file.WriteAt(realipDataByte, 0)
+        //if err != nil {
+        //    dlogger.Println("Error writing file:", err)
+        //    return
+        //}
     }
 
     return
