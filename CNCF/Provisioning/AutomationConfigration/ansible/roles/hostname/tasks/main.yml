@@ -1,0 +1,4 @@
+---
+# tasks file for hostname
+- import_tasks: Debian.yml
+  when: ansible_os_family == 'Debian'

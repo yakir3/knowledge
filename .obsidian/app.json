@@ -1,0 +1,10 @@
+{
+  "promptDelete": false,
+  "showLineNumber": true,
+  "vimMode": true,
+  "legacyEditor": false,
+  "attachmentFolderPath": "./attachements",
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": true,
+  "newFileLocation": "current"
+}

@@ -1,0 +1,17 @@
+---
+# tasks file for logrotate
+- name: Set Logrotate For tomcat And nginx
+  block:
+    - name: Stat cron  
+      stat: path=/opt/cron/
+      register: logrotate_cron_stat
+    
+    - name: Create logrotate cron Dir
+      file: path=/opt/cron/  state=directory
+      when: not logrotate_cron_stat.stat.exists
+
+    - name: Upload nginx Cron Confs 
+      copy: src=nginx  dest=/opt/cron/nginx owner=root group=root mode=644
+
+    - name:  Add logrotate nginx  To Cronjob
+      cron: name='logroate nginx' minute='59' hour='23' job='/usr/sbin/logrotate -f /opt/cron/nginx >> /opt/cron/cron.log 2>&1'

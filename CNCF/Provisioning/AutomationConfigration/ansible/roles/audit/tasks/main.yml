@@ -1,0 +1,34 @@
+---
+# tasks file for audit
+- name: Log Command History To Message
+  blockinfile:
+    path: /etc/profile
+    block: |
+      function log2syslog
+      {
+      export HISTTIMEFORMAT="[%Y-%m-%d %H:%M:%S] [`who am i 2>/dev/null| awk '{print $NF}'|sed -e 's/[()]//g'`] "
+      export PROMPT_COMMAND='\
+        if [ -z "$OLD_PWD" ];then
+          export OLD_PWD=$(pwd);
+        fi;
+        if [ ! -z "$LAST_CMD" ] && [ "$(history 1)" != "$LAST_CMD" ]; then
+          logger  `whoami`_shell_cmd "[$OLD_PWD]$(history 1)";
+          logger -p local1.notice -t bash -i -- $USER :"$(history 1)";
+        fi ;
+        export LAST_CMD="$(history 1)";
+        export OLD_PWD=$(pwd);'
+      }
+      trap log2syslog DEBUG
+
+- name: Set History Size
+  lineinfile:
+    dest: /etc/profile
+    line: HISTSIZE=100000
+    state: present
+
+- name: Set Alias For Centos 7
+  blockinfile:
+    path: /etc/profile
+    block: |
+      alias grep='grep --color=auto'
+  when: ansible_distribution_major_version  == "7"

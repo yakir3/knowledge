@@ -1,0 +1,5 @@
+---
+# tasks file for dns
+- name: Set Nameserver
+  copy: src={{env}}_resolv.conf dest=/etc/resolv.conf  mode=644 owner=root group=root
+  when: hostname_prefix == 'ubuntu20'

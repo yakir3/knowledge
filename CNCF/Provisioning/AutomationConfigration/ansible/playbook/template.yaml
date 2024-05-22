@@ -1,0 +1,26 @@
+- hosts: template
+  remote_user: root
+  vars_prompt:
+    - name: "root_password"
+      prompt: "请输入新的root密码"
+      private: yes
+      encrypt: "md5_crypt"
+      confirm: yes
+      salt_size: 7
+  vars:
+    - ansible_connection: smart
+    - ansible_port: 22 
+    - ansible_user: root 
+    - ansible_ssh_pass: qwe123
+    - ansible_python_interpreter: "/usr/bin/python3"
+  roles:
+    - { role: addbanner }
+    - { role: hostname }
+    - { role: hosts }
+    - { role: adduser, env: '{{ hostname_prefix }}' }
+    - { role: chgRootPass, password: '{{ root_password }}' }
+    - { role: sshd }
+    - { role: ulimit }
+    - { role: sysctl }
+    - { role: audit }
+    - {role: template, when: "ansible_os_family == 'RedHat'", key1: v1, key2: v2}

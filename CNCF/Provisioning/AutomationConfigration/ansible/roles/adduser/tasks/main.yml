@@ -1,0 +1,38 @@
+---
+# tasks file for adduser
+- name: Add User myuser 
+  block:
+    - name: Add Group myuser
+      group: name=myuser state=present
+
+    - name: Add User myuser
+      user: name=myuser group=myuser  shell=/bin/bash
+
+    - name: Create User myuser .ssh dir
+      args:
+        warn: false
+      shell: mkdir -p /home/myuser/.ssh && chown -R myuser.myuser /home/myuser/.ssh
+
+    - name: Add Authorized Key For myuser
+      authorized_key:
+        user: myuser
+        state: present
+        key: "{{ lookup('file', '/etc/ansible/keys/node.pub') }}"
+      when: env == "ali" or env == "tencent"
+
+    - name: Set OPT Permission
+      file: path=/opt/ owner=myuser group=myuser mode=0755 recurse=yes state=directory
+
+    - name: Set WEB Permission
+      file: path=/web/ owner=myuser group=myuser mode=0755 recurse=yes state=directory
+
+    - name: add source /etc/profile to /root/.bashrc
+      blockinfile:
+        path: /root/.bashrc
+        block: |
+          source /etc/profile
+    - name: add source /etc/profile to /home/myuser/.bashrc
+      blockinfile:
+        path: /home/myuser/.bashrc
+        block: |
+          source /etc/profile

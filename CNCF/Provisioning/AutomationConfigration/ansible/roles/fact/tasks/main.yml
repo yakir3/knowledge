@@ -1,0 +1,8 @@
+---
+# tasks file for fact
+- name: create directory
+  file: path={{ dir }} state=directory recurse=yes
+  when: ansible_hostname == 'node1'
+
+- name: upload factfile
+  template: src=forbidden.fact.j2 dest={{ dir }}/{{ factfile }} 

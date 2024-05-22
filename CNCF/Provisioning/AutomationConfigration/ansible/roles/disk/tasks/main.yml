@@ -1,0 +1,17 @@
+---
+# tasks file for disk
+- name: create pv 
+  shell: pvcreate /dev/sdb
+  ignore_errors: true
+
+- name: Create a logical volume with disks /dev/sdb
+  shell: vgextend ubuntu-vg /dev/sdb
+  ignore_errors: true
+
+- name: Extend the logical volume to consume all remaining space in the volume group
+  shell: lvextend -l +100%free /dev/ubuntu-vg/ubuntu-lv
+  ignore_errors: true
+
+- name: Extend the logical volume to take all remaining space of the PVs and resize the underlying filesystem
+  shell: resize2fs /dev/ubuntu-vg/ubuntu-lv
+  ignore_errors: true

@@ -1,0 +1,4 @@
+---
+# tasks file for chgRootPass
+- name: Change root Password
+  user: name=root update_password=always password={{ password }}

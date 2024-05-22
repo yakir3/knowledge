@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    - { role: fact, dir: /opt/ansible/facts.d, factfile: forbidden.fact, one: aaa, two: bbb}

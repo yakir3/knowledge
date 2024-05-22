@@ -1,0 +1,53 @@
+---
+# tasks file for systemd
+- name: Set Systemd Configs 
+  block:
+    - name: Set Journald Persistent Log To Disk
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: Storage=persistent 
+        state: present
+    
+    - name: Stop Forward Info Message To Login User
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: ForwardToWall=no
+        state: present
+
+    - name: Compress Log
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: Compress=yes
+        state: present
+
+    - name: Log Rotate Period
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: MaxFileSec=day
+        state: present
+
+    - name: Log Keep Period
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: MaxRetentionSec=month
+        state: present
+
+    - name: Log By uid
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: SplitMode=uid
+        state: present
+
+    - name: Forward To Rsyslog
+      lineinfile: 
+        dest: /etc/systemd/journald.conf
+        line: ForwardToSyslog=yes
+        state: present
+
+    - name: reload systemd
+      service: name=systemd-journald  state=restarted enabled=yes
+
+  when: ansible_distribution_major_version == "8"
+
+- import_tasks: debian.yml
+  when: ansible_os_family == 'Debian'
