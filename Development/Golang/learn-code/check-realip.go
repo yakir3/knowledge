@@ -6,7 +6,7 @@
 package main
 
 import (
-    //"fmt"
+    "bytes"
     "encoding/json"
     "log"
     "io"
@@ -25,13 +25,13 @@ var (
     dlogger   *log.Logger
     //Info      *log.Logger
     //Error     *log.Logger
-    logFile   *os.File
+    //logFile   *os.File
 )
 func init() {
-    logFile, err := os.OpenFile("./all.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-    if err != nil {
-        panic("Error creating or open log file")
-    }
+    //logFile, err := os.OpenFile("./all.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+    //if err != nil {
+    //    panic("Error creating or open log file")
+    //}
     dlogger = log.New(os.Stdout, "Log: ", log.Ldate|log.Ltime|log.Lshortfile)
     //dlogger = log.New(logFile, "Log: ", log.Ldate|log.Ltime|log.Lshortfile)
     //dlogger = log.New(io.MultiWriter(os.Stdout, logFile), "Log: ", log.Ldate|log.Ltime|log.Lshortfile)
@@ -42,8 +42,7 @@ func init() {
 //}
 
 func getCloudfront() {
-    dlogger.Println(logFile)
-    defer logFile.Close()
+    //defer logFile.Close()
 
     // 定义 cloudfront 接口地址以及发起 http 请求
     cfURL := "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
@@ -100,7 +99,6 @@ func getCloudfront() {
         dlogger.Println(len(diff))
         // 发送通知邮件
         // sendEmail()
-        //log.Fatal(err)
 
         // 新切片数据 newSlice 写回 RealipData 结构体
         realipData.Cloudfront = newSlice
@@ -109,15 +107,11 @@ func getCloudfront() {
             dlogger.Println("Error encoding JSON:", err)
         }
 
-        dlogger.Println(realipDataByte)
-
         // 结构体数据 realipData 回写文件 real.json
-        /*
-        // option1: io.WriteString
-        //if _, err := io.WriteString(file, string(realipDataByte)); err != nil {
+        // option1: io
+        //if _, err := io.Copy(file, bytes.NewReader(realipDataByte)); err != nil {
         //    dlogger.Println("Error writing file:", err)
         //}
-        /*
         // option2: file.WriteAt
         //_, err = file.WriteAt(realipDataByte, 0)
         //if err != nil {
