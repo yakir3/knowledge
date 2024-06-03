@@ -24,8 +24,10 @@ venv.bak/
 .AppleDouble
 .LSOverride
 
+
 # Yakir
 tmp/
 .obsidian/workspace.json
 Development/**/scripts/*.json
 Development/**/scripts/*.log
+Development/Node.js/node_modules/
