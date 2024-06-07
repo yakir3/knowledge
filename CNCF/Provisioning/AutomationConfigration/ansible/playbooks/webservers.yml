@@ -1,0 +1,6 @@
+# ansible-playbook site.yml --limit webservers
+# ansible-playbook webservers.yml
+- hosts: webservers
+  roles:
+    - common
+    - webtier

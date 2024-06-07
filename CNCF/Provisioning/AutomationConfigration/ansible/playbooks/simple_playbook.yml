@@ -1,0 +1,97 @@
+---
+# common
+# ansible-playbook playbooks/simple_playbook.yml
+- name: Simple Test Playbook
+  hosts: test
+  hosts: "{{ init_host }}"
+  # become: true
+  # become_user: root
+  # ignore_errors: yes
+  gather_facts: yes
+  vars:
+    - ansible_connection: smart
+    - ansible_port: 22
+    - ansible_user: root
+    - ansible_ssh_pass: qwe123
+  tasks:
+    - name: Ansible buildin ping
+      ansible.builtin.ping:
+
+    - name: Debug when group_var
+      debug:
+        #msg: "debug test"
+        var: k1
+      # get host_vars or group_vars
+      #when: template_host_var == "yes"
+      when: template_group_var == "yes"
+
+    - name: import tasks when syntax
+      import_tasks: Debian.yml
+      when: ansible_os_family == "Debian"
+    - name: include tasks with loop syntax
+      include_tasks: "{{item}}.yaml"
+      loop:
+        - i1
+        - i2
+
+    - name: system fact
+      debug: msg={{ ansible_facts["default_ipv4"]["address"] }}
+    - name: custom fact
+      debug:
+        var: ansible_local.forbidden.forbid
+
+  # roles setting
+  roles:
+    - role: redis
+      vars:
+        config: redis.conf
+        port: 6379
+    # custom fact data
+    - role: fact 
+      dir: /opt/ansible/facts.d/
+      factfile: forbidden.fact
+      one: aaa 
+      two: bbb
+
+# use block
+# ansible-playbook playbooks/simple_playbook.yml
+- name: Attempt and graceful roll back demo
+  hosts: test
+  tasks:
+    - block:
+        - debug:
+            msg: 'I execute normally'
+        - name: i force a failure
+          command: /bin/false
+        - debug:
+            msg: 'I never execute, due to the above task failing, :-('
+      rescue:
+        - debug:
+            msg: 'I caught an error'
+        - name: i force a failure in middle of recovery! >:-)
+          command: /bin/false
+        - debug:
+            msg: 'I also never execute :-('
+      always:
+        - debug:
+            msg: "This always executes"
+  handlers:
+     - name: run me even after an error
+       debug:
+         msg: 'This handler runs even on error'
+
+# use ansible-vault
+# ansible-playbook playbooks/simple_playbook.yml --ask-vault-pass
+- name: Attempt and graceful roll back demo
+  hosts: test
+  vars:
+    root_password: !vault |
+              $ANSIBLE_VAULT;1.1;AES256
+              31633966303334346438316331323761343062643963343661356630333461616135656563653464
+              3437376461316135333731393763303337306239353564350a373164343866386463623032346631
+              32633664656634326565396661656437656161346363373330646261343035656536373963366537
+              3139303766633766330a316332666362623331303238343030393663396130326435613931303432
+              3333
+  tasks:
+    - name: debug
+      debug: msg={{ root_password }}

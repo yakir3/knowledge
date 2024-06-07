@@ -1,12 +1,14 @@
 ---
-#####Ubuntu 20 系统初始化######
-#用法 : ansible-playbook ubuntu20_init.yml -i 1.1.1.1,2.2.2.2,
-#用法 : 修改 /etc/ansible/hosts [ubuntu20]中的主机列表  ansible-playbook ubuntu20_init.yml
-#- hosts: 1.1.1.1
-- hosts: ubuntu22
-  remote_user: root
-  #become: yes
-  #become_method: su
+# Usage:
+# Group hosts
+#   ansible-playbook -i inventories/initial.hosts initial playbooks/initial.yml
+# Single host or multiple hosts
+#   ansible-playbook -i inventories/initial.hosts 10.0.10.12, playbooks/initial.yml
+#   ansible-playbook -i inventories/initial.hosts 10.0.10.12,10.0.10.13, playbooks/initial.yml
+
+#   ansible-playbook -i inventories/initial.hosts -e "init_hosts=10.0.10.12,10.0.10.13" playbooks/initial.yml
+#- hosts: "{{ init_host }}"
+- hosts: initial
   vars_prompt:
     - name: "root_password"
       prompt: "请输入新的root密码"
