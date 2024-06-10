@@ -9,16 +9,16 @@ apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev l
 # build 
 ./configure --prefix=/usr/local/python3_11_1 --enable-loadable-sqlite-extensions --enable-shared --enable-optimizations
 # 常用的编译参数
---enable-shared: 开启动态链接库支持，允许其他程序链接 Python 库
---enable-optimizations: 开启编译优化
---enable-ipv6: 开启 IPv6 支持
---enable-loadable-sqlite-extensions: 允许动态加载 SQLite 扩展
---with-system-expat: 使用系统的 expat 库
---with-system-ffi: 使用系统的 ffi 库
---with-openssl: 指定 OpenSSL 库的路径
---with-zlib=: 指定 zlib 库的路径
---with-bz2=: 指定 bzip2 库的路径
---with-tcltk=: 指定 Tcl/Tk 库的路径
+--enable-shared                         # 开启动态链接库支持，允许其他程序链接 Python 库
+--enable-optimizations                  # 开启编译优化
+--enable-ipv6                           # 开启 IPv6 支持
+--enable-loadable-sqlite-extensions     # 允许动态加载 SQLite 扩展
+--with-system-expat                     # 使用系统的 expat 库
+--with-system-ffi                       # 使用系统的 ffi 库
+--with-openssl=/usr/local/openssl1.11u  # 指定 OpenSSL 库的路径
+--with-zlib=/usr/local/zlib             # 指定 zlib 库的路径
+--with-bz2=/usr/local/bz2               # 指定 bzip2 库的路径
+--with-tcltk=/usr/local/tcltk           # 指定 Tcl/Tk 库的路径
 
 # install
 make && make install
