@@ -24,14 +24,22 @@ git mv
 git rm 
 
 
+# 保存认证信息
+git config credential.helper 'cache --timeout=3600' [--global]
+git config credential.helper store [--global]
+git config user.name yakir
+git config user.email yakir@gmail.com
+
+
 # 关联github远程仓库
-git remote add origin git@github.com:yakir3/testgit 
+git remote add origin https://github.com/username/reponame.git 
+git remote -v 
+
 # 推送到远程仓库
 git push -u origin main
-# 拉取远程分支合并到本地
 git pull main
 # 查看所有远程库信息
-git remote -v 
+
 
 
 # 设置别名

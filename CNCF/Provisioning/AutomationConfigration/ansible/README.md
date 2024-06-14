@@ -75,14 +75,16 @@ inventories/prod.host
 ##### [[automation#ansible|Common]]
 + ad-hoc(modules)
 + vars && fact && template
++ ansible-console
++ ansible-doc
 + ansible-galaxy
++ ansible-lint
 + ansible-playbook
 + ansible-vault
 
 ##### Plugins && api
 ```shell
 ```
-
 
 
 

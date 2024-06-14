@@ -175,19 +175,48 @@ make
 ##### download helm charts
 [[cc-helm|helm使用]]
 ```shell
-# 创建中间件 chart 包目录
-mkdir /opt/helm-charts/middleware
-cd /opt/helm-charts/middleware
-
-# 添加 helm 仓库，下载 kafka chart 包
+# add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update
-# 一主多从模式
-helm pull bitnami/redis --untar
-# 集群模式
-helm pull bitnami/redis-cluster  --untar
-cd redis-cluster
 
+# get charts package
+# single mode
+helm fetch bitnami/redis --untar
+# cluster mode
+helm fetch bitnami/redis-cluster  --untar
+
+# configure and run
+vim values.yaml
+global:
+  storageClass: "xxx"
+  redis:
+    password: "xxx"
+# single mode config
+architecture: standalone
+master:
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+    - CONFIG
+    - SHUTDOWN
+    - KEYS
+# cluster mode config
+cluster:
+  nodes: 3
+  replicas: 0
+vim templates/configmap.yaml
+data:
+  redis-default.conf: |-
+    rename-command FLUSHALL ""
+    rename-command FLUSHDB  ""
+    rename-command CONFIG   ""
+    rename-command SHUTDOWN ""
+    rename-command KEYS     ""
+...
+
+# install
+helm -n middleware install redis .
+helm -n middleware install redis-cluster .
 ```
 
 

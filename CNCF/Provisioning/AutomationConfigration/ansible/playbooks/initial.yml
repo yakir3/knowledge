@@ -1,13 +1,20 @@
 ---
-# Usage:
-# Group hosts
+# Option1: include
+# Usage: 
+#   ansible-playbook -i inventories/initial.hosts initial playbooks/initial.yml --limit webservers.yml
 #   ansible-playbook -i inventories/initial.hosts initial playbooks/initial.yml
-# Single host or multiple hosts
-#   ansible-playbook -i inventories/initial.hosts 10.0.10.12, playbooks/initial.yml
-#   ansible-playbook -i inventories/initial.hosts 10.0.10.12,10.0.10.13, playbooks/initial.yml
+# - include: webservers.yml
+# - include: dbservers.yml
 
-#   ansible-playbook -i inventories/initial.hosts -e "init_hosts=10.0.10.12,10.0.10.13" playbooks/initial.yml
-#- hosts: "{{ init_host }}"
+# Option2: roles
+# Usage:
+#   Group hosts
+#     ansible-playbook -i inventories/initial.hosts initial playbooks/initial.yml
+#   Single host or multiple hosts
+#     ansible-playbook -i inventories/initial.hosts 10.0.10.12, playbooks/initial.yml
+#     ansible-playbook -i inventories/initial.hosts 10.0.10.12,10.0.10.13, playbooks/initial.yml
+#     ansible-playbook -i inventories/initial.hosts -e "init_hosts=10.0.10.12,10.0.10.13" playbooks/initial.yml
+#- hosts: "{{ init_hosts }}"
 - hosts: initial
   vars_prompt:
     - name: "root_password"

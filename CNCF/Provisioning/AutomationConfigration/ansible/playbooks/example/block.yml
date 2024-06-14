@@ -1,0 +1,26 @@
+---
+# ansible-playbook playbooks/example/block.yml
+- name: Attempt and graceful roll back demo
+  hosts: test
+  tasks:
+    - block:
+        - debug:
+            msg: 'I execute normally'
+        - name: i force a failure
+          command: /bin/false
+        - debug:
+            msg: 'I never execute, due to the above task failing, :-('
+      rescue:
+        - debug:
+            msg: 'I caught an error'
+        - name: i force a failure in middle of recovery! >:-)
+          command: /bin/false
+        - debug:
+            msg: 'I also never execute :-('
+      always:
+        - debug:
+            msg: "This always executes"
+  handlers:
+     - name: run me even after an error
+       debug:
+         msg: 'This handler runs even on error'

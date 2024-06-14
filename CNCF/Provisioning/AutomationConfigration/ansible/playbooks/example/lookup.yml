@@ -1,0 +1,15 @@
+---
+# ansible-playbook playbooks/example/lookup.yml
+- name: Test lookup plugin
+  hosts: test
+  # file
+  vars:
+     contents: "{{ lookup('file', '/tmp/foo.txt') }}"
+  tasks:
+    - debug: msg="the value of foo.txt is {{ contents }}"
+    #- debug:  msg="The TXT record for example.org. is {{ lookup('dig',  'example.org./TXT') }}"
+  # env
+  #vars:
+  #  local_home: "{{ lookup('env', 'HOME') }}"
+  #tasks:
+  #  - debug: var=local_home

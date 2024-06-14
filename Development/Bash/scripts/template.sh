@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# help info
-### template.sh -— call xxx command to do something
+# Help info
+### Script function description
 ###
 ### Usage:
+###   ./template.sh [command]
 ###   ./template.sh <arg1> <arg2> [option1]
 ###
 ### Options:
@@ -14,10 +15,13 @@
 ### Examples:
 ###   # Show this message
 ###   ./template.sh -h
+###
 ###   # Do event 1
 ###   ./template.sh aaa bbb
+###
 ###   # Do event 2
 ###   ./template.sh xxx yyy
+###
 ###   # Do event 3
 ###   ./template.sh arg1 arg2 option1
 function help_info() {

@@ -216,6 +216,7 @@ offsetsTopicReplicationFactor: 3
 transactionStateLogReplicationFactor: 3
 transactionStateLogMinIsr: 2
 numPartitions: 3
+replicaCount: 3
 ...
 
 # install

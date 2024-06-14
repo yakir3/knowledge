@@ -233,6 +233,15 @@ ansible-galaxy install geerlingguy.redis
 ansible-galaxy remove geerlingguy.redis
 ```
 
+#### ansible-lint
+```shell
+# install
+pip install ansible-lint
+
+# use
+ansible-lint playbooks/simple_playbook.yml
+```
+
 #### ansible-playbook
 ```shell
 # execute example playbook
@@ -309,6 +318,10 @@ ansible-playbook -i inventories/initial.hosts playbooks/initial.yml -e "init_hos
 
 # debuger
 
+
+# step task
+ansible-playbook playbooks/simple_playbook.yml --start-at-task="install packages"
+ansible-playbook playbooks/simple_playbook.yml --step
 
 
 ```
