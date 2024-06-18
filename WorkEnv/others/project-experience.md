@@ -220,6 +220,20 @@ nfs-subdir-external-provisioner
 npm: hosted-repo, proxy-repo, group-repo
 maven
 
+##### jiracdflow
+xxx
+
+##### ansible
+system init
+deploy middleware
+
+#### Platform
+##### Alibaba Cloud
++ CDN
+
+##### Huawei Cloud
++ CDN
++ Live
 
 
 >1. [乌云知识库](https://github.com/SuperKieran/WooyunDrops)

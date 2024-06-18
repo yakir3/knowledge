@@ -28,8 +28,6 @@ EOF
 . customer.env
 source customer.env
 echo $APP_NAME
-
-
 ```
 
 ### exec
@@ -110,9 +108,6 @@ EOF
 exec -c printenv
 # exec with find command
 find /tmp/ -name "test.log" -exec chmod +x '{}' \;
-
-
-
 ```
 
 ### function 
@@ -141,7 +136,6 @@ function test() (
     my_key=my_value
     echo $my_key
 )
-
 ```
 
 ### set 
@@ -179,12 +173,9 @@ set -o nounset
 # display parameters after executing command
 set -x
 set -o xtrace
-
-
-
 ```
 
-### print
+### printf
 ```shell
 # format 
 df -h |column -t
@@ -205,7 +196,6 @@ variable="path/to/some/file.txt"
 result="${variable##*/}"   # longest match from start, get: file.txt
 variable="path/to/some/file.txt"
 result="${variable%%/*}"   # longest match from end, get: path
-
 ```
 
 

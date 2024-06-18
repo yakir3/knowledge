@@ -1,22 +1,25 @@
-#### Deploy by Binaries
-> 官方包下载地址：http://download.redis.io/redis-stable/
+#### Introduction
+...
 
+#### Deploy by Binaries
 ##### Download and Compile
 ```shell
-# 下载源码
+# download source code
 wget https://download.redis.io/redis-stable.tar.gz
 
-# 解压编译
+# compile
 tar -xzvf redis-stable.tar.gz
 cd redis-stable
 make
 
-# 安装编译好的二进制命令到执行 prefix 目录
+# install
 make PREFIX=/usr/local/bin install
 
 ```
 
-[[sc-redis-cluster|redis常用配置]]
+##### Config
+[[sc-redis-cluster|Redis Config]]
+
 
 ##### Single Mode
 ```shell
@@ -92,7 +95,6 @@ redis-cli --cluster-replicas 0 --cluster create \
 127.0.0.1:7003
 ```
 
-
 ##### Run and Boot
 ```shell
 # redis 配置文件方式，打开配置即使用守护进程启动
@@ -131,7 +133,6 @@ systemctl start redis.service
 systemctl enable redis.service
 ```
 
-
 ##### Verify
 ```shell
 # client 端连接命令与参数
@@ -160,7 +161,6 @@ CLUSTER INFO
 
 ```
 
-
 ##### troubleshooting
 ```shell
 ../deps/jemalloc/lib/libjemalloc.a: No such file or directory
@@ -170,10 +170,19 @@ make
 
 ```
 
+#### Deploy by Container
+##### Run On Docker
+```shell
+# Standlone
+docker run --rm --name yakir-redis -e REDIS_PASSWORD=123 -p 6379:6379 -v /docker-volume/data:/data -d redis
 
-#### Deploy by Helm
-##### download helm charts
-[[cc-helm|helm使用]]
+
+# Cluster
+docker run --rm --name redis-cluster -e ALLOW_EMPTY_PASSWORD=yes -d bitnami/redis-cluster
+```
+
+##### Run by Helm
+
 ```shell
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -217,70 +226,15 @@ data:
 # install
 helm -n middleware install redis .
 helm -n middleware install redis-cluster .
-```
 
-
-##### deploy redis-cluster
-```shell
-# Chart.yaml 配置修改，视情况修改
-sed -i 's/^name: .*/name: uat-redis-xxx/' Chart.yaml
-
-
-# values.yaml 配置修改，必修改项
-vim values.yaml
-## 修改全局持久化存储类与密码
-global:
-  storageClass: nfs-client
-  redis:
-    password: redis-pwd
-## 集群相关配置
-cluster:
-  init: true
-  nodes: 6
-  replicas: 1
-
-
-## 安装
-helm -n middleware install uat-redis-cluster .
-
-```
-
-##### Verify
-```shell
-# 查看 redis 密码
+# verify
 kubectl -n middleware get secret uat-redis-cluster -o jsonpath="{.data.redis-password}" | base64 -d
-
-# kubectl -n middleware get pod
-# kubectl -n middleware get service
-NAME                                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)              AGE
-service/uat-redis-cluster-headless   ClusterIP   None            <none>        6379/TCP,16379/TCP   2m20s
-service/uat-redis-cluster            ClusterIP   10.43.148.142   <none>        6379/TCP             2m20s   
-
-
-# k8s 集群内部可通过 service 的 headless 实现集群访问
-kafka.servers = uat-redis-cluster-0.redis-cluster-headless.middleware.svc:6379,uat-redis-cluster-1.redis-cluster-headless.middleware.svc:6379,.....
-
-
-# 启动 client 容器测试
-kubectl -n middleware run redis-client --image docker.io/bitnami/redis-cluster --command -- sleep infinity
-kubectl -n middleware exec -it redis-client -- bash
-```
-
-
-#### Run On Docker
-```shell
-# Standlone
-docker run --rm --name yakir-redis -e REDIS_PASSWORD=123 -p 6379:6379 -v /docker-volume/data:/data -d redis
-
-
-# Cluster
-docker run --rm --name redis-cluster -e ALLOW_EMPTY_PASSWORD=yes -d bitnami/redis-cluster
+kubectl -n middleware get service |grep redis
 ```
 
 
 
 >Reference:
->1. [官方文档地址](https://redis.io/docs/getting-started/)
->2. [官方 github 地址](https://github.com/redis/redis)
->3. [redis 集群方案](https://segmentfault.com/a/1190000022028642)
->4. [k8s redis-cluster 部署](https://www.airplane.dev/blog/deploy-redis-cluster-on-kubernetes)
+>1. [Official Document址](https://redis.io/docs/getting-started/)
+>2. [Redis Github](https://github.com/redis/redis)
+>3. [Redis 集群方案](https://segmentfault.com/a/1190000022028642)

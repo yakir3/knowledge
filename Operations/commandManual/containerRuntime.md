@@ -26,6 +26,9 @@ docker build -t yakir/test:latest -f APP-META/Dockerfile .
 
 ##### Quick test container
 ```shell
+# busybox
+docker run --rm -it busybox sh
+
 # mysql-server
 docker run --name mysql \
   -e MYSQL_ROOT_PASSWORD=root_password \
@@ -33,6 +36,9 @@ docker run --name mysql \
   -p 3306:3306 \
   -v $(pwd)/volume-mysql/:/var/lib/mysql
   -d mysql --character-set-server=utf8mb4
+
+# redis-client
+docker run --rm --name redis-client -it docker.io/bitnami/redis-cluster bash
 
 # knowledge-base
 docker run --name mrdoc_mysql \
@@ -250,6 +256,14 @@ kubectl config set-context NAME [--cluster=cluster_nickname] [--user=user_nickna
 
 # check version
 kubectl version
+```
+
+##### Quick test container
+```shell
+# redis-client
+kubectl -n middleware run redis-client --image docker.io/bitnami/redis-cluster --command -- sleep infinity
+kubectl -n middleware exec -it redis-client -- bash
+
 ```
 
 #### helm
