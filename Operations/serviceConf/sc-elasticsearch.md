@@ -1,4 +1,4 @@
-```shell
+```bash
 # single node mode
 path.data: /opt/elasticsearch/data/
 path.logs: /opt/elasticsearch/logs/

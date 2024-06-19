@@ -1,6 +1,6 @@
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # Ubuntu Package install
 https://nginx.org/en/linux_packages.html#Ubuntu
 
@@ -57,7 +57,7 @@ cd /opt/nginx
 ##### Config and Boot
 [[sc-nginx|Nginx Config]]
 
-```shell
+```bash
 # boot 
 cat > /etc/systemd/system/nginx.service << EOF
 [Unit]
@@ -84,7 +84,7 @@ systemctl enable nginx.service
 ```
 
 ##### Verify
-```shell
+```bash
 # syntax check
 /opt/nginx/sbin/nginx -t                 
 nginx: the configuration file /opt/nginx/conf/nginx.conf syntax is ok
@@ -93,7 +93,7 @@ nginx: configuration file /opt/nginx/conf/nginx.conf test is successful
 
 
 ##### Troubleshooting
-```shell
+```bash
 # pcre zlib openssl ...
 apt install libpcre3-dev zlib1g zlib1g-dev openssl
 
@@ -152,7 +152,7 @@ cp -ar lua-resty-lrucache/lib/resty/* /usr/local/luajit2/share/luajit-2.1.0-beta
 
 #### Deploy by Helm
 >k8s 集群建议使用 ingress-nginx-controller
-```shell
+```bash
 ### for Nginx
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

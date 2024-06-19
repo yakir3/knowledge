@@ -4,13 +4,13 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 
 ```
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run by docker or docker-compose
 docker run -d --name rancher --rm \
 -p 80:80 -p 443:443 \
@@ -24,12 +24,12 @@ docker logs rancher |grep Password
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # 
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update

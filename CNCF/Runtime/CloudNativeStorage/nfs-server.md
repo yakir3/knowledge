@@ -7,7 +7,7 @@
 客户端通过获取的NFS端口来建立和服务端的NFS连接并进行数据的传输。
 
 ##### Server 部署配置
-```shell
+```bash
 # ubuntu 安装
 apt install nfs-kernel-server
 
@@ -42,7 +42,7 @@ systemctl enable nfs-kernel-server
 
 
 ##### Client 端挂载
-```shell
+```bash
 # nfs 客户端挂载
 apt install nfs-common
 mkdir /tmp/nfs_test
@@ -57,7 +57,7 @@ mount -t nfs 1.1.1.1:/a18_data /tmp/nfs_test
 
 #### 二、K8S NFS 供应插件
 ##### NFS CSI Driver
-```shell
+```bash
 # create csi driver 
 curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/install-driver.sh | bash -s master --
 
@@ -94,7 +94,7 @@ kubectl apply -f csi-nfs-client.yaml
 
 
 ##### nfs-subdir-external-provisioner
-```shell
+```bash
 # add helm repo
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm repo update
@@ -122,13 +122,13 @@ helm install nfs-subdir-external-provisioner . --namespace kube-system
 
 
 ##### nfs-ganesha-server-and-external-provisioner
-```shell
+```bash
 # https://github.com/kubernetes-sigs/nfs-ganesha-server-and-external-provisioner
 ```
 
 
 >K8S 集群 PV 重建切换
-```shell
+```bash
 # 删除原 pv 资源
 kubectl delete pv qc-nfs-pv
 

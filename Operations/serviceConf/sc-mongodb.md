@@ -1,6 +1,6 @@
 /etc/my.cnf
 /opt/mysql/sysconfig/my.cnf
-```shell
+```bash
 [client]    
 port=3306    
 socket=/opt/mysql/mysql.sock

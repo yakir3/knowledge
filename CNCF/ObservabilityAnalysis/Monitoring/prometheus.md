@@ -4,7 +4,7 @@
 
 #### Deploy On Binaries
 ##### Download and Install
-```shell
+```bash
 # download source and decompress
 wget https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz
 tar xf prometheus-2.45.0.linux-amd64.tar.gz && rm -f prometheus-2.45.0.linux-amd64.tar.gz
@@ -28,7 +28,7 @@ curl 127.0.0.1:9090/-/reload -X POST
 ##### Config and Boot
 [[sc-monitoring|Prometheus Config]]
 
-```shell
+```bash
 # boot
 cat > /etc/systemd/system/prometheus.service << "EOF"
 [Unit]
@@ -72,7 +72,7 @@ job_service:rpc_durations_seconds_count:avg_rate5m
 
 #### Deploy On Container
 ##### Run On Docker
-```shell
+```bash
 mkdir /opt/prometheus
 cat > /opt/prometheus/prometheus.yml << "EOF"
 ...
@@ -86,7 +86,7 @@ docker run --name prometheus --rm -p 9090:9090 -v /opt/prometheus/prometheus.yml
 ```
 
 ##### Run On Helm
-```shell
+```bash
 # add and update repo
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm update
@@ -135,7 +135,7 @@ helm -n monitoring install prometheus .
 
 #### AlertManager
 ##### Download and Install
-```shell
+```bash
 # baniry
 cd /opt/prometheus
 wget https://github.com/prometheus/alertmanager/releases/download/v0.25.0/alertmanager-0.25.0.linux-amd64.tar.gz
@@ -147,7 +147,7 @@ mv alertmanager-0.25.0.linux-amd64 alertmanager
 ```
 
 ##### [[sc-monitoring#Alertmanager|Alert Config]]
-```shell
+```bash
 cat > /opt/prometheus/alertmanager/alertmanager.yml << "EOF"
 ...
 EOF
@@ -160,7 +160,7 @@ cd /opt/prometheus/alertmanager/
 #### Metrics exporter
 ##### node_exporter
 Download and Install
-```shell
+```bash
 # baniry
 cd /opt/prometheus
 wget https://github.com/prometheus/blackbox_exporter/releases/download/v0.24.0/blackbox_exporter-0.24.0.linux-amd64.tar.gz
@@ -178,7 +178,7 @@ helm fetch --untar prometheus-community/prometheus-blackbox-exporter
 
 
 ##### middleware exporter
-```shell
+```bash
 ### template
 # 1.install exporter
 # 2.modify exporter config and check exporter
@@ -225,7 +225,7 @@ metadata:
 ```
 
 redis-exporter
-```shell
+```bash
 # helm values
 no need
 
@@ -253,7 +253,7 @@ no need
 ```
 
 kafka-exporter
-```shell
+```bash
 # helm values
 kafkaServer:
   - 1.1.1.1:9092
@@ -273,7 +273,7 @@ kafkaServer:
 ```
 
 rocketmq-exporter
-```shell
+```bash
 # modify config and build jar
 rocketmq:
   config:

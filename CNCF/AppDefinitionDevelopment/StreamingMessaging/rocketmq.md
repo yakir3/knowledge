@@ -4,7 +4,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # download source
 wget https://dist.apache.org/repos/dist/release/rocketmq/5.1.4/rocketmq-all-5.1.4-source-release.zip
 unzip rocketmq-all-5.1.4-source-release.zip
@@ -50,7 +50,7 @@ export PATH=$PATH:/opt/rocketmq-5.1.4/bin
 ##### Config and Boot
 ##### [[sc-kafka|RocketMQ Config]]
 
-```shell
+```bash
 # config 
 #
 
@@ -65,7 +65,7 @@ systemctl enable rocketmq.service
 ```
 
 ##### Verify
-```shell
+```bash
 # set nameserver address
 export NAMESRV_ADDR=localhost:9876
 
@@ -77,7 +77,7 @@ export NAMESRV_ADDR=localhost:9876
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # problem 1
 # 
 ```
@@ -85,7 +85,7 @@ export NAMESRV_ADDR=localhost:9876
 
 #### Deploy by Container
 ##### Run by Docker
-```shell
+```bash
 # pull image
 docker pull apache/rocketmq:5.1.4
 
@@ -99,7 +99,7 @@ docker run -it --net=host --mount source=/tmp/store,target=/home/rocketmq/store 
 ```
 
 ##### Run by Helm Operator
-```shell
+```bash
 # rocketmq operator
 # https://artifacthub.io/packages/olm/community-operators/rocketmq-operator
 

@@ -1,5 +1,5 @@
 ### Build Install
-```shell
+```bash
 # centos
 yum install -y make gcc zlib-devel bzip2-devel openssl-devel ncurses-devel libffi-devel
 
@@ -26,12 +26,12 @@ make && make install
 
 ### Pycharm
 #### active
-```shell
+```bash
 cat ideaActive/ja-netfilter-all/ja-netfilter/readme.txt
 ```
 
 #### config
-```shell
+```bash
 # Editor
 Font
 Color Scheme
@@ -55,7 +55,7 @@ Python Intergrated Tools -> Docstring format: Google
 
 ### ProjectManage
 #### pip
-```shell
+```bash
 # Install
 ...
 
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 
 #### poetry
 ##### Install
-```shell
+```bash
 # Option 1(recommend)
 # Install
 curl -sSL https://install.python-poetry.org | python -
@@ -93,7 +93,7 @@ pipx upgrade poetry
 ```
 
 ##### How to use
-```shell
+```bash
 # New project
 poetry new poetry-project
 

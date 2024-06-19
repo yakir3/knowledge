@@ -5,14 +5,14 @@
 #### Deployment
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run by docker or docker-compose
 # https://hub.docker.com/r/rook/ceph/tags
 ```
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # https://rook.io/docs/rook/v1.11/Getting-Started/quickstart/#tldr
 git clone https://github.com/rook/rook.git
 cd rook/deploy/examples
@@ -27,7 +27,7 @@ kubectl -n rook-ceph get pod,crd
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add rook https://charts.rook.io/release
 helm repo update
@@ -52,7 +52,7 @@ kubectl -n rook-ceph get pod,crd
 ```
 
 deploy storageclass and use
-```shell
+```bash
 # storageclass
 # https://github.com/rook/rook/blob/release-1.11/deploy/examples/csi/rbd/storageclass-test.yaml
 cat > storage-test.yaml << "EOF"

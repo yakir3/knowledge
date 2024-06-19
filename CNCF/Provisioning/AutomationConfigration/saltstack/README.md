@@ -4,7 +4,7 @@
 
 #### Install 
 ##### Before Install
-```shell
+```bash
 # Check your network ports
 4505  # Event Publisher/Subscriber port
 4506  # Data payloads and minion returns (file services/return data)
@@ -16,7 +16,7 @@
 ```
 
 ##### Install On Ubuntu
-```shell
+```bash
 # install repository key and create the apt sources list file
 curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg
 echo "deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main" | tee /etc/apt/sources.list.d/salt.list
@@ -31,7 +31,7 @@ apt install salt-master salt-minion [salt-api...]
 ##### Config and Boot
 [[sc-saltstack|Salt Config]]
 
-```shell
+```bash
 # boot
 cat > /lib/systemd/system/salt-master.service << "EOF"
 [Unit]
@@ -80,7 +80,7 @@ salt-pip install <package name>
 
 #### Use
 ##### Accept the minion keys
-```shell
+```bash
 # select all keys
 salt-key -L
 
@@ -100,7 +100,7 @@ salt '*' test.ping
 ```
 
 ##### match minion and groups
-```shell
+```bash
 # regular 
 salt '*' test.ping
 salt 'web0[3-7]' test.ping
@@ -137,7 +137,7 @@ salt -S '192.168.1.0/24' test.ping
 ```
 
 ##### modules && state structure
-```shell
+```bash
 # modules doc
 salt 'node1' sys.doc
 salt 'node1' sys.doc pkg[.install]
@@ -223,7 +223,7 @@ salt '*' state.sls package.nginx [test=True] [saltenv=dev]
 ```
 
 ##### grains
-```shell
+```bash
 # default cache dir
 /var/cache/salt/master/minions/node1/data.p
 
@@ -288,7 +288,7 @@ salt -G 'roles:app1' test.ping
 ```
 
 ##### pillar
-```shell
+```bash
 # pillar_roots
 tee > /srv/salt/pillar/mypillar.sls << "EOF"
 {% if grains['fqdn'] == 'node1' %}
@@ -342,7 +342,7 @@ salt '*' state.sls tmp.init
 
 #### Salt Rosters
 ##### salt-ssh
-```shell
+```bash
 # install 
 apt install salt-ssh
 pip install --upgrade salt-ssh

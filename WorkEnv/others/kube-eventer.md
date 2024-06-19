@@ -28,7 +28,7 @@
 #### 2）存储中间件部署
 ##### Kafka
 使用 helm 部署 Kafka
-```shell
+```bash
 # 添加 helm 仓库
 helm repo add bitnami https://charts.bitnami.com/bitnami
 
@@ -118,7 +118,7 @@ yakir-kafka-zookeeper-0               1/1     Running   6 (168m ago)   10d
 
 + 获取官方 YAML 资源文件进行部署
 
-```shell
+```bash
 cat > kube-eventer.yaml << "EOF"
 apiVersion: apps/v1
 kind: Deployment
@@ -389,7 +389,7 @@ CMD ["python", "get_events.py"]
 
 + 打包镜像，启动验证
 
-```shell
+```bash
 # 编译源码打包镜像步骤
 cd /opt/yakir/kube-eventer-py/ && mkdir APP-META
 rm -f APP-META/*.py && cp *.py APP-META/

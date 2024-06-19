@@ -1,6 +1,6 @@
 #### awk
 ##### 基本语法
-```shell
+```bash
 awk [POSIX or GNU style options] -f progfile [--] file 
 POSIX options:          GNU long options: (standard)
         -f progfile             --file=progfile
@@ -58,7 +58,7 @@ chmod +x demo.awk && ./demo.awk
 | FILENAME | 数组下标分隔符（默认值是34）| 
 
 ##### 函数 && 条件
-```shell
+```bash
 # 常用函数
 # tolower()：字符转为小写。
 # length()：返回字符串长度。
@@ -78,7 +78,7 @@ awk -F ':' '{if ($1 > "m") print $1; else print "---"}' /etc/passwd
 ```
 
 ##### 常用用法
-```shell
+```bash
 awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
 首先执行 BEGIN 语句块，只会执行一次。通常用于变量初始化，头行打印一些表头信息，在通过stdin读入数据前就被执行。
 每读取一行数据使用 pattern{ commands }循环处理数据。
@@ -147,19 +147,19 @@ awk '!seen[$0]++ || !/memory/' values.yaml > tmp && mv -v tmp values.yaml
 
 #### grep
 ##### 基本语法
-```shell
+```bash
 
 ```
 
 ##### 常用用法
-```shell
+```bash
 
 ```
 
 
 #### sed
 ##### 基本语法
-```shell
+```bash
 sed [OPTION]... {script-only-if-no-other-script} [input-file]...
 
 # options
@@ -215,7 +215,7 @@ sed -i_bk_xx 's/tomcat/fff/p' top.txt
 ```
 
 ##### 常用用法
-```shell
+```bash
 # file 
 tee top.txt << "EOF"
     PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND

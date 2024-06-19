@@ -1,5 +1,5 @@
 /etc/salt/master
-```shell
+```bash
 default_include: master.d/*.conf
 gather_job_timeout: 10  # salt job
 timeout: 5  # salt command and api
@@ -34,7 +34,7 @@ log_level_logfile: info
 
 
 /etc/salt/minion
-```shell
+```bash
 id: minion_hostname
 user: root
 master:

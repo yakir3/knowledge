@@ -1,6 +1,6 @@
 #### docker & podman
 ##### common command
-```shell
+```bash
 # common parameters
 -d, --detach    Run container in background and print container ID
 -e, --env stringArray   Set environment variables in container
@@ -25,7 +25,7 @@ docker build -t yakir/test:latest -f APP-META/Dockerfile .
 ```
 
 ##### Quick test container
-```shell
+```bash
 # busybox
 docker run --rm -it busybox sh
 
@@ -54,7 +54,7 @@ docker run --name mrdoc \
 
 
 #### containerd
-```shell
+```bash
 # default run by systemd
 systemctl start containerd.service
 # run by k3s
@@ -79,7 +79,7 @@ crictl images
 
 #### kubectl
 ##### Basic
-```shell
+```bash
 # create
 kubectl create secret tls my-tls --cert=./tls.crt --key=./tls.key
 kubectl create secret tls my-tls --save-config \
@@ -134,7 +134,7 @@ kubectl delete pod pod_name --force=true --grace-period=0
 
 
 ##### Deploy
-```shell
+```bash
 # rollout 
 kubectl rollout (history|pause|restart|resume|status|undo) (resource_type) (resource_name)
 
@@ -147,7 +147,7 @@ kubectl autoscale (-f x.yaml | deployment/mysql) [--min=MINPODS] --max=MAXPODS [
 
 
 ##### Cluster Management
-```shell
+```bash
 # top
 kubectl -n namespace_name top pod
 kubectl top node
@@ -164,7 +164,7 @@ kubectl taint NODE NAME KEY_1=VAL_1:TAINT_EFFECT_1 ... KEY_N=VAL_N:TAINT_EFFECT_
 
 
 ##### Troubleshooting and Debugging
-```shell
+```bash
 # describe
 kubectl describe service service_name
 
@@ -198,7 +198,7 @@ kubectl events -n namespace_name
 
 
 ##### Advanced
-```shell
+```bash
 # diff
 kubectl diff -f FILENAME [options]
 
@@ -218,7 +218,7 @@ kubectl kustomize DIR [flags] [options]
 
 
 ##### Settings
-```shell
+```bash
 # label
 kubectl label nodes Node1 node-role.kubernetes.io/control-plane=true
 
@@ -231,7 +231,7 @@ source <(kubectl completion bash)
 
 
 ##### Other
-```shell
+```bash
 # api resources and versions infomation
 kubectl api-resources
 kubectl api-versions
@@ -259,7 +259,7 @@ kubectl version
 ```
 
 ##### Quick test container
-```shell
+```bash
 # redis-client
 kubectl -n middleware run redis-client --image docker.io/bitnami/redis-cluster --command -- sleep infinity
 kubectl -n middleware exec -it redis-client -- bash
@@ -267,7 +267,7 @@ kubectl -n middleware exec -it redis-client -- bash
 ```
 
 #### helm
-```shell
+```bash
 # parameter
 -n namespace 
 --create-namespace

@@ -8,7 +8,7 @@
 
 ### 二、证书操作
 #### 1、第三方签发 SSL 证书
-```shell
+```bash
 # 生成私钥，加密参数 -des3
 openssl genrsa -out a.com.key 2048
 
@@ -26,7 +26,7 @@ openssl req -noout -text -in a.com.csr
 #### 2、自签名/自有 CA 签发证书
 
 - 使用自签名方式
-```shell
+```bash
 # 使用已有私钥和 csr 自签名
 openssl x509 -req -days 3650 -in a.com.csr -extensions v3_ca -signkey a.com.key -out a.com.crt
 # 或直接生成私钥+公钥
@@ -41,7 +41,7 @@ openssl x509 -text -noout -in a.com.crt
 ```
 
 - 使用 CA 签名
-```shell
+```bash
 # 生成 CA 公私钥
 openssl genrsa -out ca.key 2048
 openssl req -x509 -sha256 -new -nodes -key ca.key -out ca.crt -days 36500 -subj "/C=CN/ST=HK/L=HK/O=HK/OU=HK LTD/CN=a.com"
@@ -60,7 +60,7 @@ openssl x509 -noout -issuer -issuer_hash -in a.com.crt
 ```
 
 #### 3、使用 openssl 加密解密文件
-```shell
+```bash
 # 生成并验证私钥
 openssl genrsa -out yakir.key 2048
 openssl rsa -in yakir.key -text -noout
@@ -91,7 +91,7 @@ openssl smime -decrypt -in Encrypted.zip -binary -inform DEM -inkey yakir.key -o
 > - .PFX .P12 ：即 PKCS12，是二进制格式，同时包含证书和私钥，一般有密码保护。
 > - .JKS ：JAVA 的专属二进制格式，同时包含证书和私钥，一般有密码保护
 
-```shell
+```bash
 # DER/CER/CRT 转 PEM
 # 先查看证书信息，在转格式
 openssl x509 -in cert.der -inform der -text -noout openssl x509 -in cert.der -inform der -outform pem -out cert.pem
@@ -110,7 +110,7 @@ openssl pkcs12 -in cert.pkcs -out cert.pem
 ```
 
 #### 5、其它一些技巧
-```shell
+```bash
 # 移除证书中的密码
 openssl rsa -in cert.key -out nopass.key
 

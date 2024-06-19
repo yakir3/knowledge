@@ -1,18 +1,18 @@
 #### Forward Proxy
 ##### Proxychains
-```shell
+```bash
 #
 ```
 
 ##### Tinyproxy
-```shell
+```bash
 # 
 ```
 
 
 #### VPN Tunnel
 ##### v2ray
-```shell
+```bash
 # v2ray
 mkdir /etc/v2ray
 cat > /etc/v2ray/config.json << "EOF"
@@ -94,13 +94,13 @@ wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/dou
 ```
 
 ##### OVS
-```shell
+```bash
 # 
 ```
 
 ##### SSH Tunnel
 layer 2
-```shell
+```bash
 # 客户端执行
 ssh -o Tunnel=ethernet -w 6:6 root@[server_ip] 
 
@@ -116,7 +116,7 @@ arping -I br0 10.0.0.1
 ```
 
 layer 3
-```shell
+```bash
 ssh -o PermitLocalCommand=yes \
  -o LocalCommand="ip link set tun5 up && ip addr add 10.0.0.2/32 peer 10.0.0.1 dev tun5 " \
  -o TCPKeepAlive=yes \

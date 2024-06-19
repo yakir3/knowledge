@@ -1,5 +1,5 @@
 #### elasticsearch
-```shell
+```bash
 # 查看所有 restful api
 curl http://es_server:9200/_cat -u "elastic:es123"
 # Basic auth 认证头
@@ -128,7 +128,7 @@ curl -X POST 127.0.0.1:9200/_license/start_basic?acknowledge=true
 ```
 
 #### mysql
-```shell
+```bash
 # init reset password
 mysql -u root -p
 mysql -u root --skip-password
@@ -148,7 +148,7 @@ FLUSH PRIVILEGES;
 ```
 
 #### postgres
-```shell
+```bash
 # login
 psql -U user [-d database]
 
@@ -177,7 +177,7 @@ select * from pg_tables;
 ```
 
 #### redis
-```shell
+```bash
 # redis cluster 
 # pattern search key
 redis-cli -h host -a password -c --scan --pattern "mykey*"

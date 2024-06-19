@@ -1,5 +1,5 @@
 /etc/td-agent/td-agent.conf
-```shell
+```bash
 <system>
   workers 4
 </system>

@@ -1,5 +1,5 @@
 #### dd
-```shell
+```bash
 # out of CPU
 dd if=/dev/zero of=/dev/null
 
@@ -9,7 +9,7 @@ time dd if=/dev/zero of=test.file bs=1G count=2 oflag=direct
 ```
 
 ##### fdisk && parted
-```shell
+```bash
 # show info
 fdisk -l
 parted -l
@@ -17,7 +17,7 @@ parted -l
 ```
 
 #### fio
-```shell
+```bash
 # sequence read
 fio -filename=/tmp/test.file -direct=1 -iodepth 1 -thread -rw=read -ioengine=psync -bs=16k -size=2G -numjobs=10 -runtime=60 -group_reporting -name=test_r
 
@@ -34,7 +34,7 @@ fio -filename=/var/test.file -direct=1 -iodepth 1 -thread -rw=randrw -rwmixread=
 ```
 
 #### iostat
-```shell
+```bash
 # install
 apt install sysstat
 # use
@@ -59,16 +59,16 @@ iostat -dhx sda sdb 1 10
 ```
 
 #### iotop
-```shell
+```bash
 iotop -p xxx
 ```
 
 #### pidstat
-```shell
+```bash
 pidstat -d 1
 ```
 
 #### sar
-```shell
+```bash
 sar -b -p 1
 ```

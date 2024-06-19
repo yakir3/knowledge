@@ -82,7 +82,7 @@ node2 | 10.42.0.0/24
 
 ![image](https://github.com/yakir3/knowledge/assets/30774576/59264cc0-f9f7-44ca-a448-78460c8370f1)
 
-```shell
+```bash
 ## 相关命令
 #查看 bridge 网桥信息
 #k8s pod 伴生 infrastructure 容器，与基础容器共用 network namespace 与 veth pair
@@ -106,7 +106,7 @@ k8s 集群中服务需要相互访问，一般为之创建相应的 service，�
 #### 2）iptables 方式
 
 - 查看 service 信息：cluster ip 以及关联的 endpoints ip
-```shell
+```bash
 # kubectl describe service nginx-test
 Name:              nginx-test
 Namespace:         default
@@ -124,7 +124,7 @@ Endpoints:         10.42.1.6:80,10.42.2.6:80
 ```
 
 - 查看宿主机 iptables
-```shell
+```bash
 # iptables -nvL -t nat |head
 Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
 pkts bytes target     prot opt in     out     source               destination
@@ -140,7 +140,7 @@ pkts bytes target     prot opt in     out     source               destination
    - **docker0 或 cni0** bridge收到数据之后，自然就来到了host network namesapce 的 PREROUTING chain
 
 - 查看 KUBE-SERVICES target
-```shell
+```bash
 # iptables -nvL -t nat | grep 10.43.6.58
 0     0 KUBE-SVC-7CWUT4JBGBRVUN2L  tcp  --  *      *       0.0.0.0/0            10.43.6.58           /* default/nginx-test:80-80 cluster IP */ tcp dpt:80
 
@@ -158,7 +158,7 @@ pkts bytes target     prot opt in     out     source               destination
    - 由于一半随机比率进入 KUBE-SEP-U2YYZT2C3O6VM4EV target， 因此另一个 target 的随机比率也为50%，实现负载均衡
 
 - 查看 KUBE-SEP-U2YYZT2C3O6VM4EV 和 KUBE-SEP-GWUIQWA2TNZI4ESX
-```shell
+```bash
 # iptables -nvL -t nat | grep KUBE-SEP-U2YYZT2C3O6VM4EV -A 3
 Chain KUBE-SEP-U2YYZT2C3O6VM4EV (1 references)
 pkts bytes target     prot opt in     out     source               destination
@@ -177,7 +177,7 @@ pkts bytes target     prot opt in     out     source               destination
    - 做了DNAT操作，把原来的cluster ip给DANT转换成了pod的ip 10.42.1.6和10.42.2.6。把原来的port转换成了80 port
    - 经过这个一系列iptable的target我们的原始请求10.42.1.6:80就变成了10.42.1.6:80或者10.42.2.6:80，而且两者转变的机率各是50%。
    - 根据iptable，经过PREROUTING chain发现DNAT之后的10.42.1.6或者10.42.2.6不是本地的ip(这两个ip是pod的ip，当然不会在host network namespace里)。所以就走到了Forwarding chain中，根据host network namespace的路由表来决定下一跳地址
-```shell
+```bash
 # 查看路由表信息
 # ip route
 default via 192.168.205.1 dev enp0s1 proto dhcp src 192.168.205.4 metric 100
@@ -211,7 +211,7 @@ default via 192.168.205.1 dev enp0s1 proto dhcp src 192.168.205.4 metric 100
 #### 2）iptables 方式
 
 - 查看 service 信息
-```shell
+```bash
 # kubectl describe service nginx-test
 Name:                     nginx-test
 Namespace:                default
@@ -234,7 +234,7 @@ Events:                   <none>
 对node port类型的service来说，访问host的port就访问到了这个服务。所以从host网络角度来看，当host收到数据包的时候应该是进入host network namespace的PREROUTING chain中，查看host network namespace的PREROUTING chain。
 
 - 查看宿主机 iptables
-```shell
+```bash
 # iptables -nvL -t nat |head
 Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
 pkts bytes target     prot opt in     out     source               destination
@@ -243,14 +243,14 @@ pkts bytes target     prot opt in     out     source               destination
 根据规则，对于PREROUTING chain中，所有的流量都走到了KUBE-SERVICES这个target中。
 
 - 查看 KUBE-SERVICES target
-```shell
+```bash
 # iptables -nvL -t nat |grep KUBE-SERVICES -A 10
 Chain KUBE-SERVICES (2 references)
 pkts bytes target     prot opt in     out     source               destination
 0     0 KUBE-SVC-7CWUT4JBGBRVUN2L  tcp  --  *      *       0.0.0.0/0            10.43.6.58           /* default/nginx-test:80-80 cluster IP */ tcp dpt:80
 ```
 在KUBE-SERVICES target中当访问 nginx-test-service 在host上的 32506 时候，根据规则匹配到了 KUBE-NODEPORTS 这个target。
-```shell
+```bash
 # iptables -nvL -t nat |grep KUBE-NODEPORTS -A 3
 Chain KUBE-NODEPORTS (1 references)
 pkts bytes target     prot opt in     out     source               destination
@@ -259,7 +259,7 @@ pkts bytes target     prot opt in     out     source               destination
 在KUBE-NODEPORTS target中可以看到当访问 32506 端口时到 KUBE-EXT-7CWUT4JBGBRVUN2L 这个 target
 
 - 查看 KUBE-EXT-7CWUT4JBGBRVUN2L  target
-```shell
+```bash
 # iptables -nvL -t nat |grep KUBE-EXT-7CWUT4JBGBRVUN2L -A 5
 Chain KUBE-EXT-7CWUT4JBGBRVUN2L (1 references)
  pkts bytes target     prot opt in     out     source               destination
@@ -325,7 +325,7 @@ Chain KUBE-SVC-7CWUT4JBGBRVUN2L (2 references)
 - 配置方式：略
 
 **service 与 Pod 对应信息**
-```shell
+```bash
 # kubectl describe service nginx-test
 Name:              nginx-test
 Namespace:         default
@@ -358,7 +358,7 @@ nginx-test-7646687cc4-z8xnq   1/1     Running   0             47s   10.42.1.9   
 - 数据包在源 pod 宿主机中的路由
 
 由于数据包的目标ip地址是**10.42.1.9**，而源pod **10.42.0.65**的宿主ip是**192.168.205.4**。宿主机上开启了转发功能(net.ipv4.ip_forward = 1)，所以主机发现目标ip **10.42.1.9**不是自己的ip时候，就对这个数据包做路由转发。查看宿主**192.168.205.4**的路由表
-```shell
+```bash
 # ip addr |grep 192.168.205.4
     inet 192.168.205.4/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -370,7 +370,7 @@ nginx-test-7646687cc4-z8xnq   1/1     Running   0             47s   10.42.1.9   
 - 数据包在目标 pod 宿主机中的路由
 
 当数据包路由到目标pod **10.42.1.9**的host **192.168.205.3**的时候(通过二层交换)，目标pod宿主机上开启了转发功能(net.ipv4.ip_forward = 1)，所以主机发现目标ip **10.42.1.9 **不是自己的ip时候，就对这个数据包做路由转发。查看宿主**192.168.205.3**的路由表
-```shell
+```bash
 # ip addr |grep 192.168.205.3
     inet 192.168.205.3/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -378,7 +378,7 @@ nginx-test-7646687cc4-z8xnq   1/1     Running   0             47s   10.42.1.9   
 10.42.1.0/24 dev cni0 proto kernel scope link src 10.42.1.1
 ```
 在路由表里发现**10.42.1.0/24**网段的数据下一跳是直连路由，由设备cni0 网卡转发。cni 网卡 **10.42.1.1** 作为linux bridge，会把数据通过veth pair从host network namespace发送到目标pod的**10.42.1.9**的network namespace里。然后由内核交给应用程序处理，从而完成了pod到pod的通讯。可以使用 kubectl debug 查看路由经过节点
-```shell
+```bash
 # kubectl debug -it nginx-test-7646687cc4-z8xnq --image=busybox -- /bin/sh
 
 # ip addr
@@ -407,7 +407,7 @@ vxlan 是一种overlay 网络技术，意在利用在三层网络之上构建二
 2.vxlan 利用 udp 封包，etcd 配置 udp 使用8472端口接收数据，需要在所有节点放行8472 udp port 。
 
 **service 与 Pod 对应信息**
-```shell
+```bash
 # kubectl describe service nginx-test
 Name:              nginx-test
 Namespace:         default
@@ -432,7 +432,7 @@ nginx-test-7646687cc4-z8xnq   1/1     Running   0             47s   10.42.1.9   
 ```
 
 **kubectl debug 查看路由走向与网络，进入 pod 10.42.0.65**
-```shell
+```bash
 #kubectl debug -it nginx-test-7646687cc4-n8s9s --image=busybox -- /bin/sh
 / # ping -c 3 10.42.1.9
 PING 10.42.1.9 (10.42.1.9): 56 data bytes
@@ -451,7 +451,7 @@ traceroute to 10.42.1.9 (10.42.1.9), 30 hops max, 46 byte packets
 - 数据在 pod namespace network 中路由
 
 ip为**10.42.0.65**的pod从自己的network namespace访问pod **10.42.1.9**，根据**10.42.0.65** pod network namespace的路由表，数据进入了**10.42.0.65** pod的宿主**192.168.205.4**的network namespace中的linux bridge cni0。查看宿主机路由信息
-```shell
+```bash
 # ip addr |grep 192.168.205.4
     inet 192.168.205.4/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -463,7 +463,7 @@ ip为**10.42.0.65**的pod从自己的network namespace访问pod **10.42.1.9**，
 - 查看 vtep 端点 mac 地址以及转发接口信息
 
 查看 mac 地址信息：在pod **10.42.0.65**的宿主**192.168.205.4**上通过arp表查询**10.42.1.0/32**的mac地址为 62:c8:a9:ce:ca:4e
-```shell
+```bash
 # ip addr |grep 192.168.205.4
     inet 192.168.205.4/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -475,7 +475,7 @@ ip为**10.42.0.65**的pod从自己的network namespace访问pod **10.42.1.9**，
 10.42.2.0 lladdr ca:cb:1f:99:10:97 PERMANENT
 ```
 查看 mac 地址转发信息：由于flannel.1设备是vxlan设备，会有转发接口与它的mac对应，继续在pod **10.42.0.65**的宿主**192.168.205.4**上查询flannel.1设备的mac转发接口。
-```shell
+```bash
 # ip addr |grep 192.168.205.4
     inet 192.168.205.4/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -489,7 +489,7 @@ ee:87:b2:4a:fd:62 dst 192.168.205.5 self permanent
 可以看到 flannel.1设备mac地址 **62:c8:a9:ce:ca:4e** 对应的转发接口为 **192.168.205.3**，代表flannel.1设备将会把原始二层数据包(源ip为**10.42.0.65**，目标ip为**10.42.1.9**，源mac为 pod **10.42.0.65** network namespace中veth设备mac，目标mac为**10.42.1.0/32** mac)做为 upd 的 payload 发给 **192.168.205.3 **的 **8472 **端口。目标pod **10.42.1.9 **的宿主机确实是 **192.168.205.3**，而且其上的flannel.1设备同样会对8472端口的数据进行upd解包。
 
 - flannel.1 设备处理 udp 封包与解包
-```shell
+```bash
 # ip addr |grep 192.168.205.4
     inet 192.168.205.4/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -512,7 +512,7 @@ flannel.1 设备 udp 解包：宿主机 **192.168.205.3 **接收到数据包后
    - flannel.1收到数据之后开始对vxlan udp报文拆包，去掉upd报文的ip，port，mac信息后得到内部的payload，发现是一个二层报文。
    - 对于这个二层报文继续拆包，得到里面的源ip是**10.42.0.65**，目标ip是**10.42.1.9**。
    - 根据**192.168.205.3**上路由表，将数据由linux bridge cni0做本地转发，cni0 作为 linux bridge 利用 veth pair 将数据转发到目标 pod **10.42.1.9**
-```shell
+```bash
 # ip addr |grep 192.168.205.3
     inet 192.168.205.3/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 
@@ -524,7 +524,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 - 宿主host的路由表的写入 与 flannel.1设备mac转发接口表的写入（fdb 转发）
 
 因为所有的host都运行flannel服务，而flannel连接etcd存储中心，所以每个host就知道自己的子网地址cidr是什么，也知道在这个cidr中自己的flannel.1设备ip地址和mac地址，同时也知道了其它host的子网cidr以及flannel.1设备ip地址和mac地址。而知道了这些信息，就可以在flannel启动的时候写入到路由表和fdb中了，以 **192.168.205.4 **宿主为例：
-```shell
+```bash
 ~# ip addr |grep 192.168.205.4
     inet 192.168.205.4/24 metric 100 brd 192.168.205.255 scope global dynamic enp0s1
 

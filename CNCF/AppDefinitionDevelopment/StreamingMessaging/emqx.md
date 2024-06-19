@@ -3,13 +3,13 @@
 
 #### Deploy by Container
 ##### Run by Docker
-```shell
+```bash
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
 
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 # get charts package
 git clone https://github.com/emqx/emqx.git
@@ -28,7 +28,7 @@ helm -n middleware install my-emqx .
 
 #### How to use
 emqx
-```shell
+```bash
 # manual cluster
 ./bin/emqx ctl cluster join emqx@node1.emqx.com
 # static cluster
@@ -50,7 +50,7 @@ cluster {
 ```
 
 ##### mqttx
-```shell
+```bash
 # connect 
 mqttx conn -h 'broker.emqx.io' -p 1883 -u 'admin' -P 'public'
 

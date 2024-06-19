@@ -4,7 +4,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # create dir
 mkdir -p /opt/tidb/tikv1 /opt/tidb/tikv2 /opt/tidb/tikv3 /opt/tidb/pd1
 cd /opt/tidb
@@ -41,7 +41,7 @@ mv tidb-v5.0.1-linux-amd64/bin /opt/tidb && cd /opt/tidb
 ```
 
 ##### Config and Boot
-```shell
+```bash
 # config
 # https://tikv.org/docs/6.5/deploy/configure/introduction/
 
@@ -56,7 +56,7 @@ systemctl enable tikv.service
 ```
 
 ##### Verify
-```shell
+```bash
 # verify by pd-ctl
 ./bin/pd-ctl store -u http://127.0.0.1:2379
 
@@ -73,7 +73,7 @@ print(client.get(b'foo')) # b'baz'
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # problem 1
 
 ```
@@ -81,12 +81,12 @@ print(client.get(b'foo')) # b'baz'
 
 #### Deploy by Container
 ##### Run by Docker
-```shell
+```bash
 # not yet
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # not yet
 ```
 

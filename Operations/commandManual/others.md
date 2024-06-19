@@ -1,5 +1,5 @@
 ### git
-```shell
+```bash
 # 回退上一个版本
 git reset --hard HEAD^ 
 # 回退两个版本
@@ -95,7 +95,7 @@ git cherry-pick 4c805e2
 ```
 
 ### mvn
-```shell
+```bash
 # determine file location
 mvn -X clean | grep "settings"
 

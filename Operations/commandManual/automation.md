@@ -1,6 +1,6 @@
 ### ansible
 #### ansible(ad-hoc modules)
-```shell
+```bash
 # command usage
 # optional arguments
 --vault-password-file VAULT_PASSWORD_FILES
@@ -71,7 +71,7 @@ ansible test -m async_status -a "jid=488359678239.2844"
 
 #### vars && fact && template
 ##### vars
-```shell
+```bash
 # how to define
 # 1. extra vars
 -e "init_hosts=10.0.10.12,10.0.10.13" --check
@@ -133,7 +133,7 @@ https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
 ```
 
 ##### fact
-```shell
+```bash
 # ansible setup info
 ansible test -m setup
 ansible test -m setup -a 'filter=ansible_eth*'
@@ -171,7 +171,7 @@ ansible-playbook --flush-cache simple_playbook.yml
 ```
 
 ##### template
-```shell
+```bash
 # jinja2 template
 ansible test -m debug -a "msg={{ now(utc='True',fmt='%H-%m-%d %T') }}"
 
@@ -190,7 +190,7 @@ tasks:
 ```
 
 #### ansible-console
-```shell
+```bash
 ansible-console test
 
 root@all (1)[f:5]$ ping
@@ -202,7 +202,7 @@ root@all (1)[f:5]$ ping
 ```
 
 #### ansible-doc
-```shell
+```bash
 # List available plugins
 ansible-doc --list
 
@@ -214,7 +214,7 @@ ansible-doc -s ping
 ```
 
 #### ansible-galaxy
-```shell
+```bash
 # collections
 ansible-galaxy collection
 
@@ -234,7 +234,7 @@ ansible-galaxy remove geerlingguy.redis
 ```
 
 #### ansible-lint
-```shell
+```bash
 # install
 pip install ansible-lint
 
@@ -243,7 +243,7 @@ ansible-lint playbooks/simple_playbook.yml
 ```
 
 #### ansible-playbook
-```shell
+```bash
 # execute example playbook
 ansible-playbook playbooks/simple_playbook.yml
 # execute playbook use extra vars hosts
@@ -327,7 +327,7 @@ ansible-playbook playbooks/simple_playbook.yml --step
 ```
 
 #### ansible-vault
-```shell
+```bash
 # file
 ansible-vault create new.yml
 ansible-vault encrypt simple_playbook.yml
@@ -349,7 +349,7 @@ ansible-playbook playbooks/simple_playbook.yml --ask-vault-pass
 
 ### saltstack
 #### module
-```shell
+```bash
 # command module
 salt '*' cmd.run 'ls /tmp'
 salt '*' cp.get_file salt://nginx/files/nginx.conf /tmp/nginx.conf
@@ -360,7 +360,7 @@ salt 'node1' sys.doc saltutil
 ```
 
 #### state
-```shell
+```bash
 # show state sls
 salt 'node1' state.show_highstate [saltenv=dev]
 salt 'node1' state.show_sls template [saltenv=dev]
@@ -376,7 +376,7 @@ salt 'node1' state.highstate [--batch 10%|10] [test=True]
 ```
 
 #### grains
-```shell
+```bash
 salt '*' saltutil.refresh_grains [saltenv=base|dev|prod]
 salt '*' saltutil.sync_grains
 salt '*' grains.ls
@@ -385,7 +385,7 @@ salt '*' grains.item username
 ```
 
 #### pillar
-```shell
+```bash
 salt '*' saltutil.refresh_pillar [pillarenv=base|dev|prod]
 salt '*' pillar.ls
 salt '*' pillar.items

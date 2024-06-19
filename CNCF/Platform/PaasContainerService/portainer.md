@@ -4,7 +4,7 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 # download source
 wget https://dlcdn.apache.org/zookeeper/zookeeper-3.7.1/apache-zookeeper-3.7.1-bin.tar.gz
 mv apache-zookeeper-3.7.1-bin zookeeper-3.7.1 && cd zookeeper-3.7.1
@@ -63,19 +63,19 @@ systemctl enable zookeeper.service
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run by docker or docker-compose
 # https://hub.docker.com/_/zookeeper
 ```
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # 
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update

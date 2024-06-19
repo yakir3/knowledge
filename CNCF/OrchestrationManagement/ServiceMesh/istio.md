@@ -1,5 +1,5 @@
 ### 二进制部署
-```shell
+```bash
 # 1.download and decompression
 https://www.elastic.co/downloads/logstash
 
@@ -13,7 +13,7 @@ bin/logstash -f logstash.conf
 [[sc-logstash|logstash常用配置]]
 
 ### helm 部署
-```shell
+```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co
 helm update

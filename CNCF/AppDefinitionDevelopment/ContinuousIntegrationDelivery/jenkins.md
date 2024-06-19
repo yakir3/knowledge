@@ -4,7 +4,7 @@
 
 #### Deployment
 #### Run On WARFile
-```shell
+```bash
 # download and decompression
 # https://www.jenkins.io/download/
 wget https://get.jenkins.io/war-stable/2.401.1/jenkins.war
@@ -16,13 +16,13 @@ cat /opt/jenkins-config/secrets/initialAdminPassword
 ```
 
 ##### Run On Ubuntu
-```shell
+```bash
 # https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
 ```
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # create bridge network
 docker network create jenkins
 
@@ -38,7 +38,7 @@ cat /var/lib/docker/volumes/jenkins_home/_data/secrets/initialAdminPassword
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # manifest resource yaml
 namespace
 serviceAccout
@@ -51,7 +51,7 @@ https://www.jenkins.io/doc/book/installing/kubernetes/
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add jenkinsci https://charts.jenkins.io
 helm repo update
@@ -72,7 +72,7 @@ helm -n cicd install jenkins . --create-namespace
 [deploy by jenkins-operator](https://jenkinsci.github.io/kubernetes-operator/docs/getting-started/latest/)
 
 access and use
-```shell
+```bash
 # patch harbor ingress resource
 kubectl -n cicd patch ingress jenkins --patch '{"spec":{"ingressClassName": "nginx"}}'
 

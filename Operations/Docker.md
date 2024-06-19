@@ -61,7 +61,7 @@ int main()
 }
 ```
 编译运行程序验证
-```shell
+```bash
 $ gcc -o ns ns.c
 $ ./ns
 Parent - start a container!
@@ -71,7 +71,7 @@ $ ls /tmp
 ```
 
 ##### UTS Namespace
-```shell
+```bash
 int container_main(void* arg)
 {
     printf("Container - inside the container!\n");
@@ -92,7 +92,7 @@ int main()
 }
 ```
 运行程序，子进程的 hostname 变成了 container
-```shell
+```bash
 ubuntu@ubuntu:~$ sudo ./uts
 Parent - start a container!
 Container - inside the container!
@@ -111,7 +111,7 @@ int container_pid = clone(container_main, container_stack+STACK_SIZE,
             CLONE_NEWUTS | CLONE_NEWIPC | SIGCHLD, NULL);
 ```
 先创建一个 IPC 的 Queue,全局 Queue ID 是0
-```shell
+```bash
 ubuntu@ubuntu:~$ ipcmk -Q 
 Message queue id: 0
 
@@ -121,7 +121,7 @@ key        msqid      owner      perms      used-bytes   messages
 0xd0d56eb2 0          ubuntu      644        0            0
 ```
 运行程序验证 IPC Queue 是否隔离
-```shell
+```bash
 # 如果运行没有 CLONE_NEWIPC 的程序,在子进程中还是能看到这个全启的IPC Queue
 ubuntu@ubuntu:~$ sudo ./uts 
 Parent - start a container!
@@ -167,7 +167,7 @@ int main()
 }
 ```
 运行程序验证
-```shell
+```bash
 ubuntu@ubuntu:~$ sudo ./pid
 Parent [ 3474] - start a container!
 Container [ 1] - inside the container!
@@ -207,7 +207,7 @@ int main()
 }
 ```
 运行程序验证
-```shell
+```bash
 ubuntu@ubuntu:~$ sudo ./pid.mnt
 Parent [ 3502] - start a container!
 Container [    1] - inside the container!
@@ -227,7 +227,7 @@ root@container:~# top
 User Namespace 主要是用了 CLONE_NEWUSER 的参数。使用了这个参数后，内部看到的  UID 和 GID 已经与外部不同了，默认显示为65534。那是因为容器找不到其真正的 UID,所以设置上了最大的 UID（其设置定义在 /proc/sys/kernel/overflowuid）。
 
 要把容器中的 uid 和真实系统的 uid 给映射在一起，需要修改 /proc/pid/uid_map 和 /proc/pid/gid_map 这两个文件。这两个文件的格式为：
-```shell
+```bash
 ID-inside-ns ID-outside-ns length
 ```
 其中：
@@ -235,12 +235,12 @@ ID-inside-ns ID-outside-ns length
 + 第二个字段 ID-outside-ns 表示容器外映射的真实的 UID 或 GID。
 + 第三个字段表示映射的范围，一般填1，表示一一对应。
 比如，把真实的 uid=1000映射成容器内的 uid=0
-```shell
+```bash
 $ cat /proc/2465/uid_map
          0       1000          1
 ```
 再比如下面的示例：表示把 namespace 内部从0开始的 uid 映射到外部从0开始的 uid，其最大范围是无符号32位整形
-```shell
+```bash
 $ cat /proc/$$/uid_map
          0          0          4294967295
 ```
@@ -360,7 +360,7 @@ int main()
 上面的程序，用了一个 pipe 来对父子进程进行同步，为什么要这样做？因为子进程中有一个execv 的系统调用，这个系统调用会把当前子进程的进程空间给全部覆盖掉，我们希望在 execv 之前就做好 user namespace 的 uid/gid 的映射，这样，execv 运行的 /bin/bash 就会因为我们设置了 uid 为0的 inside-uid 而变成#号的提示符。
 
 运行程序
-```shell
+```bash
 ubuntu@ubuntu:~$ id
 uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu)
 
@@ -385,7 +385,7 @@ User Namespace 是以普通用户运行，但是别的 Namespace 需要 root 权
 ![[Pasted image 20240213223106.png]]
 
 docker 容器中,使用 ip link show 或 ip addr show 查看当前宿主机的网络情况
-```shell
+```bash
 ubuntu@ubuntu:~$ ip link show
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state ... 
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -398,7 +398,7 @@ ubuntu@ubuntu:~$ ip link show
 ```
 
 如何模拟以上情况:
-```shell
+```bash
 ## 首先，我们先增加一个网桥lxcbr0，模仿docker0
 brctl addbr lxcbr0
 brctl stp lxcbr0 off
@@ -443,7 +443,7 @@ docker 网络原理与以上方式有两点区别:
 - 另外，docker 是用进程的 PID 来做 Network Namespace 的名称的。
 
 为运行的 docker 容器新增网卡,比如为正在运行的docker容器，增加一个 eth1的网卡，并给了一个静态的可被外部访问到的 IP 地址。
-```shell
+```bash
 ip link add peerA type veth peer name peerB 
 brctl addif docker0 peerA 
 ip link set peerA up 
@@ -471,7 +471,7 @@ Linux CGroupCgroup 可​​​让​​​您​​​为​​​系​​​�
 - 限制访问某些设备（通过设置设备的白名单）
 
 Ubuntu 中查看 cgroup mount
-```shell
+```bash
 ubuntu@ubuntu:~$ mount -t cgroup
 cgroup on /sys/fs/cgroup/cpuset type cgroup (rw,relatime,cpuset)
 cgroup on /sys/fs/cgroup/cpu type cgroup (rw,relatime,cpu)
@@ -486,7 +486,7 @@ cgroup on /sys/fs/cgroup/perf_event type cgroup (rw,relatime,perf_event)
 cgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,relatime,hugetlb)
 ```
 或者使用 lssubsys 命令
-```shell
+```bash
 $ lssubsys  -m
 cpuset /sys/fs/cgroup/cpuset
 cpu /sys/fs/cgroup/cpu
@@ -502,7 +502,7 @@ hugetlb /sys/fs/cgroup/hugetlb
 ```
 
 如果没有可自己 mount 
-```shell
+```bash
 mkdir cgroup
 mount -t tmpfs cgroup_root ./cgroup
 mkdir cgroup/cpuset
@@ -529,7 +529,7 @@ cpuset.cpus            cpuset.memory_spread_slab       user
 cpuset.mem_exclusive   cpuset.mems
 ```
 在 /sys/fs/cgroup 各个子目录 make dir
-```shell
+```bash
 ubuntu@ubuntu:/sys/fs/cgroup/cpu$ sudo mkdir yakir
 
 ubuntu@ubuntu:/sys/fs/cgroup/cpu$ ls ./yakir
@@ -539,7 +539,7 @@ cgroup.event_control   cpu.cfs_period_us  cpu.shares        notify_on_release
 
 ##### CPU Limit
 模拟非常吃 CPU 的程序
-```shell
+```bash
 tee > deadloop.c << "EOF"
 int main(void)
 {
@@ -553,7 +553,7 @@ gcc deadloop.c -o deadlooop
 ./deadloop
 ```
 限制自定义 group 的 CPU
-```shell
+```bash
 ubuntu@ubuntu:~# cat /sys/fs/cgroup/cpu/yakir/cpu.cfs_quota_us 
 -1
 # 20% CPU 使用率
@@ -665,7 +665,7 @@ int main(void)
 ```
 
 限制内存
-```shell
+```bash
 # 创建memory cgroup
 $ mkdir /sys/fs/cgroup/memory/yakir
 $ echo 64k > /sys/fs/cgroup/memory/yakir/memory.limit_in_bytes
@@ -676,7 +676,7 @@ $ echo [pid] > /sys/fs/cgroup/memory/haoel/tasks
 
 ##### IO Limit
 测试模拟 IO 速度
-```shell
+```bash
 # dd 命令读写 IO
 dd if=/dev/sda1 of=/dev/null
 
@@ -687,11 +687,11 @@ iotop
 ```
 
 创建一个 blkio(块设备IO) 的 cgroup
-```shell
+```bash
 mkdir /sys/fs/cgroup/blkio/yakir
 ```
 限制进程 IO 速度
-```shell
+```bash
 # 注：8:0 是设备号，通过 ls -l /dev/sda1 获得
 root@ubuntu:~# echo '8:0 1048576'  > /sys/fs/cgroup/blkio/yakir/blkio.throttle.read_bps_device
 # 将 dd 命令的 pid 放入 cgroup
@@ -723,7 +723,7 @@ iotop
 
 ### Docker Engine
 #### Install
-```shell
+```bash
 # install docker engine
 https://docs.docker.com/engine/install/debian/
 
@@ -731,7 +731,7 @@ https://docs.docker.com/engine/install/debian/
 
 #### Storage
 ##### Overview
-```shell
+```bash
 # show docker volume info
 docker volume ls
 DRIVER    VOLUME NAME
@@ -754,7 +754,7 @@ local     yakir-test
 ```
 
 ##### Volumes
-```shell
+```bash
 # create volume
 docker volume create yakir-test
 
@@ -795,7 +795,7 @@ docker volume rm yakir-test
 ```
 
 ##### Bind mounts
-```shell
+```bash
 # start container with bind mounts
 docker run -d --name test \
 ###
@@ -830,7 +830,7 @@ docker rm test
 ```
 
 ##### tmpfs mounts
-```shell
+```bash
 # start container with tmpfs
 docker run -it --name tmptest \
 ###
@@ -853,7 +853,7 @@ docker rm tmptest
 
 ##### Storage drivers
 ###### Btrfs
-```shell
+```bash
 # stop docker
 systemctl stop docker.service
 
@@ -881,7 +881,7 @@ docker info --format '{{ json .Driver }}'
 ```
 
 ###### OverlayFS
-```shell
+```bash
 # stop docker
 systemctl stop docker.service
 
@@ -905,7 +905,7 @@ mount |grep overlay |grep docker
 ```
 
 ###### ZFS
-```shell
+```bash
 # stop docker
 systemctl stop docker.service
 
@@ -935,7 +935,7 @@ docker info --format '{{ json .Driver }}'
 ```
 
 ###### containerd snapshotters
-```shell
+```bash
 # configure Docker to use the btrfs storage driver
 vim /etc/docker/daemon.json
 {
@@ -954,7 +954,7 @@ docker info -f '{{ .DriverStatus }}'
 #### Networking
 ##### Overview
 
-```shell
+```bash
 # show docker network info
 docker network ls
 NETWORK ID     NAME      DRIVER    SCOPE
@@ -976,7 +976,7 @@ f1b2d749ed2c   none      null      local
 
 ##### Networking drivers
 ###### Bridge
-```shell
+```bash
 # bridge
 每个容器拥有独立网络协议栈，为每一个容器分配、设置 IP 等。将容器连接到虚拟网桥（默认为 docker0 网桥）。
 
@@ -1001,12 +1001,12 @@ docker inspect test |grep Gateway
 ```
 
 ###### Overlay
-```shell
+```bash
 # 多 docker 主机组建网络，配合 docker swarm 使用
 ```
 
 ###### Host
-```shell
+```bash
 # host
 使用宿主机的 IP 和端口，共享宿主机网络协议栈。
 
@@ -1015,7 +1015,7 @@ docker run --rm -dit --net host busybox ip addr
 ```
 
 ###### IPvlan
-```shell
+```bash
 # ipvlan
 ipvlan_mode: l2, l3(default), l3s
 ipvlan_flag: bridge(default), private, vepa
@@ -1047,7 +1047,7 @@ docker run --net=test_l3_net --ip=10.10.1.9 -it --rm busybox ping -c 2 192.168.1
 ```
 
 ###### Macvlan
-```shell
+```bash
 # macvlan
 
 # bridge mode
@@ -1072,7 +1072,7 @@ docker network create -d macvlan \
 ```
 
 ###### None
-```shell
+```bash
 # none
 每个容器拥有独立网络协议栈，但没有网络设置，如分配 veth pair 和网桥连接等。
 
@@ -1081,7 +1081,7 @@ docker run --rm -dit --net none busybox ip addr
 ```
 
 ###### Container
-```shell
+```bash
 # container
 和一个指定已有的容器共享网络协议栈，使用共有的 IP、端口等。
 
@@ -1092,7 +1092,7 @@ docker run -it --name c2 --net container:test --rm busybox ip addr
 ```
 
 ###### 自定义网络模式
-```shell
+```bash
 # user-defined 
 默认 docker0 网桥无法通过 container name host 通信，自定义网络默认使用 daemon 进程内嵌的 DNS server，可以直接通过 --name 指定的 container name 进行通信
 
@@ -1123,7 +1123,7 @@ docker exec -it test3 ip addr
 ```
 
 ##### Daemon
-```shell
+```bash
 # configuration file
 /etc/docker/daemon.json
 ~/.config/docker/daemon.json
@@ -1190,7 +1190,7 @@ COPY --from=build /bin/hello /bin/hello
 CMD ["/bin/hello"]
 ```
 
-```shell
+```bash
 # build
 docker built -t hello .
 

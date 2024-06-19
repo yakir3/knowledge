@@ -1,7 +1,7 @@
 [[containerRuntime|helm常用命令]]
 
 ## helm repo
-```shell
+```bash
 # repo hub 
 https://artifacthub.io/
 

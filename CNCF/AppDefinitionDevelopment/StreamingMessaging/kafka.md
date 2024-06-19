@@ -5,7 +5,7 @@
 ##### Zookeeper Mode
 [[zookeeper|zookeeper-deploy]]
 下载官方包
-```shell
+```bash
 # 下载解压
 cd /opt/
 wget https://archive.apache.org/dist/kafka/3.3.1/kafka_2.13-3.3.1.tgz
@@ -17,7 +17,7 @@ cd kafka_3.3.1
 
 [[sc-kafka|kafka常用配置]]
 修改配置
-```shell
+```bash
 # zookeeper 配置
 cat > config/zookeeper.properties << "EOF"
 # 初始延迟时间（心跳时间单位）
@@ -65,7 +65,7 @@ EOF
 ```
 
 启动服务与开机自启
-```shell
+```bash
 # 集群方式启动启动 zookeeper 需要创建 myid
 # 多点集群
 echo 0 > /opt/kafka_3.3.1/zk-data/myid
@@ -106,7 +106,7 @@ systemctl enable kafka.service
 
 ##### Kraft Mode
 下载官方包
-```shell
+```bash
 # 下载解压
 cd /opt/
 wget https://archive.apache.org/dist/kafka/3.3.1/kafka_2.13-3.3.1.tgz
@@ -117,7 +117,7 @@ cd kafka_3.3.1
 ```
 
 kraft 配置与格式化
-```shell
+```bash
 # 集群启动时配置点
 # vim config/kraft/server.properties
 # node.id 集群启动每个节点需不同
@@ -145,7 +145,7 @@ KAFKA_CLUSTER_ID="$(./bin/kafka-storage.sh random-uuid)"
 ```
 
 启动服务与开机自启
-```shell
+```bash
 # 启动 kafka
 ./bin/kafka-server-start.sh -daemon config/kraft/server.properties
 
@@ -175,7 +175,7 @@ systemctl enable kafka.service
 ```
 
 如需自定义 JAVA 环境时在启动脚本添加环境变量
-```shell
+```bash
 export JAVA_HOME=/opt/jdkx.xx
 export JRE_HOME=$JAVA_HOME/jre
 export CLASSPATH=$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
@@ -183,7 +183,7 @@ export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 ```
 
 ##### Verify
-```shell
+```bash
 # 创建 topic
 ./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --create --topic yakir-test
 # 查看分区副本信息
@@ -195,7 +195,7 @@ export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 #### Deploy by Helm
 ##### Get helm charts
 [[cc-helm|helm使用]]
-```shell
+```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update
@@ -234,7 +234,7 @@ kafka 需要使用持久化存储配置，k8s 本身不支持 nfs 做 storagecla
 
 
 ##### Install kafka
-```shell
+```bash
 # Chart.yaml 配置修改，视情况修改
 sed -i 's/^name: .*/name: uat-kafka-xxx/' Chart.yaml
 
@@ -266,7 +266,7 @@ helm -n middleware install uat-kafka-xxx .
 ```
 
 ##### Verify
-```shell
+```bash
 # kubectl -n middleware get pod 
 # kubectl -n middleware get service
 uat-kafka                          ClusterIP   10.234.14.230   <none>        9092/TCP                     
@@ -285,7 +285,7 @@ kubectl -n middleware exec -it kafka-client -- bash
 
 
 #### Run On Docker
-```shell
+```bash
 # run by docker or docker-compose
 # https://hub.docker.com/r/bitnami/kafka
 ```

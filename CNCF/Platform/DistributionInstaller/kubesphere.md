@@ -4,26 +4,26 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 # download source
 
 ```
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run by docker or docker-compose
 # https://hub.docker.com/_/zookeeper
 ```
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # 
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update

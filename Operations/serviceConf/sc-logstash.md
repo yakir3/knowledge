@@ -1,4 +1,4 @@
-```shell
+```bash
 # logstash.conf
 # input config
 input {

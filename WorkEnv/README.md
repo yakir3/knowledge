@@ -1,7 +1,7 @@
 ### Init Environment
 #### Common
 ##### HomeBrew
-```shell
+```bash
 # Official
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
@@ -19,7 +19,7 @@ brew install wget
 ```
 
 ##### zsh && oh-my-zsh || oh-my-bash
-```shell
+```bash
 # Install and change shell to zsh
 brew install zsh # Mac
 apt install zsh  # Debian
@@ -41,7 +41,7 @@ sudo spctl --master-disable
 ```
 
 ##### Vim
-```shell
+```bash
 # Install vim and vundle
 apt install vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -88,7 +88,7 @@ initEnvFiles/iterm2/HaX0R_GR33N.itermcolors
 ```
 
 ##### K3S
-```shell
+```bash
 # Kernel module
 lsmod |grep -E "nf_conntrack|br_netfilter"
 
@@ -131,7 +131,7 @@ helm list
 
 #### Others
 ##### Fedora Init
-```shell
+```bash
 # Install packages
 dnf install zsh git svn telnet wget curl make cmake
 dnf install containerd
@@ -165,7 +165,7 @@ dnf search cursor-theme
 ```
 
 ##### Ubuntu Init
-```shell
+```bash
 # Install package
 apt install zsh git svn telnet wget curl make cmake
 apt install openjdk-11-jdk 
@@ -234,7 +234,7 @@ Pycharm
 ```
 
 ##### virtual
-```shell
+```bash
 # Multipass
 ssh-keygen -t rsa -b 4096 -f ~/test_rsa
 multipass launch -c 2 -m 2G -d 50G -n node1 --cloud-init - << EOF

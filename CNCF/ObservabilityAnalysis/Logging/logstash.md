@@ -3,7 +3,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # 1.download and decompression
 https://www.elastic.co/downloads/logstash
 
@@ -19,7 +19,7 @@ bin/logstash -f logstash.conf
 ##### Config and Boot
 [[sc-logstash|Logstash config]]
 
-```shell
+```bash
 # boot 
 cat > /usr/lib/systemd/system/logstash.service << "EOF"
 [Unit]
@@ -55,12 +55,12 @@ systemctl enable .service
 
 #### Deploy by Container
 ##### Run by Resource
-```shell
+```bash
 # https://docs.fluentd.org/container-deployment/kubernetes
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co
 helm update

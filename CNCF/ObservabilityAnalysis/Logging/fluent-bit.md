@@ -16,7 +16,7 @@ Fluentd 和 Fluent Bit 都可以充当聚合器或转发器，它们可以互补
 
 
 #### Deploy by Binaries
-```shell
+```bash
 # source code download
 https://docs.fluentbit.io/manual/installation/getting-started-with-fluent-bit
 
@@ -63,7 +63,7 @@ Kubernetes 管理 nodes 集群，因此我们的日志代理工具需要在每�
 
 ##### helm 下载 charts 包
 [[cc-helm|helm常用命令]]
-```shell
+```bash
 # 创建可观测性 chart 包目录
 mkdir /opt/helm-charts/logging
 cd /opt/helm-charts/logging
@@ -180,7 +180,7 @@ vim values.yaml
 
 
 ##### 配置启动
-```shell
+```bash
 # config
 cat > values.yaml << "EOF"
 config:
@@ -345,7 +345,7 @@ helm -n logging install fluent-bit-uat .
 
 
 **快速部署 fluent-bit & es 服务（仅用于测试环境）**
-```shell
+```bash
 kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes-logging/master/output/elasticsearch/fluent-bit-ds.yaml
 ```
 
@@ -354,7 +354,7 @@ kubectl create -f https://raw.githubusercontent.com/fluent/fluent-bit-kubernetes
 ##### Elasticsearch 配置
 [[cc-elasticsearch|ES 常用命令]]
 [[sc-elasticsearch|ES 常用配置]]
-```shell
+```bash
 # elasticsearch 部署配置：略
 
 
@@ -446,7 +446,7 @@ curl -X PUT 'http://172.30.2.218:9200/_template/logstash_template' \
 
 ##### Logstash 配置
 [[sc-logstash|logstash 常用配置]]
-```shell
+```bash
 # 下载解压
 cd /opt
 wget https://artifacts.elastic.co/downloads/logstash/logstash-8.4.3-linux-x86_64.tar.gz
@@ -526,7 +526,7 @@ output {
 
 
 ##### 谷歌云存储桶服务配置
-```shell
+```bash
 # 1、创建存储桶：xxx_logs_store
 # 2、创建存储桶日志目录（非必需）：backup_logs
 # 3、将 logstash 备份日志目录使用 gsutil 工具定时任务上传谷歌云存储桶服务

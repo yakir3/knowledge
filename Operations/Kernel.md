@@ -2,7 +2,7 @@
 /etc/sysctl.conf
 /etc/sysctl.d/\*.conf
 /proc/sys/...
-```shell
+```bash
 # Controls the System Request debugging functionality of the kernel
 kernel.sysrq = 0
 # Controls whether core dumps will append the PID to the core filename.
@@ -90,7 +90,7 @@ sysctl -p /etc/sysctl.d/xxx.conf
 
 #### Others
 ##### ulimit：fd dont enough
-```shell
+```bash
 # user used fd
 lsof -u $(whoami) | wc -l
 
@@ -112,7 +112,7 @@ fs.file-max = 65535000
 
 
 ##### TIME_WAIT: too mush connection state
-```shell
+```bash
 # client 
 # HTTP Headers，connection set to keep-alive，http/1.1 default os keep-alive
 Connection: keep-alive
@@ -128,7 +128,7 @@ net.ipv4.tcp_tw_reuse = 1
 
 
 ##### nf_conntrack: table full, dropping packet
-```shell
+```bash
 # conntrack bucket number and used memory
 CONNTRACK_MAX = RAMSIZE (in bytes) / 16384 / (ARCH / 32)
 size_of_mem_used_by_conntrack (in bytes) = CONNTRACK_MAX * sizeof(struct ip_conntrack) + HASHSIZE * sizeof(struct list_head)
@@ -195,7 +195,7 @@ iptables -t raw -A OUTPUT -p tcp -m multiport --sports 80,443 -j NOTRACK
 
 
 ##### ARP table
-```shell 
+```bash 
 # arp table cache full
 # kernel error message = arp_cache: neighbor table overflow!
 net.ipv4.neigh.default.gc_thresh1 = 128    # 超过此阈值时按 gc_interval 定期启动回收

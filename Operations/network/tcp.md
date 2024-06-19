@@ -176,7 +176,7 @@ Wireshark中，可以使用 tcp.analysis.zero_window 来过滤包，然后使用
 #### TCP 全连接与半连接队列
 ##### 半连接队列溢出 & SYN Flood
 测试使用 tcp-server 端
-```shell
+```bash
 cat > simple-tcp-server.c << "EOF"
 #include <stdio.h>
 #include <netinet/in.h>
@@ -253,7 +253,7 @@ gcc -o ststest simple-tcp-server.c
 ./ststest
 ```
 
-```shell
+```bash
 # 调整并关闭相关参数
 iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP
 sysctl -w net.ipv4.tcp_syncookies=0
@@ -305,7 +305,7 @@ telnet 127.0.0.1 8877
 
 
 ##### 全连接队列溢出
-```shell
+```bash
 # 调整并关闭相关参数
 sysctl -w net.ipv4.tcp_syncookies=0
 sysctl -w net.ipv4.tcp_abort_on_overflow=0

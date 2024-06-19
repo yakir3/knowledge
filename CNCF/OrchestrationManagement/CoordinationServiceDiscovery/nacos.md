@@ -4,7 +4,7 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 # download source
 wget https://github.com/alibaba/nacos/releases/download/2.2.3/nacos-server-2.2.3.zip
 unzip nacos-server-2.2.3.zip && cd nacos
@@ -28,19 +28,19 @@ sh startup.sh
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run by docker or docker-compose
 # https://hub.docker.com/r/nacos/nacos-server
 ```
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # 
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # https://artifacthub.io/packages/helm/ygqygq2/nacos
 ```
 

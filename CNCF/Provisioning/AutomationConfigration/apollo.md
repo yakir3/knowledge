@@ -1,7 +1,7 @@
 [[cc-helm|helm常用命令]]
 
 ## helm repo
-```shell
+```bash
 nginx-stable    https://helm.nginx.com/stable
 jetstack        https://charts.jetstack.io
 bitnami         https://charts.bitnami.com/bitnami

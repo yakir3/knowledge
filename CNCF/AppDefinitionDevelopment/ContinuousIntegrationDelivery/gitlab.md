@@ -6,7 +6,7 @@
 [Run On SourceCode](https://docs.gitlab.com/ee/install/installation.html#overview)
 
 ##### Run On Ubuntu
-```shell
+```bash
 # Install and configure the necessary dependencies
 apt update
 apt install -y curl openssh-server ca-certificates tzdata perl
@@ -21,7 +21,7 @@ cat /etc/gitlab/initial_root_password
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run container
 GITLAB_HOME=/opt/gitlab
 docker run --detach \
@@ -49,7 +49,7 @@ gitlab/gitlab-ee
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # manifest resource yaml
 deployments = redis, postgresql, gitlab
 service = redis, postgresql, gitlab
@@ -57,7 +57,7 @@ ingress = gitlab
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
@@ -87,7 +87,7 @@ helm -n cicd install gitlab . --create-namespace \
 [deploy by gitlab-operator](https://docs.gitlab.com/operator/)
 
 access and use
-```shell
+```bash
 # patch harbor ingress resource
 kubectl -n cicd patch ingress gitlab-webservice-default --patch '{"spec":{"ingressClassName": "nginx"}}'
 

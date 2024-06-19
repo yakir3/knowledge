@@ -175,7 +175,7 @@ Middleware GitHub 漏洞安全补丁关注
 
 #### Kubernetes 优化
 ##### JVM
-```shell
+```bash
 JAVA_OPTS="-Dfile.encoding=utf-8 \
 -Dcatalina.base=${PWD}
 -Dlog.file.path=/app/logs

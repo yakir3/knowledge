@@ -4,7 +4,7 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 # get and run from source
 wget https://github.com/coredns/coredns/releases/download/v1.10.1/coredns_1.10.1_linux_amd64.tgz
 tar xf coredns_1.10.1_linux_amd64.tgz
@@ -46,18 +46,18 @@ systemctl enable coredns.service
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # https://hub.docker.com/r/coredns/coredns/tags
 ```
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 #
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add coredns https://coredns.github.io/helm
 helm repo update

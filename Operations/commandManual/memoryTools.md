@@ -1,5 +1,5 @@
 ##### free vm memory
-```shell
+```bash
 # 0：do not release (default)
 # 1：release page cache
 # 2：release dentries and inodes cache

@@ -7,7 +7,7 @@ https://www.jaegertracing.io/docs/1.45/#about
 #### Deployment
 ##### Run On Docker
 all-in-one 部署，用于测试环境
-```shell
+```bash
 docker run -d --name jaeger \
   -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
   -e COLLECTOR_OTLP_ENABLED=true \
@@ -29,7 +29,7 @@ docker run -d --name jaeger \
 >Must be installed: ingress & cert-manager
 
 **deploy by kubenertes manifest**
-```shell
+```bash
 # install operator
 kubectl create namespace observability
 kubectl create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.45.0/jaeger-operator.yaml -n observability
@@ -48,7 +48,7 @@ kubectl -n observability get jaegers
 
 **deploy by helm**
 [[cc-helm|helm常用命令]]
-```shell
+```bash
 # add and update repo
 helm repo add jaegertracing https://jaegertracing.github.io/helm-charts
 helm update

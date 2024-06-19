@@ -5,7 +5,7 @@
 #### Deploy by Container
 ##### Run by Binary
 install and verify
-```shell
+```bash
 # download and decompress
 mkdir -p /opt/vault/bin /opt/vault/data /opt/vault/tls
 cd /opt/vault/bin
@@ -57,7 +57,7 @@ vault status
 ```
 
 how to user
-```shell
+```bash
 # kv secret
 vault kv put -mount=secret kvpath foo=bar
 vault kv list -mount=secret
@@ -113,7 +113,7 @@ vault kv put -mount=secret creds password="my-long-password"
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm update

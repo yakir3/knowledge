@@ -1,5 +1,5 @@
 ##### ab && wrk
-```shell
+```bash
 # install ab
 apt install apache2-utils
 # use
@@ -17,7 +17,7 @@ wrk -t 100 -c 10000 -d 30 --latency http://www.google.com/
 ```
 
 ##### arp && arping
-```shell
+```bash
 # install
 apt install net-tools
 apt install arping
@@ -39,7 +39,7 @@ tcpdump -ttttnvvvS -i ens160 arp
 ```
 
 ##### curl
-```shell
+```bash
 # 自定义请求 Header
 --header / -H
 
@@ -80,7 +80,7 @@ time_total: %{time_total}
 ```
 
 ##### dig
-```shell
+```bash
 # normal query
 dig www.google.com
 dig -t ns www.google.com
@@ -114,7 +114,7 @@ dig www.google.com +subnet=1.1.1.0/24
 ```
 
 ##### hping3
-```shell
+```bash
 # install 
 apt install hping3
 
@@ -123,7 +123,7 @@ hping3 -S -p 8877 --flood 127.0.0.1
 ```
 
 ##### iftop
-```shell
+```bash
 # iptop -h
    -n                  dont do hostname lookups
    -N                  dont convert port numbers to services
@@ -168,7 +168,7 @@ Sorting:
 ```
 
 ##### ip
-```shell
+```bash
 # apt install iproute2
 
 # select route table
@@ -223,7 +223,7 @@ ip netns exec net0 ping -c 3 10.0.1.3
 ```
 
 ##### netstat && ss
-```shell
+```bash
 # netstat = apt install net-tools 
 # count all tcp state number
 netstat -tna | awk '/tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
@@ -246,7 +246,7 @@ ss -K dst 1.1.1.1 dport = 57156
 ```
 
 ##### nc && netcat
-```shell
+```bash
 # install 
 apt install netcat-openbsd
 
@@ -259,12 +259,12 @@ echo -e "POST /post HTTP/1.1\r\nHost: httpbin.org\r\nContent-Type: application/x
 ```
 
 ##### sar
-```shell
+```bash
 sar -n DEV 1
 ```
 
 ##### tcpdump
-```shell
+```bash
 # install
 apt install tcpdump
 
@@ -318,7 +318,7 @@ tcpdump -i eth0 -nStttvvv src 1.1.1.1 or dst 1.1.1.1 and port 80
 ```
 
 ##### tcpkill
-```shell
+```bash
 # install
 apt install dsniff
 

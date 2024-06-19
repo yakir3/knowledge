@@ -4,7 +4,7 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 # built from source
 git clone -b v3.5.0 https://github.com/etcd-io/etcd.git
 cd etcd
@@ -66,7 +66,7 @@ systemctl enable etcd.service
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 rm -rf /tmp/etcd-data.tmp && mkdir -p /tmp/etcd-data.tmp && \
 docker rmi gcr.io/etcd-development/etcd:v3.4.26 || true && \
 docker run \
@@ -99,7 +99,7 @@ docker exec etcd-gcr-v3.4.26 /usr/local/bin/etcdctl get foo
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # static pod 
 # https://www.zhaowenyu.com/etcd-doc/ops/etcd-install-k8s-static-pod.html
 
@@ -108,7 +108,7 @@ docker exec etcd-gcr-v3.4.26 /usr/local/bin/etcdctl get foo
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 # Add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
@@ -131,7 +131,7 @@ OUE0bUVabWtqVQ==
 
 
 #### common command
-```shell
+```bash
 export ETCDCTL_API=3
 
 #status

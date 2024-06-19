@@ -4,7 +4,7 @@ grafana 是一个可视化面板，有着非常漂亮的图表和布局展示，
 
 #### Deploy On Binaries
 ##### Download and Install
-```shell
+```bash
 # option.1: Debian / Ubuntu repo
 apt install -y apt-transport-https software-properties-common wget
 wget -q -O /usr/share/keyrings/grafana.key https://apt.grafana.com/gpg.key
@@ -23,7 +23,7 @@ cd grafana-10.0.3
 ##### Config and Boot
 ##### [[sc-monitoring#Grafana|Grafana Config]]
 
-```shell
+```bash
 # boot
 systemctl daemon-reload
 systemctl start grafana-server.service 
@@ -33,7 +33,7 @@ systemctl enable grafana-server.service
 #### Deploy On Container
 ##### Run On Docker
 pull images
-```shell
+```bash
 # default based images: Alpine
 # oss version(open source, default)
 docker pull grafana/grafana
@@ -50,7 +50,7 @@ docker pull grafana/grafana-oss:latest-ubuntu
 docker pull grafana/grafana-enterprise:latest-ubuntu
 ```
 start container
-```shell
+```bash
 # run 
 docker run -d -p 3000:3000 grafana/grafana-enterprise
 
@@ -76,7 +76,7 @@ docker run -d -p 3000:3000 --name=grafana grafana-custom
 
 ##### Run On Kubernetes
 **deploy on resource manifest**
-```shell
+```bash
 cat > grafana.yaml << "EOF"
 kind: PersistentVolumeClaim
 ...
@@ -96,7 +96,7 @@ kubectl -n monitoring port-forward service/grafana 3000:3000
 
 **deploy on helm**
 [[cc-helm|helm常用命令]]
-```shell
+```bash
 # add and update repo
 helm repo add grafana https://grafana.github.io/helm-charts
 helm update
@@ -119,14 +119,14 @@ helm -n monitorning install grafana .
 
 #### Grafana Labs
 ##### Node 
-```shell
+```bash
 # Node Exporter Full
 1860
 
 ```
 
 ##### Kubernetes
-```shell
+```bash
 # K8s Cluster Summary
 8685
 
@@ -140,7 +140,7 @@ helm -n monitorning install grafana .
 ```
 
 ##### Middleware
-```shell
+```bash
 # kafka
 7589
 
@@ -158,7 +158,7 @@ helm -n monitorning install grafana .
 
 #### Alert
 ##### telegram_bot
-```shell
+```bash
 # 1.get bot and token
 https://core.telegram.org/bots#how-do-i-create-a-bot
 https://core.telegram.org/bots/features#botfather

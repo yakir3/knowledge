@@ -3,7 +3,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # Ubuntu Package install
 # https://docs.fluentd.org/installation/install-by-deb
 
@@ -12,7 +12,7 @@
 ##### Config and Boot
 [[sc-fluentd|Fluentd Config]]
 
-```shell
+```bash
 # change storage permission
 # td-agent
 chown td-agent.td-agent /opt/log_path/ -R
@@ -26,7 +26,7 @@ systemctl enable td-agent.service
 ```
 
 ##### Verify
-```shell
+```bash
 # syntax check
 # td-agent
 td-agent -c td-agent.conf --dry-run
@@ -35,19 +35,19 @@ fluentd -c fluentd.conf --dry-run
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # 
 ```
 
 
 #### Deploy by Container
 ##### Run by Resource
-```shell
+```bash
 # https://docs.fluentd.org/container-deployment/kubernetes
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add fluent https://fluent.github.io/helm-charts
 helm update

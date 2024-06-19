@@ -1,5 +1,5 @@
 ##### how to add a storage disk
-```shell
+```bash
 # 1. add new disk to VM instances
 #operate in console
 
@@ -19,7 +19,7 @@ mount -a
 ```
 
 ##### expand disk capacity
-```shell
+```bash
 # option1: expand the original disk
 # get original disk name and pvresize
 fdisk /dev/sdb # if /dev/sdb partition
@@ -46,7 +46,7 @@ xfs_growfs /dev/vg_name/lv_name
 ```
 
 不重启，直接刷新磁盘数据总线，获取新加的磁盘
-```shell
+```bash
 # option1
 for host in $(ls /sys/class/scsi_host); 
 do 

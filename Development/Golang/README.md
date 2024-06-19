@@ -1,5 +1,5 @@
 ### Install
-```shell
+```bash
 # Download and Install
 # https://go.dev/doc/install
 
@@ -12,7 +12,7 @@
 
 
 ### Goland
-```shell
+```bash
 # active code
 ideaActive
 

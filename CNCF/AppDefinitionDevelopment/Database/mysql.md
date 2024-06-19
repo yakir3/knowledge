@@ -4,7 +4,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # download source with boost lib
 wget https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-boost-8.0.34.tar.gz
 tar xf mysql-boost-8.0.34.tar.gz && rm -f mysql-8.0.34
@@ -38,7 +38,7 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY '123qwe';
 ##### Config and Boot
 [[sc-mysqld|Mysqld Config]]
 
-```shell
+```bash
 # boot 
 cp support-files/mysql.server /etc/init.d/mysql
 
@@ -48,14 +48,14 @@ systemctl enable mysql.service
 ```
 
 ##### Verify
-```shell
+```bash
 # syntax check
 ./bin/mysql -V
 Ver 8.0.34 for Linux on x86_64 (Source distribution)
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # every remake need to execute
 make clean && rm CMakeCache.txt
 
@@ -74,12 +74,12 @@ apt install pkg-config
 
 #### Deploy by Container
 ##### Run by Resource
-```shell
+```bash
 #
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update

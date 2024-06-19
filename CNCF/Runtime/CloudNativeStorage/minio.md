@@ -4,7 +4,7 @@
 
 #### Deploy by Binaries
 ##### Download and Install Server
-```shell
+```bash
 # download source
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
@@ -26,7 +26,7 @@ minio server --console-address :9001 http://1.1.1.1/opt/minio/data http://2.2.2.
 ```
 
 ##### Storage Requirements
-```shell
+```bash
 # Use local Storage
 mkdir /opt/minio/data
 # create lvm and mount data dir
@@ -37,7 +37,7 @@ cat /etc/fstab
 ```
 
 ##### Config and Boot
-```shell
+```bash
 # config 
 cat > /etc/default/minio << "EOF"
 # set this for MinIO to reload entries with 'mc admin service restart'
@@ -102,7 +102,7 @@ systemctl enable minio.service
 ```
 
 ##### Verify
-```shell
+```bash
 # download and install minio client
 curl https://dl.min.io/client/mc/release/linux-amd64/mc -o mc
 chmod +x mc
@@ -119,7 +119,7 @@ mc cat myminio/mybucket/1.txt
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # problem 1
 # 
 ```
@@ -127,14 +127,14 @@ mc cat myminio/mybucket/1.txt
 
 #### Deploy by Container
 ##### Run by Docker
-```shell
+```bash
 # single node test
 docker run -p 9000:9000 -p 9001:9001 quay.io/minio/minio server /data --console-address ":9001"
 
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add minio https://helm.min.io/
 helm update

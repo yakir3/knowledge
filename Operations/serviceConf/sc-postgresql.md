@@ -1,5 +1,5 @@
 /opt/pgsql/data/postgresql.conf
-```shell
+```bash
 # PostgreSQL configuration file
 # DB Version: 15
 # OS Type: linux

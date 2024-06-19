@@ -4,7 +4,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # dependencies: install erlang
 wget https://github.com/erlang/otp/releases/download/OTP-25.3.2.4/otp_src_25.3.2.4.tar.gz
 tar xf otp_src_25.3.2.4.tar.gz && rm -f otp_src_25.3.2.4.tar.gz 
@@ -53,7 +53,7 @@ rabbitmqctl -n rabbitmq1 cluster_status
 ```
 
 ##### Config and Boot
-```shell
+```bash
 # config 
 # $RABBITMQ_HOME/etc/rabbitmq/rabbitmq.conf
 # $RABBITMQ_HOME/etc/rabbitmq/advanced.config
@@ -69,7 +69,7 @@ systemctl enable rabbitmq.service
 ```
 
 ##### Verify
-```shell
+```bash
 # syntax check
 /usr/local/erlang/bin/erl -version
 Erlang (SMP,ASYNC_THREADS) (BEAM) emulator version 13.2.2.2
@@ -78,7 +78,7 @@ Erlang (SMP,ASYNC_THREADS) (BEAM) emulator version 13.2.2.2
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # problem 1
 # 
 ```
@@ -86,7 +86,7 @@ Erlang (SMP,ASYNC_THREADS) (BEAM) emulator version 13.2.2.2
 
 #### Deploy by Container
 ##### Run by Docker
-```shell
+```bash
 # pull image
 docker pull rabbitmq:3
 
@@ -101,7 +101,7 @@ docker exec -it rabbitmq sh
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update

@@ -1,7 +1,7 @@
 #### Prometheus
 ##### main config
 /opt/prometheus/prometheus.yml
-```shell
+```bash
 # Global config
 global:
   scrape_interval: 15s
@@ -47,7 +47,7 @@ scrape_configs:
 
 ##### rule files
 /opt/prometheus/alerting.rules.yaml
-```shell
+```bash
 # alerting rules file
 groups:
 - name: alerting.rules
@@ -72,7 +72,7 @@ groups:
 ```
 
 /opt/prometheus/recording.rules.yaml
-```shell
+```bash
 # recoding rules file
 groups:
 - name: recording.rules
@@ -87,7 +87,7 @@ groups:
 ```
 
 syntax-checking rules
-```shell
+```bash
 ./promtool check rules alerting.rules.yml recording.rules.yaml
 ``` 
 
@@ -95,7 +95,7 @@ syntax-checking rules
 #### Alertmanager
 ##### main config
 /opt/prometheus/alertmanager/alertmanager.yml
-```shell
+```bash
 global:
   resolve_timeout: 5m
   smtp_smarthost: 'smtp.163.com:465'
@@ -152,7 +152,7 @@ templates:
 
 #### Grafana
 /etc/grafana/grafana.ini
-```shell
+```bash
 ...
 [smtp]
 enabled = true

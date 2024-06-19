@@ -3,7 +3,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # download source code
 wget https://download.redis.io/redis-stable.tar.gz
 
@@ -22,7 +22,7 @@ make PREFIX=/usr/local/bin install
 
 
 ##### Single Mode
-```shell
+```bash
 # 复制配置文件
 cp redis.conf /etc/redis.conf
 
@@ -35,7 +35,7 @@ nohup /usr/local/bin/redis-server /etc/redis.conf
 
 ##### Cluster Mode
 初始化配置与启动
-```shell
+```bash
 # 创建目录
 mkdir -p /opt/redis/{bin,data,conf,logs}
 mkdir -p /opt/redis/data/{7001..7003}
@@ -87,7 +87,7 @@ redis-server conf/redis_7002.conf
 redis-server conf/redis_7003.conf
 ```
 集群初始化创建
-```shell
+```bash
 # cluster-replicas 配置 slave 节点数量，建议为3主3从配置
 redis-cli --cluster-replicas 0 --cluster create \
 127.0.0.1:7001 \
@@ -96,7 +96,7 @@ redis-cli --cluster-replicas 0 --cluster create \
 ```
 
 ##### Run and Boot
-```shell
+```bash
 # redis 配置文件方式，打开配置即使用守护进程启动
 daemonize yes
 
@@ -134,7 +134,7 @@ systemctl enable redis.service
 ```
 
 ##### Verify
-```shell
+```bash
 # client 端连接命令与参数
 # /usr/local/bin/redis-cli [-h host] [-p port] [-a password] [-c]
 redis-cli -p 7001 -a redis123 -c 
@@ -162,7 +162,7 @@ CLUSTER INFO
 ```
 
 ##### troubleshooting
-```shell
+```bash
 ../deps/jemalloc/lib/libjemalloc.a: No such file or directory
 # 解决：
 apt install libjemalloc-dev
@@ -172,7 +172,7 @@ make
 
 #### Deploy by Container
 ##### Run On Docker
-```shell
+```bash
 # Standlone
 docker run --rm --name yakir-redis -e REDIS_PASSWORD=123 -p 6379:6379 -v /docker-volume/data:/data -d redis
 
@@ -183,7 +183,7 @@ docker run --rm --name redis-cluster -e ALLOW_EMPTY_PASSWORD=yes -d bitnami/redi
 
 ##### Run by Helm
 
-```shell
+```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update

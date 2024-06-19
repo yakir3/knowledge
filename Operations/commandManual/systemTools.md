@@ -1,5 +1,5 @@
 ##### openssl
-```shell
+```bash
 # install 
 apt install openssl
 
@@ -12,7 +12,7 @@ openssl s_client -starttls smtp -connect mail.example.com:25
 ```
 
 ##### sar
-```shell
+```bash
 # install 
 apt install sysstat
 # use
@@ -46,7 +46,7 @@ sar -r 1 10
 ```
 
 ##### strace
-```shell
+```bash
 # install 
 apt install sysstat
 
@@ -56,7 +56,7 @@ strace -c ls
 ```
 
 ##### systemd
-```shell
+```bash
 # journalctl
 # tailf and unit log
 journalctl -u prometheus.service -f
@@ -64,7 +64,7 @@ journalctl -u prometheus.service -f
 ```
 
 ##### systemtap
-```shell
+```bash
 # install
 apt install systemtap
 
@@ -112,7 +112,7 @@ stap -v sg.stp
 ```
 
 ##### trap
-```shell
+```bash
 # 捕获 ctrl+c 信号，执行对应命令，只生效于当前环境
 trap "exit" SIGINT
 trap "echo 'Received SIGINT signal'" SIGINT
@@ -127,7 +127,7 @@ trap - SIGINT
 ```
 
 ##### vmstat
-```shell
+```bash
 # install
 apt install procps
 # use
@@ -152,7 +152,7 @@ vmstat -ant 1
 ```
 
 ##### watch
-```shell
+```bash
 # 查看系统软中断速率
 watch -d cat /proc/softirqs
 ```

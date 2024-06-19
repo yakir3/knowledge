@@ -1,4 +1,4 @@
-```shell
+```bash
 ##### redis-cluster.conf
 bind 0.0.0.0
 protected-mode yes

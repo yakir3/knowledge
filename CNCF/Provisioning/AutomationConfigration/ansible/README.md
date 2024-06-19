@@ -4,7 +4,7 @@
 
 #### Install 
 ##### Before install
-```shell
+```bash
 # denpend
 ssh protocal
 python2(scp)
@@ -16,7 +16,7 @@ firewalld
 ```
 
 ##### Install on linux
-```shell
+```bash
 # root dir
 ANSIBLE_ROOT=/opt/ansible
 mkdir $ANSIBLE_ROOT && cd $ANSIBLE_ROOT
@@ -42,7 +42,7 @@ export ANSIBLE_CONFIG=/opt/ansible
 ```
 
 ##### Credentials
-```shell
+```bash
 # Generate private and public key
 ssh-keygen -t rsa -b 1024 -C 'for ansible key' -f /opt/ansible/keys/ansible -q -N ""
 mv /opt/ansible/keys/ansible /opt/ansible/keys/ansible.key
@@ -61,7 +61,7 @@ ssh-copy-id ...
 
 #### Use
 ##### INVENTORY
-```shell
+```bash
 # initial: for initalize the system
 inventories/initial.host
 
@@ -83,7 +83,7 @@ inventories/prod.host
 + ansible-vault
 
 ##### Plugins && api
-```shell
+```bash
 ```
 
 

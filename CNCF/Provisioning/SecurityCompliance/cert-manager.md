@@ -6,7 +6,7 @@
 #### Deployment
 ##### Deploy On Kubernetes
 **deploy by kubenertes manifest**
-```shell
+```bash
 # install operator
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
 
@@ -14,7 +14,7 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
 
 **deploy by helm**
 [[cc-helm|helm常用命令]]
-```shell
+```bash
 # install crds resources
 # if installCRDS is true, don't need to apply
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.1/cert-manager.crds.yaml

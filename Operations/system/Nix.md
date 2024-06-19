@@ -2,7 +2,7 @@
 #### Nix package manager
 ##### Linux
 
-```shell
+```bash
 # Install Nix via the recommended multi-user installation:
 sh <(curl -L https://nixos.org/nix/install) --daemon
 
@@ -11,7 +11,7 @@ sh <(curl -L https://nixos.org/nix/install) --no-daemon
 ```
 
 ##### Docker
-```shell
+```bash
 # Start a Docker shell with Nix
 docker run -it nixos/nix
 # Or start a Docker shell with Nix exposing a workdir directory
@@ -35,7 +35,7 @@ bash-5.2# nix run github:helix-editor/helix/master
 
 ##### 2. Manual Installation
 ###### Partitioning
-```shell
+```bash
 # UEFI(GPT)
 # Create a GPT partition table
 parted /dev/sda -- mklabel gpt
@@ -59,7 +59,7 @@ parted /dev/sda -- mkpart primary linux-swap -2GB 100%
 ![[Pasted image 20240321172907.png]]
 
 ###### Formatting
-```shell
+```bash
 # Format
 mkfs.fat -F 32 -n boot /dev/sda1
 mkfs.ext4 -L nixos /dev/sda2
@@ -82,7 +82,7 @@ mkfs.fat -F 32 -n boot /dev/sda3
 ```
 
 ###### Installing
-```shell
+```bash
 # Mount the target file system on which NixOS should be installed on /mnt, e.g.
 mount /dev/sda2/ /mnt
 
@@ -162,7 +162,7 @@ nixos-install
 ```
 
 ##### 3. Upgrading
-```shell
+```bash
 # switch channel
 nix-channel --list
 nixos https://nixos.org/channels/nixos-23.11
@@ -176,7 +176,7 @@ nixos-rebuild switch --upgrade
 
 ### NixCommand
 ##### nixos-rebuild 
-```shell
+```bash
 # build new configuration and try to realise the configuration in the running system
 nixos-rebuild switch
 
@@ -200,7 +200,7 @@ nixos-rebuild switch --rollback
 ```
 
 ##### nix-channel
-```shell
+```bash
 # list
 nix-channel list
 
@@ -209,7 +209,7 @@ nix-channel --add https://channels.nixos.org/channel-name nixos
 ```
 
 ##### nix-shell
-```shell
+```bash
 # nodejs env
 bash-5.2# nix-shell -p nodejs
 [nix-shell:/]# node -e "console.log(1+1)"
@@ -233,7 +233,7 @@ bash-5.2# nix-shell
 ```
 
 ##### nix-build
-```shell
+```bash
 # create normal redis nix file
 cat > ./docker-redis.nix << "EOF"
 { pkgs ? import <nixpkgs> { system = "x86_64-linux";} 
@@ -287,7 +287,7 @@ docker images
 ### Flakes
 #### nix flake
 ##### enable experimental features
-```shell
+```bash
 cat /etc/nixos/configuration.nix
 { config, pkgs, inputs, ... }:
 {
@@ -304,7 +304,7 @@ cat /etc/nixos/configuration.nix
 ```
 
 ##### init flake.nix
-```shell
+```bash
 # show flakes templates
 nix flake show templates
 # init
@@ -372,7 +372,7 @@ sudo nixos-rebuild switch --flake .
 ```
 
 #### nix-command
-```shell
+```bash
 # nix-channel
 # no need
 
@@ -397,7 +397,7 @@ nix repl
 ```
 
 #### home-manager
-```shell
+```bash
 # init home.nix
 cat > /etc/nixos/home.nix << "EOF"
 { config, pkgs, ... }:
@@ -597,7 +597,7 @@ nixos-rebuild switch
 ```
 
 #### module imports
-```shell
+```bash
 # example
 tree /etc/nixos
 /etc/nixos

@@ -1,6 +1,6 @@
 #### Deploy by Binaries
 ##### Download
-```shell
+```bash
 # 1.download and decompression
 # https://www.elastic.co/downloads/elasticsearch
 cd /opt
@@ -11,7 +11,7 @@ cd elasticsearch-8.7.1
 
 ##### Config and Boot
 [[sc-elasticsearch|Elasticsearch Config]]
-```shell
+```bash
 # 2.configure
 vim config/elasticsearch.yml
 
@@ -90,7 +90,7 @@ systemctl enable elasticsearch.service
 
 #### Deploy by Container
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co
 helm update

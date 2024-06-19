@@ -4,7 +4,7 @@
 
 #### Deployment
 ##### Run On Binaries
-```shell
+```bash
 # download source
 wget https://github.com/envoyproxy/envoy/releases/download/v1.26.2/envoy-x86_64
 mkdir -p /opt/envoy/
@@ -22,7 +22,7 @@ EOF
 
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
-```shell
+```bash
 # run by docker or docker-compose
 # https://hub.docker.com/r/envoyproxy/envoy
 
@@ -37,12 +37,12 @@ curl -v 127.0.0.1:80
 
 ##### Run On Kubernetes
 [[cc-k8s|deploy by kubernetes manifest]]
-```shell
+```bash
 # 
 ```
 
 [[cc-helm|deploy by helm]]
-```shell
+```bash
 #  
 ```
 

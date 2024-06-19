@@ -4,7 +4,7 @@
 
 #### Deploy by Binaries
 ##### Download and Compile
-```shell
+```bash
 # download source
 wget https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz
 tar xf postgresql-15.1.tar.gz && rm -f postgresql-15.1.tar.gz 
@@ -31,7 +31,7 @@ chown postgres:postgres /opt/pgsql -R
 ##### Config and Boot
 [[sc-mysqld|Postgresql Config]]
 
-```shell
+```bash
 # boot 
 cat > /etc/systemd/system/postgresql.service << "EOF"
 [Unit]
@@ -57,14 +57,14 @@ systemctl enable postgresql.service
 ```
 
 ##### Verify
-```shell
+```bash
 # syntax check
 /opt/pgsql/bin/postgres --version
 postgres (PostgreSQL) 15.1
 ```
 
 ##### Troubleshooting
-```shell
+```bash
 # problem 1
 # configure: error: readline library not found
 apt install libreadline-dev
@@ -79,12 +79,12 @@ apt install libsystemd-dev
 
 #### Deploy by Container
 ##### Run by Resource
-```shell
+```bash
 #
 ```
 
 ##### Run by Helm
-```shell
+```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update

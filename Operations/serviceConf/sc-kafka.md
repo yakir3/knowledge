@@ -1,4 +1,4 @@
-```shell
+```bash
 # 官方配置：https://kafka.apache.org/documentation/#configuration
 
 ##### producer 参数

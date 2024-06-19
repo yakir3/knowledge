@@ -141,7 +141,7 @@ MIRROR：镜像数据包，调换源 IP 与目的 IP
 
 #### Command
 ##### Common
-```shell
+```bash
 # config file
 /etc/sysconfig/iptables
 # save to config file
@@ -178,7 +178,7 @@ iptables -A FORWARD -i docker0 ! -o docker0 -j ACCEPT
 ```
 
 ##### Example
-```shell
+```bash
 # init
 iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 iptables -A INPUT -m state --state INVALID,NEW -j DROP

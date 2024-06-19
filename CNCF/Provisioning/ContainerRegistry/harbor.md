@@ -4,7 +4,7 @@
 
 #### Deployment
 ##### Run On Docker
-```shell
+```bash
 # download offline or online installer and verify
 # configure HTTPS Access to Harbor
 https://github.com/goharbor/harbor/releases
@@ -17,7 +17,7 @@ https://goharbor.io/docs/2.8.0/install-config/download-installer/
 ##### Deploy On Kubernetes
 **deploy by helm**
 [[cc-helm|helm常用命令]]
-```shell
+```bash
 # add and update repo
 helm repo add harbor https://helm.goharbor.io
 helm update
@@ -41,7 +41,7 @@ helm -n provisioning install harbor . --create-namespace
 ```
 
 **access and use**
-```shell
+```bash
 # patch harbor ingress resource
 kubectl -n provisioning patch ingress harbor-ingress --patch '{"spec":{"ingressClassName": "nginx"}}'
 

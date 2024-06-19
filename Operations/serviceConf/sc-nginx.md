@@ -1,5 +1,5 @@
 #### nginx.conf
-```shell
+```bash
 user  nobody nobody; # chown nobody.nobody /opt/nginx -R
 worker_processes  auto;
 worker_cpu_affinity auto;
@@ -163,7 +163,7 @@ include modules.conf;
 ```
 
 ##### modules.conf
-```shell
+```bash
 cat > /opt/nginx/conf/modules.conf << EOF
 load_module modules/ndk_http_module.so;
 load_module modules/ngx_http_array_var_module.so;
@@ -184,7 +184,7 @@ EOF
 [[GeoLite2-City.mmdb.gz|Geoip2]]
 
 ##### real_ip.conf
-```shell
+```bash
 real_ip_header X-Forwarded-For;
 real_ip_recursive on;
 # proxy downstream real ip
@@ -193,7 +193,7 @@ set_real_ip_from 192.168.1.2/32;
 ```
 
 ##### default.conf
-```shell
+```bash
 server {
   listen 80 default;
   listen 443 ssl http2 default_server;
@@ -229,7 +229,7 @@ ssl_session_tickets off;
 ```
 
 ##### test.conf
-```shell
+```bash
 upstream bakend_server {
     server 1.1.1.1:8080;
     server 2.2.2.2:8080;

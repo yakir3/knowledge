@@ -1,5 +1,5 @@
 ### env
-```shell
+```bash
 # add share lib search
 # option1 for tmp 
 LD_LIBRARY_PATH=/opt/pgsql/lib
@@ -31,7 +31,7 @@ echo $APP_NAME
 ```
 
 ### exec
-```shell
+```bash
 # executed command and exit current shell(process replacement)
 echo $$
 exec sleep 100
@@ -111,7 +111,7 @@ find /tmp/ -name "test.log" -exec chmod +x '{}' \;
 ```
 
 ### function 
-```shell
+```bash
 # script position 
 tee > test.sh << "EOF"
 #/usr/bin/env bash
@@ -139,7 +139,7 @@ function test() (
 ```
 
 ### set 
-```shell
+```bash
 # set to environment variable
 set -a testk
 set -o allexport
@@ -176,7 +176,7 @@ set -o xtrace
 ```
 
 ### printf
-```shell
+```bash
 # format 
 df -h |column -t
 
@@ -184,7 +184,7 @@ df -h | awk '{printf "%-20s %-10s %-10s %-10s %-10s %-10s\n", $1, $2, $3, $4, $5
 ```
 
 ### truncate string
-```shell
+```bash
 # truncate string
 variable="Hello World"
 echo "${variable#He}"   # output: llo World

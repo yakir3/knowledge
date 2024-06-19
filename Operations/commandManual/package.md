@@ -1,5 +1,5 @@
 #### apt 
-```shell
+```bash
 # 更新软件仓库
 apt update
 # 查看所有已有仓库源
@@ -34,7 +34,7 @@ dpkg -i elasticsearch-8.8.2-amd64.deb
 ```
 
 #### yum
-```shell
+```bash
 #
 ```
 
