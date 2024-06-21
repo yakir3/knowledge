@@ -1,3 +1,0 @@
-- name: Create /etc/rc.local
-  copy: src=rc.local dest=/etc/rc.local owner=root group=root mode=755
-  when: env == "ali"

@@ -1,6 +1,6 @@
 ---
 # tasks file for audit
-- name: Log Command History To Message
+- name: Add Command Audit To /etc/profile
   blockinfile:
     path: /etc/profile
     block: |
@@ -19,16 +19,5 @@
         export OLD_PWD=$(pwd);'
       }
       trap log2syslog DEBUG
-
-- name: Set History Size
-  lineinfile:
-    dest: /etc/profile
-    line: HISTSIZE=100000
-    state: present
-
-- name: Set Alias For Centos 7
-  blockinfile:
-    path: /etc/profile
-    block: |
-      alias grep='grep --color=auto'
-  when: ansible_distribution_major_version  == "7"
+      # set history size
+      HISTSIZE=100000

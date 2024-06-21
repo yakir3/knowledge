@@ -2,8 +2,7 @@
 ```bash
 # add share lib search
 # option1 for tmp 
-LD_LIBRARY_PATH=/opt/pgsql/lib
-export LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/opt/pgsql/lib
 # option2 for persistent
 echo "/opt/pgsql/lib" >> /etc/ld.so.conf.d/pgsql.conf
 ldconfig

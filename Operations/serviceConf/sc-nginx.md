@@ -1,6 +1,6 @@
 #### nginx.conf
 ```bash
-user  nobody nobody; # chown nobody.nobody /opt/nginx -R
+user  nobody nobody;
 worker_processes  auto;
 worker_cpu_affinity auto;
 worker_rlimit_nofile 655350;
@@ -8,11 +8,9 @@ worker_rlimit_nofile 655350;
 error_log  logs/error.log;
 pid        logs/nginx.pid;
 
-
 events {
     worker_connections  102400;
 }
-
 
 stream{
     log_format tcp_log '$remote_addr [$time_local]'
@@ -32,8 +30,6 @@ stream{
       proxy_pass tcp_backend_server;
     }
 }
-
-
 
 http {
     include       mime.types;
