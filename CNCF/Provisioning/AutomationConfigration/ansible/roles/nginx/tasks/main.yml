@@ -30,12 +30,12 @@
 
 - name: Nginx logrotate
   block:
-    - name: confirm cron directory
-      file: path=/opt/cron/ owner=root group=root mode='0755' state=directory
+    - name: confirm logrotate directory
+      file: path=/opt/logrotate/ owner=root group=root mode='0755' state=directory
     - name: synchronize logrotate file 
-      copy: src=nginx.logrotate dest=/opt/cron/nginx.logrotate owner=root group=root mode='0644'
+      copy: src=nginx.logrotate dest=/opt/logrotate/nginx.logrotate owner=root group=root mode='0644'
     - name: add logrotate task to crontab
-      cron: name='logroate nginx' minute='59' hour='23' job='/usr/sbin/logrotate -f /opt/cron/nginx >> /opt/cron/cron.log 2>&1'
+      cron: name='logroate nginx' minute='59' hour='23' job='/usr/sbin/logrotate -f /opt/logrotate/nginx.logrotate >> /opt/logrotate/logrotate.log 2>&1'
 
 - name: Check and start nginx service
   block:

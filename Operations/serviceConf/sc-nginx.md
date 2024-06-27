@@ -1,4 +1,4 @@
-#### nginx.conf
+### nginx.conf
 ```bash
 user  nobody nobody;
 worker_processes  auto;
@@ -158,7 +158,7 @@ include modules.conf;
 
 ```
 
-##### modules.conf
+#### modules.conf
 ```bash
 cat > /opt/nginx/conf/modules.conf << EOF
 load_module modules/ndk_http_module.so;
@@ -174,21 +174,14 @@ EOF
 ```
 
 
-#### vhosts/\*.conf
-##### iplib
+### third iplib
 [[IPV6-COUNTRY-REGION-CITY.BIN.gz|ip2location]]
+
 [[GeoLite2-City.mmdb.gz|Geoip2]]
 
-##### real_ip.conf
-```bash
-real_ip_header X-Forwarded-For;
-real_ip_recursive on;
-# proxy downstream real ip
-set_real_ip_from 192.168.1.1/32;
-set_real_ip_from 192.168.1.2/32;
-```
+### vhosts/\*.conf
 
-##### default.conf
+#### default.conf
 ```bash
 server {
   listen 80 default;
@@ -223,8 +216,16 @@ ssl_session_timeout  4h;
 ssl_session_cache shared:SSL:30m;
 ssl_session_tickets off;
 ```
+#### real_ip.conf
+```bash
+real_ip_header X-Forwarded-For;
+real_ip_recursive on;
+# proxy downstream real ip
+set_real_ip_from 192.168.1.1/32;
+set_real_ip_from 192.168.1.2/32;
+```
 
-##### test.conf
+#### template.conf
 ```bash
 upstream bakend_server {
     server 1.1.1.1:8080;
@@ -256,7 +257,8 @@ server {
         error_page 502   /502;
         error_page 503   /503;
     }
-    
+
+    # geoip
     location /geoip2-test {
         if ( $allowed_country = no ) {
 		    return 444;
@@ -272,6 +274,7 @@ server {
         "allowed_country": "$allowed_country"}';
     }
 
+    # ip2location
     location /ip2location-test {
     	if ( $blocked_country = yes ) {
 		    return 444;
@@ -287,7 +290,8 @@ server {
         "longitude": "$ip2location_longitude",
         "blocked_country": "$blocked_country"}';
     }
-    
+
+    # websocket protocol
     location /socket/ {        
         proxy_pass http://bakend_server/;
         proxy_http_version 1.1;
@@ -301,6 +305,18 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
    }
+
+    # CDN cache
+    location / {
+        if ($request_filename ~ .*\.(htm|html)$) { add_header Cache-Control "max-age=60, s-maxage=120"; }
+        if ($request_filename !~ .*\.(htm|html)$) { add_header Cache-Control "max-age=31536000, s-maxage=86400"; }
+            root /usr/share/nginx/html;
+            try_files $uri $uri/ /index.html;
+        }
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS';
+        add_header Access-Control-Allow-Headers 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization';
+    }
 }
 ```
 

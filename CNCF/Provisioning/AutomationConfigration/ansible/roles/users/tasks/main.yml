@@ -1,38 +1,26 @@
 ---
 # tasks file for adduser
-- name: Add User myuser 
+- name: Add user and group <ansible> and ssh login authorized
   block:
-    - name: Add Group myuser
-      group: name=myuser state=present
+    - name: Add User <ansible>
+      user: name=<ansible> group=<ansible>  shell=/bin/bash
 
-    - name: Add User myuser
-      user: name=myuser group=myuser  shell=/bin/bash
+    - name: Add group <ansible>
+      group: name=<ansible> state=present
 
-    - name: Create User myuser .ssh dir
-      args:
-        warn: false
-      shell: mkdir -p /home/myuser/.ssh && chown -R myuser.myuser /home/myuser/.ssh
+    - name: Create <ansible> .ssh directory
+      #shell: mkdir -p /home/<ansible>/.ssh && chown -R <ansible>.<ansible> /home/<ansible>/.ssh
+      debug:
 
-    - name: Add Authorized Key For myuser
+    - name: Create .ssh directory and add authorized key
       authorized_key:
-        user: myuser
+        user: <ansible>
         state: present
-        key: "{{ lookup('file', '/etc/ansible/keys/node.pub') }}"
-      when: env == "ali" or env == "tencent"
+        key: "{{ lookup('file', '/etc/ansible/keys/east.pub') }}"
+      when: hostnamefix == "east"
 
-    - name: Set OPT Permission
-      file: path=/opt/ owner=myuser group=myuser mode=0755 recurse=yes state=directory
-
-    - name: Set WEB Permission
-      file: path=/web/ owner=myuser group=myuser mode=0755 recurse=yes state=directory
-
-    - name: add source /etc/profile to /root/.bashrc
-      blockinfile:
-        path: /root/.bashrc
-        block: |
-          source /etc/profile
-    - name: add source /etc/profile to /home/myuser/.bashrc
-      blockinfile:
-        path: /home/myuser/.bashrc
-        block: |
-          source /etc/profile
+    - name: Set user directory permission
+      file: path={{ item }} owner=<ansible> group=<ansible> mode=0755 recurse=yes state=directory
+      loop:
+        - /opt/
+        - /web/

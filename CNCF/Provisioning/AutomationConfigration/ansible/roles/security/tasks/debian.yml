@@ -1,9 +1,0 @@
-- name: create config file
-  shell: mkdir -p /etc/sysconfig/
-
-- name: Update Iptables Conf File Ubuntu 20
-  copy: src=iptables_ali dest=/etc/sysconfig/iptables owner=root group=root mode=0600
-  when: ansible_distribution_major_version  == "20" and env == "ali"
-
-- name: Restart Iptables
-  shell: /sbin/iptables-restore < /etc/sysconfig/iptables

@@ -40,17 +40,20 @@ tcpdump -ttttnvvvS -i ens160 arp
 
 ##### curl
 ```bash
-# 自定义请求 Header
---header / -H
-
-# 携带 cookie 请求
---cookie 或 -b 参数
-
-# 详细输出请求信息
+# customer header
+-H
+# use cookie
+-b 
+# verbose info
 -v
+# proxy
+-x [protocol://]host[:port]
 
-# 代理请求
--x, --proxy [protocol://]host[:port]
+
+# 304 response
+curl https://cdn.example.com/ -H'if-modified-since: Mon, 1 Jan 2024 00:00:00 GMT' -i
+curl https://cdn.example.com/ -H'if-none-match: "xxx123-xxx456"' -i 
+
 
 # 测试服务端支持的 TLS 版本
 curl https://google.com -kv --tlsv1 --tls-max 1.0

@@ -17,13 +17,12 @@
   roles:
     - audit
     - disk
-    - hosts
+    - hostname
     - ntp
     - packages
     - salt-minion
-    - security # iptables
+    - security # iptables, ulimit
     - sysctl
-    - ulimit
     - users
     - vimrc
     - zabbix-client

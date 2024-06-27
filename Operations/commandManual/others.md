@@ -1,52 +1,6 @@
 ### git
+#### branch
 ```bash
-# 回退上一个版本
-git reset --hard HEAD^ 
-# 回退两个版本
-git reset --hard HEAD^^
-# 回退10个版本
-git reset --hard HEAD~10
-# 指定版本
-git reset --hard fd301d 指定版本
-
-
-# 查看 git 每次执行命令
-git reflog
-# 撤销修改区回到最新版本
-git checkout -- file 
-# 撤销添加暂存区回到修改区 撤销add，回到修改区
-git reset HEAD file 
-
-
-# 移动文件
-git mv
-# 删除文件
-git rm 
-
-
-# 保存认证信息
-git config credential.helper 'cache --timeout=3600' [--global]
-git config credential.helper store [--global]
-git config user.name yakir
-git config user.email yakir@gmail.com
-
-
-# 关联github远程仓库
-git remote add origin https://github.com/username/reponame.git 
-git remote -v 
-
-# 推送到远程仓库
-git push -u origin main
-git pull main
-# 查看所有远程库信息
-
-
-
-# 设置别名
-git config --global alias.test "command"
-git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
-
 # 创建分支
 git branch dev
 # 创建并合并分支
@@ -60,8 +14,34 @@ git branch -D dev
 git push origin --delete dev
 # 关联本地和远程dev分支
 git branch --set-upstream-to=origin/dev dev 
-# 分支变基
-git rebase
+```
+
+#### config
+```bash
+# 设置别名
+git config --global alias.test "command"
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+# 保存认证信息
+git config credential.helper 'cache --timeout=3600' [--global]
+git config credential.helper store [--global]
+git config user.name yakir
+git config user.email yakir@gmail.com
+```
+
+#### common
+```bash
+# mv and rm
+git mv x.json
+git rm x.json
+
+# tag
+# 根据版本号打标签
+git tag v1.0 dsv34dsdv
+# 本地删除标签
+git tag -d v0.9 
+# 远程删除标签
+git push origin :refs/tags/v0.9 
 
 # 合并dev分支到当前分支，fast-forward模式 新版本git
 git merge dev 
@@ -69,21 +49,27 @@ git merge dev
 git merge --no-ff -m "merge with no-ff" dev 
 # 查看分支记录
 git log --graph --pretty=oneline --abbrev-commit 
+# 分支变基
+git rebase
+```
 
 
+#### remote repo
+```bash
+# relationship remote repo
+git remote add origin https://github.com/username/reponame.git 
+git remote -v 
 
-# 根据版本号打标签
-git tag v1.0 dsv34dsdv
-# 推送标签版本到远程库
-git push origin v1.0 
-# 一次性全部推送所有标签
-git push origin --tags 
-# 本地删除标签
-git tag -d v0.9 
-# 远程删除标签
-git push origin :refs/tags/v0.9 
+# pull and push remote repo
+git pull main
+git push origin main 
 
+# 查看所有远程库信息
+git branch --all |grep remotes
+```
 
+#### stash
+```bash
 # 暂存工作到堆栈去
 git stash save "stash message for log"
 # 查看所有暂存堆栈
@@ -94,7 +80,26 @@ git stash pop
 git cherry-pick 4c805e2
 ```
 
-### mvn
+#### version control
+```bash
+# 回退上一个版本
+git reset --hard HEAD^ 
+# 回退两个版本
+git reset --hard HEAD^^
+# 回退10个版本
+git reset --hard HEAD~10
+# 指定版本
+git reset --hard fd301d 指定版本
+
+# 查看 git 每次执行命令
+git reflog
+# 撤销修改区回到最新版本
+git checkout -- file 
+# 撤销添加暂存区回到修改区 撤销add，回到修改区
+git reset HEAD file 
+```
+
+### maven
 ```bash
 # determine file location
 mvn -X clean | grep "settings"
