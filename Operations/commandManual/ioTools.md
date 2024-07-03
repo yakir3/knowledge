@@ -8,14 +8,6 @@ time dd if=/dev/zero of=test.file bs=1G count=2 oflag=direct
 
 ```
 
-##### fdisk && parted
-```bash
-# show info
-fdisk -l
-parted -l
-
-```
-
 #### fio
 ```bash
 # sequence read
@@ -32,6 +24,7 @@ fio -filename=/var/test.file -direct=1 -iodepth 1 -thread -rw=randrw -rwmixread=
 
 
 ```
+
 
 #### iostat
 ```bash
@@ -71,4 +64,44 @@ pidstat -d 1
 #### sar
 ```bash
 sar -b -p 1
+```
+
+#### Formatting and Partitioning
+##### fdisk && gdisk
+```bash
+# show info
+fdisk -l /dev/sda
+gdisk -l /dev/sda
+```
+
+##### lsblk
+```bash
+# show all block device infomation
+lsblk -f
+```
+
+##### parted && partprobe
+```bash
+# show disk partition info
+parted -l
+
+# partitioning with UEFI(GPT)
+parted /dev/sda -- mklabel gpt
+parted /dev/sda -- mkpart ESP fat32 1MB 512MB
+parted /dev/sda -- mkpart primary linux-swap 512MB 1536MB
+parted /dev/sda -- mkpart root ext4 1536MB 100%
+parted /dev/sda -- set 1 esp on
+parted /dev/sda -- print
+
+# refresh partition
+partprobe
+```
+
+##### others
+```bash
+# 无需重启服务器,通过刷新磁盘数据总线方式获取新加磁盘
+for host in $(ls /sys/class/scsi_host); 
+do 
+  echo "- - -" > /sys/class/scsi_host/$host/scan
+done
 ```

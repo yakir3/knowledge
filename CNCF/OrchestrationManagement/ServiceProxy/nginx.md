@@ -61,11 +61,17 @@ cd /opt/nginx
 # boot 
 cat > /etc/systemd/system/nginx.service << EOF
 [Unit]
-Description=Nginx HTTP Server
-Wants=network.target
-After=network.target
+Description=Nginx-1.x.x
+Documentation=https://nginx.org
+Wants=network-online.target
+After=network-online.target
 
 [Service]
+#Type=simple
+#ExecStartPre=/opt/nginx/sbin/nginx -q -g 'daemon on; master_process on;' -t
+#ExecStart=/opt/nginx/sbin/nginx -g 'daemon on; master_process on;'
+#ExecReload=/opt/nginx/sbin/nginx -g 'daemon on; master_process on;' -s reload
+#ExecStop=-/sbin/start-stop-daemon --quiet --stop --retry QUIT/5 --pidfile $PIDFile
 Type=forking
 PIDFile=/opt/nginx/logs/nginx.pid
 ExecStartPre=/opt/nginx/sbin/nginx -t
@@ -73,6 +79,16 @@ ExecStart=/opt/nginx/sbin/nginx
 ExecReload=/opt/nginx/sbin/nginx -s reload
 ExecStop=/opt/nginx/sbin/nginx -s stop
 PrivateTmp=true
+KillSignal=SIGTERM
+KillMode=mixed
+SendSIGKILL=no
+SuccessExitStatus=143
+TimeoutStartSec=60
+TimeoutStopSec=5
+Restart=on-failure
+RestartSec=10s
+LimitNOFILE=655350
+LimitNPROC=655350
 
 [Install]
 WantedBy=multi-user.target

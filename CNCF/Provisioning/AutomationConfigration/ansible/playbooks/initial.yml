@@ -5,7 +5,7 @@
   vars:
     - ansible_port: 22 
     - ansible_user: root 
-    - ansible_ssh_pass: old_root_password
+    - ansible_ssh_pass: root_password
     - ansible_python_interpreter: "/usr/bin/python3"
   vars_prompt:
     - name: "new_root_password"
@@ -21,7 +21,7 @@
     - ntp
     - packages
     - salt-minion
-    - security # iptables, ulimit
+    - security    # iptables, ulimit
     - sysctl
     - users
     - vimrc

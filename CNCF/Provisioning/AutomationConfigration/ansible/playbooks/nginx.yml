@@ -1,6 +1,8 @@
 ---
-# Usage:
-#     ansible-playbook playbooks/nginx.yml -e "hosts_vars=10.0.10.12,10.0.10.13"
+# Usage: 
+#   ansible-playbook -e "hosts_var=10.0.10.12" playbook/nginx.yml
+#   ansible-playbook -e "hosts_var=10.0.10.12,10.0.10.13" playbook/nginx.yml
+
 - hosts: "{{ hosts_var }}"
   remote_user: root
   become: yes

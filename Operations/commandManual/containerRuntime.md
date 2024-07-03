@@ -1,4 +1,26 @@
 #### docker & podman
+##### busybox chroot
+```bash
+mkdir rootfs
+docker export $(docker create busybox) | tar -C rootfs -xvf -
+chroot rootfs /bin/ls
+chroot rootfs /bin/pwd
+chroot rootfs /bin/sh
+ls -ld /proc/$(pidof -s sh)/root
+
+
+# principle: use chroot jail
+mkdir jail/{bin,lib,lib64} -p
+ldd $(which bash)
+cp -r /lib/* jail/lib
+cp -r /lib64/* jail/lib64/
+cp /bin/ls jail/bin/
+cp /bin/bash jail/bin/
+chroot jail /bin/bash
+[I have no name!@ubuntu /]# ls
+bin  lib  lib64
+```
+
 ##### common command
 ```bash
 # common parameters

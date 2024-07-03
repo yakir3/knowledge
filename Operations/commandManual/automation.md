@@ -167,7 +167,7 @@ fact_caching_connection = localhost:11211
 
 
 # flush cache
-ansible-playbook --flush-cache playbooks/template.yml
+ansible-playbook --flush-cache playbooks/example.yml
 ```
 
 ##### template
@@ -239,13 +239,13 @@ ansible-galaxy remove geerlingguy.redis
 pip install ansible-lint
 
 # use
-ansible-lint playbooks/template.yml
+ansible-lint playbooks/example.yml
 ```
 
 #### ansible-playbook
 ```bash
 # execute example playbook
-ansible-playbook playbooks/template.yml
+ansible-playbook playbooks/example.yml
 # execute playbook use extra vars hosts
 ansible-playbook -i inventories/initial.hosts playbooks/initial.yml -e "init_hosts=10.0.10.12,10.0.10.13" --check
 
@@ -320,8 +320,8 @@ ansible-playbook -i inventories/initial.hosts playbooks/initial.yml -e "init_hos
 
 
 # step task
-ansible-playbook playbooks/template.yml --start-at-task="install packages"
-ansible-playbook playbooks/template.yml --step
+ansible-playbook playbooks/example.yml --start-at-task="install packages"
+ansible-playbook playbooks/example.yml --step
 
 
 ```
@@ -330,21 +330,21 @@ ansible-playbook playbooks/template.yml --step
 ```bash
 # file
 ansible-vault create playbooks/new.yml
-ansible-vault encrypt playbooks/template.yml
-ansible-vault view playbooks/template.yml
-ansible-vault decrypt playbooks/template.yml
+ansible-vault encrypt playbooks/example.yml
+ansible-vault view playbooks/example.yml
+ansible-vault decrypt playbooks/example.yml
 --vault-id
 --vault-password-file
 
 # use encrypt playbook
-ansible-vault encrypt --vault-id playbook@prompt playbooks/template.yml
-ansible-playbook playbooks/template.yml --ask-vault-pass
+ansible-vault encrypt --vault-id playbook@prompt playbooks/example.yml
+ansible-playbook playbooks/example.yml --ask-vault-pass
 
 
 # string
 ansible-vault encrypt_string 'pwd123' --name 'root_password'
 #write vars to playbook
-ansible-playbook playbooks/template.yml --ask-vault-pass
+ansible-playbook playbooks/example.yml --ask-vault-pass
 ```
 
 ### saltstack

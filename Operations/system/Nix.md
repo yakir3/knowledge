@@ -47,7 +47,6 @@ parted /dev/sda -- mkpart root ext4 512MB 100%
 parted /dev/sda -- set 1 esp on
 
 
-
 # Legacy Boot(MBR)
 # Create a MBR partition table.
 parted /dev/sda -- mklabel msdos
