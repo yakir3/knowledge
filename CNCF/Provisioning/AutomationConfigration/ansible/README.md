@@ -72,7 +72,7 @@ inventories/test.host
 inventories/prod.host
 ```
 
-##### [[automation#ansible|Common]]
+##### [[Automation#ansible|Common]]
 + ad-hoc(modules)
 + vars && fact && template
 + ansible-console

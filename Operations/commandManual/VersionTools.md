@@ -1,5 +1,5 @@
-### git
-#### branch
+#### Git
+##### branch
 ```bash
 # 创建分支
 git branch dev
@@ -16,7 +16,7 @@ git push origin --delete dev
 git branch --set-upstream-to=origin/dev dev 
 ```
 
-#### config
+##### config
 ```bash
 # 设置别名
 git config --global alias.test "command"
@@ -29,7 +29,7 @@ git config user.name yakir
 git config user.email yakir@gmail.com
 ```
 
-#### common
+##### common
 ```bash
 # mv and rm
 git mv x.json
@@ -54,7 +54,7 @@ git rebase
 ```
 
 
-#### remote repo
+##### remote repo
 ```bash
 # relationship remote repo
 git remote add origin https://github.com/username/reponame.git 
@@ -68,7 +68,7 @@ git push origin main
 git branch --all |grep remotes
 ```
 
-#### stash
+##### stash
 ```bash
 # 暂存工作到堆栈去
 git stash save "stash message for log"
@@ -80,7 +80,7 @@ git stash pop
 git cherry-pick 4c805e2
 ```
 
-#### version control
+##### version control
 ```bash
 # 回退上一个版本
 git reset --hard HEAD^ 
@@ -99,20 +99,4 @@ git checkout -- file
 git reset HEAD file 
 ```
 
-### maven
-```bash
-# determine file location
-mvn -X clean | grep "settings"
-
-# determini effective settings
-mvn help:effective-settings
-
-# override the default location
-mvn clean --settings /tmp/my-settings.xml --global-settings /tmp/global-settings.xml
-
-# package
-mvn clean package -U -DskipTests
-
-# deploy
-mvn clean package deploy -U -DskipTests
-```
+#### Subversion

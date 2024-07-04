@@ -1251,7 +1251,7 @@ spec.contianers[n].args = CMD
 [[docker-compose.yml|Archery Docker Compose]]
 
 ### Common Command
-[[containerRuntime#docker & podman|Docker Command]]
+[[ContainerRuntime#docker & podman|Docker Command]]
 
 
 

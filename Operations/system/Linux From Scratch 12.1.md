@@ -2662,25 +2662,245 @@ EOF
 ```
 
 ##### System V Bootscript Usage and Configuration
+```bash
+# set inittab
+cat > /etc/inittab << "EOF"
+id:3:initdefault:
 
+si::sysinit:/etc/rc.d/init.d/rc S
+
+l0:0:wait:/etc/rc.d/init.d/rc 0
+l1:S1:wait:/etc/rc.d/init.d/rc 1
+l2:2:wait:/etc/rc.d/init.d/rc 2
+l3:3:wait:/etc/rc.d/init.d/rc 3
+l4:4:wait:/etc/rc.d/init.d/rc 4
+l5:5:wait:/etc/rc.d/init.d/rc 5
+l6:6:wait:/etc/rc.d/init.d/rc 6
+
+ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
+
+su:S06:once:/sbin/sulogin
+s1:1:respawn:/sbin/sulogin
+
+1:2345:respawn:/sbin/agetty --noclear tty1 9600
+2:2345:respawn:/sbin/agetty tty2 9600
+3:2345:respawn:/sbin/agetty tty3 9600
+4:2345:respawn:/sbin/agetty tty4 9600
+5:2345:respawn:/sbin/agetty tty5 9600
+6:2345:respawn:/sbin/agetty tty6 9600
+
+# End /etc/inittab
+EOF
+
+# set system clock
+cat > /etc/sysconfig/clock << "EOF"
+# Begin /etc/sysconfig/clock
+
+UTC=1
+
+# Set this to any options you might need to give to hwclock,
+# such as machine hardware clock type for Alphas.
+CLOCKPARAMS=
+
+# End /etc/sysconfig/clock
+EOF
+
+# set console
+cat > /etc/sysconfig/console << "EOF"
+# Begin /etc/sysconfig/console
+
+UNICODE="1"
+FONT="Lat2-Terminus16"
+EOF
+```
 
 ##### Configuring the System Locale
+```bash
+# check
+LC_ALL=en_US.utf8 locale language
+LC_ALL=en_US.utf8 locale charmap
+LC_ALL=en_US.utf8 locale int_curr_symbol
+LC_ALL=en_US.utf8 locale int_prefix
 
+
+cat > /etc/profile << "EOF"
+for i in $(locale); do
+  unset ${i%=*}
+done
+
+if [[ "$TERM" = linux ]]; then
+  export LANG=C.UTF-8
+else
+  #export LANG=<ll>_<CC>.<charmap><@modifiers>
+  export LANG=en_US.utf8
+fi
+EOF
+```
 
 ##### Creating the /etc/inputrc File
+```bash
+cat > /etc/inputrc << "EOF"
+# Modified by Chris Lynn <roryo@roryo.dynup.net>
 
+# Allow the command prompt to wrap to the next line
+set horizontal-scroll-mode Off
+
+# Enable 8-bit input
+set meta-flag On
+set input-meta On
+
+# Turns off 8th bit stripping
+set convert-meta Off
+
+# Keep the 8th bit for display
+set output-meta On
+
+# none, visible or audible
+set bell-style none
+
+# All of the following map the escape sequence of the value
+# contained in the 1st argument to the readline specific functions
+"\eOd": backward-word
+"\eOc": forward-word
+
+# for linux console
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[5~": beginning-of-history
+"\e[6~": end-of-history
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+
+# for xterm
+"\eOH": beginning-of-line
+"\eOF": end-of-line
+
+# for Konsole
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+EOF
+```
 
 ##### Creating the /etc/shells File
-
+```bash
+cat > /etc/shells << "EOF"
+/bin/sh
+/bin/bash
+EOF
+```
 
 #### Making the LFS System Bootable
+##### Creating the /etc/fstab File
+```bash
+cat > /etc/fstab << "EOF"
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+/dev/<xxx>     /            <fff>      defaults            1     1
+/dev/<yyy>     swap         swap       pri=1               0     0
+proc           /proc          proc     nosuid,noexec,nodev 0     0
+sysfs          /sys           sysfs    nosuid,noexec,nodev 0     0
+devpts         /dev/pts       devpts   gid=5,mode=620      0     0
+tmpfs          /run           tmpfs    defaults            0     0
+devtmpfs       /dev           devtmpfs mode=0755,nosuid    0     0
+tmpfs          /dev/shm       tmpfs    nosuid,nodev        0     0
+cgroup2        /sys/fs/cgroup cgroup2  nosuid,noexec,nodev 0     0
+EOF
+```
+
+##### Linux-6.7.4
+```bash
+# install
+cd /sources
+tar xf linux-6.7.4.tar.xz && cd linux-6.7.4
+
+make mrproper
+
+make menuconfig
+General setup --->
 ...
+
+make
+make modules_install
+
+cp -iv arch/x86/boot/bzImage /boot/vmlinuz-6.7.4-lfs-12.1
+cp -iv System.map /boot/System.map-6.7.4
+
+cp -iv .config /boot/config-6.7.4
+cp -r Documentation -T /usr/share/doc/linux-6.7.4
+
+#cd /sources/ && rm -rf linux-6.7.4
+chown 0:0 /sources/linux-6.7.4
+
+
+# config
+install -v -m755 -d /etc/modprobe.d
+cat > /etc/modprobe.d/usb.conf << "EOF"
+install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+EOF
+```
+
+##### Using GRUB to Set Up the Boot Process
+option
+```bash
+# install depends
+cd /sources/
+wget https://files.libburnia-project.org/releases/libburn-1.5.6.tar.gz
+wget https://files.libburnia-project.org/releases/libisofs-1.5.6.tar.gz
+wget https://files.libburnia-project.org/releases/libisoburn-1.5.6.tar.gz
+
+tar xf libburn-1.5.6.tar.gz && cd libburn-1.5.6
+./configure --prefix=/usr --disable-static && make
+make install
+
+tar xf libisofs-1.5.6.tar.gz && cd libisofs-1.5.6
+./configure --prefix=/usr --disable-static && make
+make install
+
+tar xf libisoburn-1.5.6.tar.gz && cd libisoburn-1.5.6
+./configure --prefix=/usr              \
+            --disable-static           \
+            --enable-pkg-check-modules && make
+make install
+
+cd /sources/ && rm -rf libburn-1.5.6 libisofs-1.5.6 libisoburn-1.5.6
+
+
+wget ftp://ftp.gnu.org/gnu/mtools/mtools-4.0.18.tar.gz
+tar xf mtools-4.0.18.tar.gz && cd mtools-4.0.18
+./configure --prefix=/usr && make && make install
+cd /sources/ && rm -rf mtools-4.0.18
+
+
+# backup emergency boot disk
+cd /tmp
+grub-mkrescue --output=grub-img.iso
+xorriso -as cdrecord -v dev=/dev/cdrw blank=as_needed grub-img.iso
+```
+config
+```bash
+# install grub
+grub-install /dev/xxx
+
+cat > /boot/grub/grub.cfg << "EOF"
+set default=0
+set timeout=5
+
+insmod part_gpt
+insmod ext2
+set root=(hd0,2)
+
+menuentry "GNU/Linux, Linux 6.7.4-lfs-12.1" {
+        linux   /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
+}
+EOF
+```
 
 #### The End
 ...
 
 ### Appendices
 ...
+
 
 
 

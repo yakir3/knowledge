@@ -55,14 +55,6 @@ strace -c ls
 
 ```
 
-##### systemd
-```bash
-# journalctl
-# tailf and unit log
-journalctl -u prometheus.service -f
-
-```
-
 ##### systemtap
 ```bash
 # install

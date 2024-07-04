@@ -1,4 +1,4 @@
-[[containerRuntime|helm常用命令]]
+[[ContainerRuntime|helm常用命令]]
 
 ## helm repo
 ```bash
