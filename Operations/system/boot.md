@@ -68,12 +68,13 @@ GUID 分区表: GUID Partition Table
 ![[Pasted image 20240320154944.png]]
 
 ### Kernel
-内核初始化硬件
-加载驱动
-初始化内存管理,进程管理
-挂载根文件系统
-切换 rootfs
-运行 init 程序
+1. 内核初始化硬件
+2. 加载驱动
+3. 初始化内存管理,进程管理
+4. 挂载根文件系统
+5. 切换 rootfs
+6. 运行 init 程序(systemd)
+7. systemd: 系统初始化与服务启动
 
 ### Systemd
 /etc/rcX.d/

@@ -6,15 +6,18 @@
 ##### Creating a New Partition
 ```bash
 # partitioning
+parted /dev/sdb -- unit mib 
 parted /dev/sdb -- mklabel gpt
-parted /dev/sdb -- mkpart ESP fat32 1MB 512MB
-parted /dev/sdb -- mkpart primary linux-swap 512MB 1536MB
-parted /dev/sdb -- mkpart root ext4 1536MB 100%
-parted /dev/sdb -- set 1 esp on
+parted /dev/sdb -- mkpart primary 1 3
+parted /dev/sdb -- mkpart ESP fat32 3 515
+parted /dev/sdb -- mkpart root ext4 515 -1
+parted /dev/sdb -- set 1 bios_grub on
+parted /dev/sdb -- set 2 esp on
+
 
 # formating
 mkfs.fat -F 32 -n boot /dev/sdb1
-mkswap -L swap /dev/sdb2 
+mkfs.ext4 -v /dev/sdb2
 mkfs.ext4 -v /dev/sdb3
 ```
 
@@ -2694,21 +2697,14 @@ EOF
 
 # set system clock
 cat > /etc/sysconfig/clock << "EOF"
-# Begin /etc/sysconfig/clock
-
 UTC=1
-
 # Set this to any options you might need to give to hwclock,
 # such as machine hardware clock type for Alphas.
 CLOCKPARAMS=
-
-# End /etc/sysconfig/clock
 EOF
 
 # set console
 cat > /etc/sysconfig/console << "EOF"
-# Begin /etc/sysconfig/console
-
 UNICODE="1"
 FONT="Lat2-Terminus16"
 EOF
@@ -2896,11 +2892,40 @@ EOF
 ```
 
 #### The End
-...
+```bash
+# the end
+echo 12.1 > /etc/lfs-release
+
+cat > /etc/lsb-release << "EOF"
+DISTRIB_ID="Linux From Scratch"
+DISTRIB_RELEASE="12.1"
+DISTRIB_CODENAME="july"
+DISTRIB_DESCRIPTION="Linux From Scratch"
+EOF
+
+cat > /etc/os-release << "EOF"
+NAME="Linux From Scratch"
+VERSION="12.1"
+ID=lfs
+PRETTY_NAME="Linux From Scratch 12.1"
+VERSION_CODENAME="july"
+HOME_URL="https://www.linuxfromscratch.org/lfs/"
+EOF
+
+# reboot system
+logout
+umount -v $LFS/dev/pts
+mountpoint -q $LFS/dev/shm && umount -v $LFS/dev/shm
+umount -v $LFS/dev
+umount -v $LFS/run
+umount -v $LFS/proc
+umount -v $LFS/sys
+umount -v $LFS/home
+umount -v $LFS
+```
 
 ### Appendices
 ...
-
 
 
 
