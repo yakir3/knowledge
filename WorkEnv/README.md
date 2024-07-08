@@ -26,10 +26,10 @@ apt install zsh  # Debian
 chsh -s $(which zsh)
 
 # Install oh-myzsh
-head -20 initEnvFiles/shell/yakir.zshrc
+head -20 InitEnvFiles/shell/yakir.zshrc
 
 # Config zshrc
-cp initEnvFiles/shell/yakir.zshrc ~/.zshrc
+cp InitEnvFiles/shell/yakir.zshrc ~/.zshrc
 
 # Install fonts = PowerlineFont
 cd /tmp && git clone https://github.com/powerline/fonts.git --depth=1
@@ -47,7 +47,7 @@ apt install vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 # Config
-cp initEnvFiles/yakir.vimrc ~/.vimrc
+cp InitEnvFiles/yakir.vimrc ~/.vimrc
 
 # Vim plugin install
 vim
@@ -63,14 +63,14 @@ cp ~/.vim/bundle/ex-colorschemes/colors/molokai.vim ~/.vim/colors/
 ##### SSH Config
 ``` shell
 # Copy ssh config
-cp initEnvFiles/ssh/yakir.sshconfig ~/.ssh/config
+cp InitEnvFiles/ssh/yakir.sshconfig ~/.ssh/config
 # Change private permission
-chmod 600 initEnvFiles/ssh/yakir_server.key
+chmod 600 InitEnvFiles/ssh/yakir_server.key
 
 # Client Machine
 mkdir ~/.ssh
-cp initEnvFiles/ssh/yakir_server.key ~/.ssh/
-cp initEnvFiles/ssh/yakir_server.pub ~/.ssh/
+cp InitEnvFiles/ssh/yakir_server.key ~/.ssh/
+cp InitEnvFiles/ssh/yakir_server.pub ~/.ssh/
 ```
 
 ##### iTerm2
@@ -79,11 +79,11 @@ cp initEnvFiles/ssh/yakir_server.pub ~/.ssh/
 brew install iterm2
 
 # Import config
-initEnvFiles/iterm2/iterm2Profile.json
+InitEnvFiles/iterm2/iterm2Profile.json
 
 # Import iterm2-color
-initEnvFiles/iterm2/Solarized_Darcula.itermcolors
-initEnvFiles/iterm2/HaX0R_GR33N.itermcolors
+InitEnvFiles/iterm2/Solarized_Darcula.itermcolors
+InitEnvFiles/iterm2/HaX0R_GR33N.itermcolors
 
 ```
 
@@ -211,18 +211,18 @@ Vimium  # map q visitPreviousTab
 #### Terminal
 ```textile
 # SecureCRT
-initEnvFiles/SecureCRT.xml
+InitEnvFiles/SecureCRT.xml
 # activation software crontab
-cp initEnvFiles/activation_software.sh /opt/activation_software.sh
+cp InitEnvFiles/activation_software.sh /opt/activation_software.sh
 * * 9,19,29 * * sh /opt/activation_software.sh
 
 # iTerm2
-initEnvFiles/iterm2Profiles.json
-initEnvFiles/iterm2/HaX0R_GR33N.itermcolors
-initEnvFiles/iterm2/Solarized_Darcula.itermcolors
+InitEnvFiles/iterm2Profiles.json
+InitEnvFiles/iterm2/HaX0R_GR33N.itermcolors
+InitEnvFiles/iterm2/Solarized_Darcula.itermcolors
 
 # Xshell
-initEnvFiles/windows_config/software/Xshell
+InitEnvFiles/windows_config/software/Xshell
 ```
 
 #### Tools
@@ -258,7 +258,7 @@ localtunnel
 # Obsidian
 
 # Sublime-text
-initEnvFiles/Preferences.sublime-settings
+InitEnvFiles/Preferences.sublime-settings
 ```
 
 ##### clients
