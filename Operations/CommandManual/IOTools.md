@@ -67,17 +67,19 @@ sar -b -p 1
 ```
 
 #### Formatting and Partitioning
+##### blkid && lsblk
+```bash
+# show all block device infomation
+blkid
+lsblk -f /dev/sda
+lsblk -o UUID,PARTUUID,PATH,MOUNTPOINT /dev/sdb
+```
+
 ##### fdisk && gdisk
 ```bash
 # show info
 fdisk -l /dev/sda
 gdisk -l /dev/sda
-```
-
-##### lsblk
-```bash
-# show all block device infomation
-lsblk -f
 ```
 
 ##### parted && partprobe
@@ -86,12 +88,13 @@ lsblk -f
 parted -l
 
 # partitioning with UEFI(GPT)
-parted /dev/sda -- mklabel gpt
-parted /dev/sda -- mkpart ESP fat32 1MB 512MB
-parted /dev/sda -- mkpart primary linux-swap 512MB 1536MB
-parted /dev/sda -- mkpart root ext4 1536MB 100%
-parted /dev/sda -- set 1 esp on
-parted /dev/sda -- print
+parted /dev/sdb -- unit mib 
+parted /dev/sdb -- mklabel gpt
+parted /dev/sdb -- mkpart primary 1 3
+parted /dev/sdb -- mkpart ESP fat32 3 515
+parted /dev/sdb -- mkpart root ext4 515 -1
+parted /dev/sdb -- set 1 bios_grub on
+parted /dev/sdb -- set 2 esp on
 
 # refresh partition
 partprobe

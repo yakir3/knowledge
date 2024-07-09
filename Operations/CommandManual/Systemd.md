@@ -1,6 +1,7 @@
 ##### bootctl
 ```bash
 bootctl status
+bootctl status --esp-path /mnt/lfs/boot/
 ```
 
 ##### hostnamectl
@@ -11,34 +12,40 @@ hostnamectl set-hostname east-web-x
 
 ##### journalctl
 ```bash
-# boot log
-journalctl -b [-0]
-
 # specified date log
+-S --since
+-U --until
 journalctl --since "2024-01-01"
 journalctl --since "2024-01-01 09:00:00" --until "2024-01-01 09:15:00"
 journalctl --since "20 min ago" --until "10 min ago"
 
+# boot log
+-b --boot [-0]
+
 # kernel log
-journalctl -k
+-k --dmesg
 
 # unit log
-journalctl -u prometheus.service
-
-# number of journal entries to show and follow log
-journalctl -n 10 -f
+-u --unit UNIT
 
 # priority log
-journalctl -p [debug|info|notice|warning|err|crit|alert|emerg]
+-p [debug|info|notice|warning|err|crit|alert|emerg]
 
-# end log
+# Immediately jump to the end in the pager
 -e --pager-end
+
+# number of journal entries to show and follow log
+-f --follow
+-n --lines 10
+
+# Show the newest entries first
+-r --reverse
+
+# Change journal output mode
+-o --output=STRING
 
 # Add message explanations where available
 -x --catalog
-
-# Change journal output mode
-journalctl -o (short, short-precise, short-iso, short-iso-precise, short-full, short-monotonic, short-unix, verbose, export, json, json-pretty, json-sse, json-seq, cat, with-unit)
 
 # specified pid log
 journalctl _PID=123

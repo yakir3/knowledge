@@ -6,8 +6,8 @@
 1. 开机加电硬件自检, POST(Power-On Self-Test)
 该过程主要对计算机各种硬件设备进行检测，如 CPU、内存、主板、硬盘、CMOS 芯片等，如果出现致命故障则停机，并且由于初始化过程还没完成，所以不会出现任何提示信号；如果出现一般故障则会发出蜂鸣；若未出现故障，加电自检完成(枚举本地硬件设备初始化).
 2. 按 Boot Sequence 查找**可用的存储设备**, 找到后从该设备第一个扇区读取 MBR 或 GPT(Linux 系统) 引导启动操作系统.
-+ [[Boot#MBR|MBR]]
-+ [[Boot#GPT|GPT]]
++ [[boot#MBR|MBR]]
++ [[boot#GPT|GPT]]
 
 #### UEFI
 **UEFI 启动模式**: 引导数据存储在 .efi 文件中. UEFI 启动模式包含一个特殊 EFI 分区,用于存储 .efi 文件并用于引导过程和引导加载程序.
@@ -15,7 +15,7 @@
 统一可扩展固件接口: Unified Extensible Firmware Interface
 1. 开机加电硬件之间, POST(Power-On Self-Test)
 2. 从该设备第一个扇区读取 GPT 方式引导操作系统.
-+ [[Boot#GPT|GPT]]
++ [[boot#GPT|GPT]]
 
 ### MBR vs GPT
 

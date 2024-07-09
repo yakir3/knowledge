@@ -5,6 +5,22 @@
 #### Preparing the Host System
 ##### Creating a New Partition
 ```bash
+su - root
+
+# legacy
+# partitioning
+parted /dev/sdb -- unit mib 
+parted /dev/sdb -- mklabel gpt
+parted /dev/sdb -- mkpart primary 1 3
+parted /dev/sdb -- mkpart primary ext4 3 515
+parted /dev/sdb -- mkpart root ext4 515 -1
+parted /dev/sdb -- set 1 bios_grub on
+# formating
+mkfs.ext4 -v /dev/sdb2
+mkfs.ext4 -v /dev/sdb3
+
+
+# UEFI
 # partitioning
 parted /dev/sdb -- unit mib 
 parted /dev/sdb -- mklabel gpt
@@ -13,53 +29,61 @@ parted /dev/sdb -- mkpart ESP fat32 3 515
 parted /dev/sdb -- mkpart root ext4 515 -1
 parted /dev/sdb -- set 1 bios_grub on
 parted /dev/sdb -- set 2 esp on
-
-
 # formating
-mkfs.fat -F 32 -n boot /dev/sdb1
-mkfs.ext4 -v /dev/sdb2
+mkfs.fat -F 32 -n boot /dev/sdb2
 mkfs.ext4 -v /dev/sdb3
 ```
 
 ##### Setting The $LFS Variable
 ```bash
-# env
-cat > env.sh << EOF
+cat >> /root/.bashrc << EOF
 export LFS=/mnt/lfs
 EOF
-source env.sh
+source /root/.bashrc
 ```
 
 ##### Mounting the New Partition
 ```bash
+# legacy
 mkdir -pv $LFS
 mount -v -t ext4 /dev/sdb3 $LFS
-
 mkdir -v $LFS/boot
-mkdir -v $LFS/swap
-mount -v /dev/sdb1 $LFS/boot/
-#mount -v -t tmpfs /dev/sdb2 $LFS/swap
-swapon -v /dev/sdb2
+mount -v -t ext4 /dev/sdb2 $LFS/boot/
 
-# mount persistence
-cat /etc/fstab
-...
-/dev/sdb3  /mnt/lfs ext4   defaults      1     1
-/dev/sdb1  /mnt/lfs/boot ext4   defaults      1     1
-#/dev/sdb2  none swap sw 0 0
+# UEFI
+mkdir -pv $LFS
+mount -v -t ext4 /dev/sdb3 $LFS
+mkdir -pv $LFS/boot/efi
+mount -t vfat -o codepage=437,iocharset=iso8859-1 /dev/sda2 /boot/efi
+
+
+# option: temp persistence mount
+cat >> /etc/fstab
+# legacy
+UUID="638d219e-f1a0-401c-b4cf-de79860a0445" /mnt/lfs ext4 defaults 1 1
+PARTUUID="d47b7e0a-61fe-4c96-a387-13c07b53ddb7" /mnt/lfs/boot ext4 defaults 1 1
+# UEFI
+UUID="638d219e-f1a0-401c-b4cf-de79860a0445" /mnt/lfs ext4 defaults 0 1
+PARTUUID="d47b7e0a-61fe-4c96-a387-13c07b53ddb7" /mnt/lfs/boot/efi vfat codepage=437,iocharset=iso8859-1 0 1
 ```
 
 #### Packages and Patches
 ```bash
-# source packages directory and permission
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
-chown root:root $LFS/sources/*
 
 # get source packages and patch
-wget https://lfs.xry111.site/zh_CN/12.1/wget-list-sysv
-cat wget-list-sysv |awk -F'/' '{print "https://repo.jing.rocks/lfs/lfs-packages/12.1/"$NF}' |tee wget-list-sysv
-wget --input-file=wget-list-sysv --continue --directory-prefix=$LFS/sources
+wget https://lfs.xry111.site/zh_CN/12.1-systemd/wget-list-systemd
+#cat wget-list-systemd |awk -F'/' '{print "https://repo.jing.rocks/lfs/lfs-packages/12.1/"$NF}' |tee wget-list-systemd
+wget --input-file=wget-list-systemd --continue --directory-prefix=$LFS/sources
+
+# option: check md5sum
+wget https://lfs.xry111.site/zh_CN/12.1-systemd/md5sums
+pushd $LFS/sources
+  md5sum -c md5sums
+popd
+
+chown root:root $LFS/sources/*
 ```
 
 #### Final Preparations
@@ -90,13 +114,13 @@ chown -v lfs $LFS/{usr{,/*},lib,var,etc,bin,sbin,tools}
 case $(uname -m) in
   x86_64) chown -v lfs $LFS/lib64 ;;
 esac
+
+# change to user lfs
+su - lfs
 ```
 
 ##### Setting Up the Environment
 ```bash
-# change to user lfs
-su - lfs
-
 # setup bash_profile
 cat > ~/.bash_profile << "EOF"
 exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
@@ -608,7 +632,6 @@ esac
 mkdir -pv $LFS/{dev,proc,sys,run}
 
 mount -v --bind /dev $LFS/dev
-
 mount -vt devpts devpts -o gid=5,mode=0620 $LFS/dev/pts
 mount -vt proc proc $LFS/proc
 mount -vt sysfs sysfs $LFS/sys
@@ -634,7 +657,6 @@ chroot "$LFS" /usr/bin/env -i   \
 
 # Creating Directories
 mkdir -pv /{boot,home,mnt,opt,srv}
-
 mkdir -pv /etc/{opt,sysconfig}
 mkdir -pv /lib/firmware
 mkdir -pv /media/{floppy,cdrom}
@@ -656,7 +678,7 @@ install -dv -m 1777 /tmp /var/tmp
 # Creating Essential Files and Symlinks
 ln -sv /proc/self/mounts /etc/mtab
 
-cat > /etc/hosts << EOF
+cat > /etc/hosts << "EOF"
 127.0.0.1  localhost $(hostname)
 ::1        localhost
 EOF
@@ -932,8 +954,6 @@ localedef -i ja_JP -f SHIFT_JIS ja_JP.SJIS 2> /dev/null || true
 
 # config
 cat > /etc/nsswitch.conf << "EOF"
-# Begin /etc/nsswitch.conf
-
 passwd: files
 group: files
 shadow: files
@@ -945,8 +965,6 @@ protocols: files
 services: files
 ethers: files
 rpc: files
-
-# End /etc/nsswitch.conf
 EOF
 
 
@@ -967,14 +985,12 @@ zic -d $ZONEINFO -p America/New_York
 unset ZONEINFO
 
 tzselect 
-ln -sfv /usr/share/zoneinfo/<xxx> /etc/localtime
-
+#ln -sfv /usr/share/zoneinfo/<xxx> /etc/localtime
+ln -sfv /usr/share/zoneinfo/Asia/Hong_Kong /etc/localtime
 
 cat > /etc/ld.so.conf << "EOF"
-# Begin /etc/ld.so.conf
 /usr/local/lib
 /opt/lib
-# Add an include directory
 include /etc/ld.so.conf.d/*.conf
 EOF
 mkdir -pv /etc/ld.so.conf.d
@@ -1483,10 +1499,10 @@ attempt to open /usr/lib/libc.so.6 succeeded
 grep found dummy.log
 found ld-linux-x86-64.so.2 at /usr/lib/ld-linux-x86-64.so.2
 
-rm -v dummy.c a.out dummy.log
 mkdir -pv /usr/share/gdb/auto-load/usr/lib
 mv -v /usr/lib/*gdb.py /usr/share/gdb/auto-load/usr/lib
 
+rm -v dummy.c a.out dummy.log
 cd /sources/ && rm -rf gcc-13.2.0
 ```
 
@@ -1940,7 +1956,7 @@ cd /sources/ && rm -rf setuptools-69.1.0
 ```bash
 tar xf ninja-1.11.1.tar.gz && cd ninja-1.11.1
 
-export NINJAJOBS=4
+export NINJAJOBS=$(nproc)
 
 sed -i '/int Guess/a \
   int   j = 0;\
@@ -2095,15 +2111,32 @@ mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 cd /sources/ && rm -rf grub-2.12
 ```
 
-##### GRUB-2.12 for EFI
+##### GRUB-2.12 for UEFI
 ```bash
+# Dependencies
+wget https://github.com/rhboot/efivar/archive/39/efivar-39.tar.gz
+wget http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.19.tar.gz
+wget https://github.com/rhboot/efibootmgr/archive/18/efibootmgr-18.tar.gz
+
+tar xf efivar-39.tar.gz && cd efivar-39
+make ENABLE_DOCS=0 && make install LIBDIR=/usr/lib ENABLE_DOCS=0
+cd .. && rm -rf efivar-39
+
+tar xf popt-1.19.tar.gz && cd popt-1.19
+./configure --prefix=/usr --disable-static && make && make install
+cd .. && rm -rf popt-1.19
+
+tar xf efibootmgr-18.tar.gz && cd efibootmgr-18
+make EFIDIR=LFS EFI_LOADER=grubx64.efi
+make install EFIDIR=LFS
+cd .. && rm -rf efibootmgr-18
+
+
+# install
 wget https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz
 wget https://unifoundry.com/pub/unifont/unifont-15.1.04/font-builds/unifont-15.1.04.pcf.gz
-# Dependencies
-# https://www.linuxfromscratch.org/blfs/view/12.1/general/freetype2.html
 
 tar xf grub-2.12.tar.xz && cd grub-2.12
-
 mkdir -pv /usr/share/fonts/unifont &&
 gunzip -c ../unifont-15.1.04.pcf.gz > /usr/share/fonts/unifont/unifont.pcf
 
@@ -2126,10 +2159,10 @@ case $(uname -m) in i?86 )
     export TARGET_CC=$PWD/x86_64-gcc/bin/x86_64-linux-gnu-gcc
 esac
 
+            #--enable-grub-mkfont \
 ./configure --prefix=/usr        \
             --sysconfdir=/etc    \
             --disable-efiemu     \
-            --enable-grub-mkfont \
             --with-platform=efi  \
             --target=x86_64      \
             --disable-werror     &&
@@ -2137,7 +2170,7 @@ unset TARGET_CC && make
 
 make install && mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 
-cd /sources/ && rm -rf grub-2.12
+cd /sources/ && rm -rf grub-2.12 
 ```
 
 ##### Gzip-1.13
@@ -2274,8 +2307,7 @@ echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 
 make
 chown -R tester .
-su tester -c "TERM=xterm-256color LANG=en_US.UTF-8 make -j1 test" \
-   &> vim-test.log
+su tester -c "TERM=xterm-256color LANG=en_US.UTF-8 make -j1 test" &> vim-test.log
 make install
 
 ln -sv vim /usr/bin/vi
@@ -2286,8 +2318,6 @@ done
 ln -sv ../vim/vim91/doc /usr/share/doc/vim-9.1.0041
 
 cat > /etc/vimrc << "EOF"
-" Begin /etc/vimrc
-
 " Ensure defaults are set before customizing settings, not after
 source $VIMRUNTIME/defaults.vim
 let skip_defaults_vim=1
@@ -2299,8 +2329,6 @@ syntax on
 if (&term == "xterm") || (&term == "putty")
   set background=dark
 endif
-
-" End /etc/vimrc
 EOF
 
 vim -c ':options'
@@ -2328,73 +2356,71 @@ pip3 install --no-index --no-user --find-links dist Jinja2
 cd /sources/ && rm -rf Jinja2-3.1.3
 ```
 
-##### Udev from Systemd-255
+##### Systemd-255
 ```bash
 tar xf systemd-255.tar.gz && cd systemd-255
 
 sed -i -e 's/GROUP="render"/GROUP="video"/' \
        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
-sed '/systemd-sysctl/s/^/#/' -i rules.d/99-systemd.rules.in
-sed '/NETWORK_DIRS/s/systemd/udev/' -i src/basic/path-lookup.h
 
-mkdir build && cd build
+patch -Np1 -i ../systemd-255-upstream_fixes-1.patch
+
+mkdir -p build && cd build
 
 meson setup \
       --prefix=/usr                 \
       --buildtype=release           \
+      -Ddefault-dnssec=no           \
+      -Dfirstboot=false             \
+      -Dinstall-tests=false         \
+      -Dldconfig=false              \
+      -Dsysusers=false              \
+      -Drpmmacrosdir=no             \
+      -Dhomed=disabled              \
+      -Duserdb=false                \
+      -Dman=disabled                \
       -Dmode=release                \
+      -Dpamconfdir=no               \
       -Ddev-kvm-mode=0660           \
-      -Dlink-udev-shared=false      \
-      -Dlogind=false                \
-      -Dvconsole=false              \
+      -Dnobody-group=nogroup        \
+      -Dsysupdate=disabled          \
+      -Dukify=disabled              \
+      -Ddocdir=/usr/share/doc/systemd-255 \
       ..
 
-export udev_helpers=$(grep "'name' :" ../src/udev/meson.build | \
-                      awk '{print $3}' | tr -d ",'" | grep -v 'udevadm')
-ninja udevadm systemd-hwdb                                           \
-      $(ninja -n | grep -Eo '(src/(lib)?udev|rules.d|hwdb.d)/[^ ]*') \
-      $(realpath libudev.so --relative-to .)                         \
-      $udev_helpers
+ninja
+ninja install
 
-install -vm755 -d {/usr/lib,/etc}/udev/{hwdb.d,rules.d,network}
-install -vm755 -d /usr/{lib,share}/pkgconfig
-install -vm755 udevadm                             /usr/bin/
-install -vm755 systemd-hwdb                        /usr/bin/udev-hwdb
-ln      -svfn  ../bin/udevadm                      /usr/sbin/udevd
-cp      -av    libudev.so{,*[0-9]}                 /usr/lib/
-install -vm644 ../src/libudev/libudev.h            /usr/include/
-install -vm644 src/libudev/*.pc                    /usr/lib/pkgconfig/
-install -vm644 src/udev/*.pc                       /usr/share/pkgconfig/
-install -vm644 ../src/udev/udev.conf               /etc/udev/
-install -vm644 rules.d/* ../rules.d/README         /usr/lib/udev/rules.d/
-install -vm644 $(find ../rules.d/*.rules \
-                      -not -name '*power-switch*') /usr/lib/udev/rules.d/
-install -vm644 hwdb.d/*  ../hwdb.d/{*.hwdb,README} /usr/lib/udev/hwdb.d/
-install -vm755 $udev_helpers                       /usr/lib/udev
-install -vm644 ../network/99-default.link          /usr/lib/udev/network
+tar -xf ../../systemd-man-pages-255.tar.xz \
+    --no-same-owner --strip-components=1   \
+    -C /usr/share/man
 
-tar -xvf ../../udev-lfs-20230818.tar.xz
-make -f udev-lfs-20230818/Makefile.lfs install
-tar -xf ../../systemd-man-pages-255.tar.xz                            \
-    --no-same-owner --strip-components=1                              \
-    -C /usr/share/man --wildcards '*/udev*' '*/libudev*'              \
-                                  '*/systemd.link.5'                  \
-                                  '*/systemd-'{hwdb,udevd.service}.8
-sed 's|systemd/network|udev/network|'                                 \
-    /usr/share/man/man5/systemd.link.5                                \
-  > /usr/share/man/man5/udev.link.5
-sed 's/systemd\(\\\?-\)/udev\1/' /usr/share/man/man8/systemd-hwdb.8   \
-                               > /usr/share/man/man8/udev-hwdb.8
-sed 's|lib.*udevd|sbin/udevd|'                                        \
-    /usr/share/man/man8/systemd-udevd.service.8                       \
-  > /usr/share/man/man8/udevd.8
-rm /usr/share/man/man*/systemd*
-
-unset udev_helpers
-
-udev-hwdb update
+systemd-machine-id-setup
 
 cd /sources/ && rm -rf systemd-255
+```
+
+##### D-Bus-1.14.10
+```bash
+tar xf dbus-1.14.10.tar.xz && cd dbus-1.14.10
+
+./configure --prefix=/usr                        \
+            --sysconfdir=/etc                    \
+            --localstatedir=/var                 \
+            --runstatedir=/run                   \
+            --enable-user-session                \
+            --disable-static                     \
+            --disable-doxygen-docs               \
+            --disable-xml-docs                   \
+            --docdir=/usr/share/doc/dbus-1.14.10 \
+            --with-system-socket=/run/dbus/system_bus_socket
+
+make
+make check
+make install
+ln -sfv /etc/machine-id /var/lib/dbus
+
+cd /sources/ && rm -rf dbus-1.14.10
 ```
 
 ##### Man-DB-2.12.0
@@ -2488,52 +2514,13 @@ rm -fv /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
 gunzip -v /usr/share/info/libext2fs.info.gz
 install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
 
-makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
+makeinfo -o doc/com_err.info ../lib/et/com_err.texinfo
 install -v -m644 doc/com_err.info /usr/share/info
 install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
 
 sed 's/metadata_csum_seed,//' -i /etc/mke2fs.conf
 
 cd /sources/ && rm -rf e2fsprogs-1.47.0
-```
-
-##### Sysklogd-1.5.1
-```bash
-tar xf sysklogd-1.5.1.tar.gz && cd sysklogd-1.5.1
-
-sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c
-sed -i 's/union wait/int/' syslogd.c
-
-make
-make BINDIR=/sbin install
-
-cat > /etc/syslog.conf << "EOF"
-# Begin /etc/syslog.conf
-
-auth,authpriv.* -/var/log/auth.log
-*.*;auth,authpriv.none -/var/log/sys.log
-daemon.* -/var/log/daemon.log
-kern.* -/var/log/kern.log
-mail.* -/var/log/mail.log
-user.* -/var/log/user.log
-*.emerg *
-
-# End /etc/syslog.conf
-EOF
-
-cd /sources/ && rm -rf sysklogd-1.5.1
-```
-
-##### Sysvinit-3.08
-```bash
-tar xf sysvinit-3.08.tar.xz && cd sysvinit-3.08
-
-patch -Np1 -i ../sysvinit-3.08-consolidated-1.patch
-
-make
-make install
-
-cd /sources/ && rm -rf sysvinit-3.08
 ```
 
 ##### Stripping
@@ -2605,109 +2592,107 @@ userdel -r tester
 ```
 
 #### System Configuration
-##### LFS-Bootscripts-20230728
-```bash
-cd /sources
-tar xf lfs-bootscripts-20230728.tar.xz && cd lfs-bootscripts-20230728
-
-make install
-```
-
-##### Managing Devices
-```bash
-### option
-
-# create custom udev rules
-bash /usr/lib/udev/init-net-rules.sh
-cat /etc/udev/rules.d/70-persistent-net.rules
-
-sed -e '/^AlternativeNamesPolicy/s/=.*$/=/'  \
-    -i /usr/lib/udev/network/99-default.link \
-     > /etc/udev/network/99-default.link
-     
-# cdrom
-udevadm test /sys/block/hdd
-sed -e 's/"write_cd_rules"/"write_cd_rules mode"/' \
-    -i /etc/udev/rules.d/83-cdrom-symlinks.rules
-
-udevadm info -a -p /sys/class/video4linux/video0
-cat > /etc/udev/rules.d/83-duplicate_devs.rules << "EOF"
-KERNEL=="video*", ATTRS{idProduct}=="1910", ATTRS{idVendor}=="0d81", SYMLINK+="webcam"
-KERNEL=="video*", ATTRS{device}=="0x036f",  ATTRS{vendor}=="0x109e", SYMLINK+="tvtuner"
-EOF
-```
-
 ##### General Network Configuration
 ```bash
-cat > /etc/sysconfig/ifconfig.eth0 << "EOF"
-ONBOOT=yes
-IFACE=eth0
-SERVICE=ipv4-static
-IP=192.168.1.2
-GATEWAY=192.168.1.1
-PREFIX=24
-BROADCAST=192.168.1.255
+# Network Device Naming 
+# by udev
+ip link
+# by manual
+# option1
+ln -s /dev/null /etc/systemd/network/99-default.link
+# option2
+cat > /etc/systemd/network/10-ether0.link << "EOF"
+[Match]
+MACAddress=00:00:00:00:00:00
+[Link]
+Name=ether0
+EOF
+# option3: set /boot/grub/grub.cfg
+net.ifnames=0
+
+
+# Static IP Configuration
+cat > /etc/systemd/network/10-eth-static.network << "EOF"
+[Match]
+Name=<network-device-name>
+
+[Network]
+Address=192.168.0.2/24
+Gateway=192.168.0.1
+DNS=8.8.8.8
+DNS=4.4.4.4
+Domains=localhost
 EOF
 
+
+# DHCP Configuration
+cat > /etc/systemd/network/10-eth-dhcp.network << "EOF"
+[Match]
+Name=<network-device-name>
+
+[Network]
+DHCP=ipv4
+
+[DHCPv4]
+UseDomains=true
+EOF
+
+
+# Static resolv.conf Configuration
 cat > /etc/resolv.conf << "EOF"
-domain <domain>
 nameserver 8.8.8.8
 nameserver 4.4.4.4
+search  ns.local
 EOF
 
-cat > /etc/hosts << "EOF"
-127.0.0.1 localhost.localdomain localhost
 
-::1       localhost ip6-localhost ip6-loopback
+# Configuration hostname
+echo "<lfs>" > /etc/hostname
+
+
+# Customizing the /etc/hosts File
+cat > /etc/hosts << "EOF"
+<192.168.0.2> <FQDN> [alias1] [alias2] ...
+::1       ip6-localhost ip6-loopback
 ff02::1   ip6-allnodes
 ff02::2   ip6-allrouters
 EOF
 ```
 
-##### System V Bootscript Usage and Configuration
+##### Managing Devices
 ```bash
-# set inittab
-cat > /etc/inittab << "EOF"
-id:3:initdefault:
+# option
+udevadm info -a -p /sys/class/block/sda
+cat > /etc/udev/rules.d/83-duplicate_devs.rules << "EOF"
+...
+EOF
+```
 
-si::sysinit:/etc/rc.d/init.d/rc S
-
-l0:0:wait:/etc/rc.d/init.d/rc 0
-l1:S1:wait:/etc/rc.d/init.d/rc 1
-l2:2:wait:/etc/rc.d/init.d/rc 2
-l3:3:wait:/etc/rc.d/init.d/rc 3
-l4:4:wait:/etc/rc.d/init.d/rc 4
-l5:5:wait:/etc/rc.d/init.d/rc 5
-l6:6:wait:/etc/rc.d/init.d/rc 6
-
-ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
-
-su:S06:once:/sbin/sulogin
-s1:1:respawn:/sbin/sulogin
-
-1:2345:respawn:/sbin/agetty --noclear tty1 9600
-2:2345:respawn:/sbin/agetty tty2 9600
-3:2345:respawn:/sbin/agetty tty3 9600
-4:2345:respawn:/sbin/agetty tty4 9600
-5:2345:respawn:/sbin/agetty tty5 9600
-6:2345:respawn:/sbin/agetty tty6 9600
-
-# End /etc/inittab
+##### Configuring the system clock
+```bash
+cat > /etc/adjtime << "EOF"
+0.0 0 0.0
+0
+LOCAL
 EOF
 
-# set system clock
-cat > /etc/sysconfig/clock << "EOF"
-UTC=1
-# Set this to any options you might need to give to hwclock,
-# such as machine hardware clock type for Alphas.
-CLOCKPARAMS=
+# After systemd timedatectl start
+timedatectl set-local-rtc 1
+timedatectl set-time YYYY-MM-DD HH:MM:SS
+
+systemctl disable systemd-timesyncd
+```
+
+##### Configuring the Linux Locale
+```bash
+# option
+cat > /etc/vconsole.conf << "EOF"
+KEYMAP=
+FONT=Lat2-Terminus16
 EOF
 
-# set console
-cat > /etc/sysconfig/console << "EOF"
-UNICODE="1"
-FONT="Lat2-Terminus16"
-EOF
+# After systemd localectl start
+localectl set-keymap MAP
 ```
 
 ##### Configuring the System Locale
@@ -2718,6 +2703,10 @@ LC_ALL=en_US.utf8 locale charmap
 LC_ALL=en_US.utf8 locale int_curr_symbol
 LC_ALL=en_US.utf8 locale int_prefix
 
+# option
+cat > /etc/locale.conf << "EOF"
+LANG=<ll>_<CC>.<charmap><@modifiers>
+EOF
 
 cat > /etc/profile << "EOF"
 for i in $(locale); do
@@ -2727,13 +2716,15 @@ done
 if [[ "$TERM" = linux ]]; then
   export LANG=C.UTF-8
 else
-  #export LANG=<ll>_<CC>.<charmap><@modifiers>
   export LANG=en_US.utf8
 fi
 EOF
+
+# After systemd localectl start
+localectl set-locale LANG="en_US.UTF-8" LC_CTYPE="en_US"
 ```
 
-##### Creating the /etc/inputrc File
+##### Creating the /etc/inputrc and /etc/shells File
 ```bash
 cat > /etc/inputrc << "EOF"
 # Modified by Chris Lynn <roryo@roryo.dynup.net>
@@ -2775,14 +2766,41 @@ set bell-style none
 "\e[H": beginning-of-line
 "\e[F": end-of-line
 EOF
-```
 
-##### Creating the /etc/shells File
-```bash
+
 cat > /etc/shells << "EOF"
 /bin/sh
 /bin/bash
 EOF
+```
+
+##### Systemd Usage and Configuration
+```bash
+# Disabling Screen Clearing at Boot Time
+mkdir -pv /etc/systemd/system/getty@tty1.service.d
+cat > /etc/systemd/system/getty@tty1.service.d/noclear.conf << EOF
+[Service]
+TTYVTDisallocate=no
+EOF
+
+# Disabling tmpfs for /tmp
+ln -sfv /dev/null /etc/systemd/system/tmp.mount
+
+# Configuring Automatic File Creation and Deletion
+
+# Overriding Default Services Behavior
+
+# Working with the Systemd Journal
+
+# Working with Core Dumps
+
+# Long Running Processes
+# option1
+loginctl enable-linger lfs
+loginctl show-user lfs
+# option2: global
+cat /etc/systemd/logind.conf
+KillUserProcesses=No
 ```
 
 #### Making the LFS System Bootable
@@ -2790,36 +2808,38 @@ EOF
 ```bash
 cat > /etc/fstab << "EOF"
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
-/dev/<xxx>     /            <fff>      defaults            1     1
-/dev/<yyy>     swap         swap       pri=1               0     0
-proc           /proc          proc     nosuid,noexec,nodev 0     0
-sysfs          /sys           sysfs    nosuid,noexec,nodev 0     0
-devpts         /dev/pts       devpts   gid=5,mode=620      0     0
-tmpfs          /run           tmpfs    defaults            0     0
-devtmpfs       /dev           devtmpfs mode=0755,nosuid    0     0
-tmpfs          /dev/shm       tmpfs    nosuid,nodev        0     0
-cgroup2        /sys/fs/cgroup cgroup2  nosuid,noexec,nodev 0     0
+
+# legacy
+PARTUUID="9f37c469-a678-4d16-a266-73c208344f03" / ext4 defaults 0 1
+PARTUUID="d47b7e0a-61fe-4c96-a387-13c07b53ddb7" /boot ext4 defaults 0 1
+
+# UEFI
+PARTUUID="9f37c469-a678-4d16-a266-73c208344f03" / ext4 defaults 0 1
+PARTUUID="d47b7e0a-61fe-4c96-a387-13c07b53ddb7" /boot/efi vfat codepage=437,iocharset=iso8859-1 0 1
+
 EOF
+
+mount -a
 ```
 
 ##### Linux-6.7.4
 ```bash
 # install
-cd /sources
-tar xf linux-6.7.4.tar.xz && cd linux-6.7.4
+cd /sources && tar xf linux-6.7.4.tar.xz && cd linux-6.7.4
 
 make mrproper
 
 make menuconfig
-General setup --->
 ...
+
+# If need support UEFI
+# https://www.linuxfromscratch.org/blfs/view/stable-systemd/postlfs/grub-setup.html#uefi-kernel
 
 make
 make modules_install
 
-cp -iv arch/x86/boot/bzImage /boot/vmlinuz-6.7.4-lfs-12.1
+cp -iv arch/x86/boot/bzImage /boot/vmlinuz-6.7.4-lfs-12.1-systemd
 cp -iv System.map /boot/System.map-6.7.4
-
 cp -iv .config /boot/config-6.7.4
 cp -r Documentation -T /usr/share/doc/linux-6.7.4
 
@@ -2827,7 +2847,7 @@ cp -r Documentation -T /usr/share/doc/linux-6.7.4
 chown 0:0 /sources/linux-6.7.4
 
 
-# config
+# Configuring Linux Module Load Order
 install -v -m755 -d /etc/modprobe.d
 cat > /etc/modprobe.d/usb.conf << "EOF"
 install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
@@ -2836,7 +2856,7 @@ EOF
 ```
 
 ##### Using GRUB to Set Up the Boot Process
-option
+###### Rescue(option)
 ```bash
 # install depends
 cd /sources/
@@ -2847,19 +2867,15 @@ wget https://files.libburnia-project.org/releases/libisoburn-1.5.6.tar.gz
 tar xf libburn-1.5.6.tar.gz && cd libburn-1.5.6
 ./configure --prefix=/usr --disable-static && make
 make install
-
 tar xf libisofs-1.5.6.tar.gz && cd libisofs-1.5.6
 ./configure --prefix=/usr --disable-static && make
 make install
-
 tar xf libisoburn-1.5.6.tar.gz && cd libisoburn-1.5.6
 ./configure --prefix=/usr              \
             --disable-static           \
             --enable-pkg-check-modules && make
 make install
-
 cd /sources/ && rm -rf libburn-1.5.6 libisofs-1.5.6 libisoburn-1.5.6
-
 
 wget ftp://ftp.gnu.org/gnu/mtools/mtools-4.0.18.tar.gz
 tar xf mtools-4.0.18.tar.gz && cd mtools-4.0.18
@@ -2872,10 +2888,10 @@ cd /tmp
 grub-mkrescue --output=grub-img.iso
 xorriso -as cdrecord -v dev=/dev/cdrw blank=as_needed grub-img.iso
 ```
-config
+###### Config
+**legacy boot**
 ```bash
-# install grub
-grub-install /dev/xxx
+grub-install /dev/sdb
 
 cat > /boot/grub/grub.cfg << "EOF"
 set default=0
@@ -2883,45 +2899,101 @@ set timeout=5
 
 insmod part_gpt
 insmod ext2
-set root=(hd0,2)
+
+#set root=(hd0,2)
+search --set=root --fs-uuid d67ed2c2-3a2d-4440-81f2-c5491f90641b
 
 menuentry "GNU/Linux, Linux 6.7.4-lfs-12.1" {
-        linux   /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
+        #linux /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
+        linux /vmlinuz-6.7.4-lfs-12.1 root=PARTUUID=9f37c469-a678-4d16-a266-73c208344f03 ro
 }
 EOF
+```
+
+**UEFI boot**
+```bash
+# Kernel Configuration for UEFI support
+
+# Create an Emergency Boot Disk
+
+# Find or Create the EFI System Partition
+fdisk -l /dev/sdb
+
+# Minimal Boot Configuration with GRUB and EFI
+# /boot/efi/EFI/BOOT/BOOTX64.EFI
+grub-install --target=x86_64-efi --removable
+
+# Mount the EFI Variable File System
+mountpoint /sys/firmware/efi/efivars || mount -v -t efivarfs efivarfs /sys/firmware/efi/efivars
+
+# Setting Up the Configuration
+grub-install --bootloader-id=LFS --recheck
+efibootmgr
+
+# Creating the GRUB Configuration File
+cat > /boot/grub/grub.cfg << EOF
+set default=0
+set timeout=5
+
+insmod part_gpt
+insmod ext2
+
+#set root=(hd0,2)
+search --set=root --fs-uuid d67ed2c2-3a2d-4440-81f2-c5491f90641b
+
+insmod all_video
+if loadfont /boot/grub/fonts/unicode.pf2; then
+  terminal_output gfxterm
+fi
+
+menuentry "GNU/Linux, Linux 6.7.4-lfs-12.1"  {
+  #linux /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
+  linux /vmlinuz-6.7.4-lfs-12.1 root=PARTUUID=9f37c469-a678-4d16-a266-73c208344f03 ro
+}
+
+menuentry "Firmware Setup" {
+  fwsetup
+}
+EOF
+
 ```
 
 #### The End
 ```bash
 # the end
-echo 12.1 > /etc/lfs-release
+echo 12.1-systemd > /etc/lfs-release
 
 cat > /etc/lsb-release << "EOF"
 DISTRIB_ID="Linux From Scratch"
-DISTRIB_RELEASE="12.1"
+DISTRIB_RELEASE="12.1-systemd"
 DISTRIB_CODENAME="july"
 DISTRIB_DESCRIPTION="Linux From Scratch"
 EOF
 
 cat > /etc/os-release << "EOF"
 NAME="Linux From Scratch"
-VERSION="12.1"
+VERSION="12.1-systemd"
 ID=lfs
 PRETTY_NAME="Linux From Scratch 12.1"
 VERSION_CODENAME="july"
 HOME_URL="https://www.linuxfromscratch.org/lfs/"
 EOF
 
+
 # reboot system
 logout
+
 umount -v $LFS/dev/pts
 mountpoint -q $LFS/dev/shm && umount -v $LFS/dev/shm
 umount -v $LFS/dev
 umount -v $LFS/run
 umount -v $LFS/proc
 umount -v $LFS/sys
-umount -v $LFS/home
+
+umount -v $LFS/boot
 umount -v $LFS
+
+reboot
 ```
 
 ### Appendices
