@@ -2,7 +2,7 @@
 ...
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # 1.download and decompression
 https://www.elastic.co/downloads/logstash

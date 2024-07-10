@@ -3,7 +3,7 @@
 
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # download source
 wget https://ftp.postgresql.org/pub/source/v15.1/postgresql-15.1.tar.gz

@@ -2,7 +2,7 @@
 ...
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # download source code
 wget https://download.redis.io/redis-stable.tar.gz

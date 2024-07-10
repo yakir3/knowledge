@@ -3,7 +3,7 @@
 
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # download source
 wget https://dist.apache.org/repos/dist/release/rocketmq/5.1.4/rocketmq-all-5.1.4-source-release.zip

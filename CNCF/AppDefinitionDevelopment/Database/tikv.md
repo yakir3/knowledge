@@ -3,7 +3,7 @@
 
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # create dir
 mkdir -p /opt/tidb/tikv1 /opt/tidb/tikv2 /opt/tidb/tikv3 /opt/tidb/pd1

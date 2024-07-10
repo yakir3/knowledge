@@ -3,7 +3,7 @@
 
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # dependencies: install erlang
 wget https://github.com/erlang/otp/releases/download/OTP-25.3.2.4/otp_src_25.3.2.4.tar.gz

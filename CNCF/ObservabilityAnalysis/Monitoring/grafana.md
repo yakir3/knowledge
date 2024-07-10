@@ -3,7 +3,7 @@ grafana 是一个可视化面板，有着非常漂亮的图表和布局展示，
 
 
 #### Deploy On Binaries
-##### Download and Install
+##### Quick Start
 ```bash
 # option.1: Debian / Ubuntu repo
 apt install -y apt-transport-https software-properties-common wget

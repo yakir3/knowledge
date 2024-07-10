@@ -51,6 +51,9 @@ docker build -t yakir/test:latest -f APP-META/Dockerfile .
 # busybox
 docker run --rm -it busybox sh
 
+# kafka-client
+docker run 
+
 # mysql-server
 docker run --name mysql \
   -e MYSQL_ROOT_PASSWORD=root_password \
@@ -282,6 +285,10 @@ kubectl version
 
 ##### Quick test container
 ```bash
+# kafka-client
+kubectl -n middleware run kafka-client --image docker.io/bitnami/kafka:3.4.0-debian-11-r22 --command -- sleep infinity
+kubectl -n middleware exec -it kafka-client -- bash
+
 # redis-client
 kubectl -n middleware run redis-client --image docker.io/bitnami/redis-cluster --command -- sleep infinity
 kubectl -n middleware exec -it redis-client -- bash
@@ -365,6 +372,7 @@ helm version
 
 
 
+>Reference:
 > 1. [阿里云 ACR 仓库加速地址](taa4w07u.mirror.aliyuncs.com)
 > 2. [Docker Official Documentation](https://docs.docker.com/engine/install/)
 > 3. [Podman Official Documentation](https://podman.io/docs)

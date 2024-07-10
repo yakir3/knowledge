@@ -2904,8 +2904,8 @@ insmod ext2
 search --set=root --fs-uuid d67ed2c2-3a2d-4440-81f2-c5491f90641b
 
 menuentry "GNU/Linux, Linux 6.7.4-lfs-12.1" {
-        #linux /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
-        linux /vmlinuz-6.7.4-lfs-12.1 root=PARTUUID=9f37c469-a678-4d16-a266-73c208344f03 ro
+        #linux /boot/vmlinuz-6.7.4-lfs-12.1-systemd root=/dev/sda2 ro
+        linux /vmlinuz-6.7.4-lfs-12.1-systemd root=PARTUUID=9f37c469-a678-4d16-a266-73c208344f03 ro
 }
 EOF
 ```
@@ -2947,8 +2947,8 @@ if loadfont /boot/grub/fonts/unicode.pf2; then
 fi
 
 menuentry "GNU/Linux, Linux 6.7.4-lfs-12.1"  {
-  #linux /boot/vmlinuz-6.7.4-lfs-12.1 root=/dev/sda2 ro
-  linux /vmlinuz-6.7.4-lfs-12.1 root=PARTUUID=9f37c469-a678-4d16-a266-73c208344f03 ro
+  #linux /boot/vmlinuz-6.7.4-lfs-12.1-systemd root=/dev/sda2 ro
+  linux /vmlinuz-6.7.4-lfs-12.1-systemd root=PARTUUID=9f37c469-a678-4d16-a266-73c208344f03 ro
 }
 
 menuentry "Firmware Setup" {

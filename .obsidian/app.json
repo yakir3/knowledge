@@ -1,10 +1,13 @@
 {
-  "promptDelete": false,
+  "promptDelete": true,
   "showLineNumber": true,
   "vimMode": true,
   "legacyEditor": false,
   "attachmentFolderPath": "./attachements",
   "alwaysUpdateLinks": true,
   "showUnsupportedFiles": true,
-  "newFileLocation": "current"
+  "newFileLocation": "current",
+  "readableLineLength": false,
+  "strictLineBreaks": false,
+  "propertiesInDocument": "visible"
 }

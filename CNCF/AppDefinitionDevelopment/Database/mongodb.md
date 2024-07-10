@@ -3,7 +3,7 @@
 
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # dependencies
 apt install python3-pip

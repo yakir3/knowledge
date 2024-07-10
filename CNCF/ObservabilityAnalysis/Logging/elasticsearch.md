@@ -1,35 +1,48 @@
 #### Deploy by Binaries
-##### Download
+##### Quick Start
 ```bash
-# 1.download and decompression
-# https://www.elastic.co/downloads/elasticsearch
-cd /opt
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.7.1-linux-x86_64.tar.gz
-tar -xf elasticsearch-8.7.1-linux-x86_64.tar.gz && rm -rf elasticsearch-8.7.1-linux-x86_64.tar.gz
-cd elasticsearch-8.7.1
-```
+# download and decompression
+cd /opt && wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.7.1-linux-x86_64.tar.gz
+tar -xf elasticsearch-8.7.1-linux-x86_64.tar.gz && rm -f elasticsearch-8.7.1-linux-x86_64.tar.gz
 
-##### Config and Boot
-[[sc-elasticsearch|Elasticsearch Config]]
-```bash
-# 2.configure
+# soft link
+ln -svf /opt/elasticsearch-8.7.1/ /opt/elasticsearch
+cd /opt/elasticsearch
+
+# configure
 vim config/elasticsearch.yml
 
-# 3.run 
-./bin/elasticsearch
-# daemon run
-./bin/elasticsearch -d 
+# options: install plugin
+# plugins dir: plugins and config
+./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v8.7.1/elasticsearch-analysis-ik-8.7.1.zip
 
-# 4.options: install plugin
-./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v8.5.1/elasticsearch-analysis-ik-8.5.1.zip
-# plugins dir = plugins and config
-
-# 5.set password and verify
+# set password and verify
 ./bin/elasticsearch-setup-passwords interactive
-curl 127.0.0.1:9200 -u 'elastic:es123123'
+curl 127.0.0.1:9200 -u 'elastic:elastic_password'
 
-# 6.boot
-cat > /usr/lib/systemd/system/elasticsearch.service << "EOF"
+# start elasticsearch server
+./bin/elasticsearch
+./bin/elasticsearch -d # daemon
+```
+
+##### [[sc-elasticsearch|Config]] and Boot
+###### Config
+```bash
+echo > config/elasticsearch.yml << "EOF"
+path.data: /opt/elasticsearch/data/
+path.logs: /opt/elasticsearch/logs/
+bootstrap.memory_lock: false
+network.host: 0.0.0.0
+http.port: 9200
+discovery.type: single-node
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: false
+EOF
+```
+
+###### Boot(systemd)
+```bash
+cat > /etc/systemd/system/elasticsearch.service << "EOF"
 [Unit]
 Description=Elasticsearch
 Documentation=https://www.elastic.co
@@ -85,11 +98,8 @@ systemctl start elasticsearch.service
 systemctl enable elasticsearch.service
 ```
 
->Elascticsearch 可视化工具 cerebro，[官方地址](https://github.com/lmenezes/cerebro)
-
-
 #### Deploy by Container
-##### Run by Helm
+##### Run on Helm
 ```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co
@@ -114,12 +124,13 @@ helm -n logging install elasticsearch .
 
 ```
 
+##### Run on ECK Operator
 
-#### Deploy by ECK Operator
-详见Reference:
+
 
 
 >Reference:
-> 1. [官方 github 文档](https://github.com/elastic/elasticsearch)
-> 2. [官方 k8s 集群部署文档](https://www.elastic.co/downloads/elastic-cloud-kubernetes)
-> 3. [Ubuntu Install](https://www.elastic.co/guide/en/elasticsearch/reference/8.7/deb.html)
+> 1. [Official Document](https://www.elastic.co/docs)
+> 2. [Elasticsearch Github](https://github.com/elastic/elasticsearch)
+> 3. [Official elastic-cloud-kubernetes](https://www.elastic.co/downloads/elastic-cloud-kubernetes)
+> 4. Elasticsearch UI: [cerebro](https://github.com/lmenezes/cerebro)

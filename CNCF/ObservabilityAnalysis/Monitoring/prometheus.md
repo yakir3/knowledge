@@ -3,7 +3,7 @@
 
 
 #### Deploy On Binaries
-##### Download and Install
+##### Quick Start
 ```bash
 # download source and decompress
 wget https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz
@@ -134,7 +134,7 @@ helm -n monitoring install prometheus .
 
 
 #### AlertManager
-##### Download and Install
+##### Quick Start
 ```bash
 # baniry
 cd /opt/prometheus

@@ -2,7 +2,7 @@
 ...
 
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # Ubuntu Package install
 # https://docs.fluentd.org/installation/install-by-deb

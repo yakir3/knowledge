@@ -1,5 +1,5 @@
 #### Deploy by Binaries
-##### Download and Compile
+##### Quick Start
 ```bash
 # Ubuntu Package install
 https://nginx.org/en/linux_packages.html#Ubuntu
@@ -55,10 +55,10 @@ cd /opt/nginx
 ```
 
 ##### Config and Boot
-[[sc-nginx|Nginx Config]]
+###### [[sc-nginx|Config]]
 
+###### Boot(systemd)
 ```bash
-# boot 
 cat > /etc/systemd/system/nginx.service << EOF
 [Unit]
 Description=Nginx-1.x.x
@@ -166,7 +166,11 @@ cp -ar lua-resty-core/lib/resty/* /usr/local/luajit2/share/luajit-2.1.0-beta3/re
 cp -ar lua-resty-lrucache/lib/resty/* /usr/local/luajit2/share/luajit-2.1.0-beta3/resty/
 ```
 
-#### Deploy by Helm
+#### Deploy On Container
+##### Run On Docker
+
+
+##### Run On Helm
 >k8s 集群建议使用 ingress-nginx-controller
 ```bash
 ### for Nginx

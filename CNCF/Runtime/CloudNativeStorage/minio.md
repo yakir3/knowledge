@@ -3,7 +3,7 @@
 
 
 #### Deploy by Binaries
-##### Download and Install Server
+##### Quick Start
 ```bash
 # download source
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
