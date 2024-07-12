@@ -88,10 +88,10 @@ inventories/prod.host
 
 
 
-
 >Reference:
 >1. [Official Ansible Doc](https://docs.ansible.com/ansible)
 >2. [Ansible 中文文档](https://ansible-tran.readthedocs.io/en/latest/docs/intro.html)
 >3. [Ansible Github](https://github.com/ansible/ansible)
 >4. [Ansible Galaxy](https://galaxy.ansible.com/)
 >5. [Ansible CN Wiki](https://ansible.leops.cn/basic/Introduction/)
+>6. [Ansible Conditional Judgment Grammar](https://www.ityoudao.cn/posts/ansible-conditionals/)

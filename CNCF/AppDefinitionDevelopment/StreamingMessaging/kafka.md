@@ -151,7 +151,7 @@ listeners=PLAINTEXT://:9092,CONTROLLER://:9093
 # listeners=PLAINTEXT://192.168.1.3:9092,CONTROLLER://192.168.1.3:9093
 
 inter.broker.listener.name=PLAINTEXT
-advertised.listeners=PLAINTEXT://localhost:9092
+#advertised.listeners=PLAINTEXT://localhost:9092
 controller.listener.names=CONTROLLER
 listener.security.protocol.map=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
 num.network.threads=3
@@ -186,10 +186,12 @@ EOF
 
 ###### Boot(systemd)
 ```bash
-# zookeeper mode
+# Zookeeper mode
+# 1. generate zookeeper id
 echo 0 > /opt/kafka/zk-data/myid
 echo 1 > /opt/kafka/zk-data/myid
 echo 2 > /opt/kafka/zk-data/myid
+# 2. kafka systemd service
 cat > /etc/systemd/system/kafka.service << EOF
 [Unit]
 Description=Apache Kafka server
@@ -221,7 +223,11 @@ EOF
 
 
 
-# kraft mode
+# Kraft mode
+# 1. generate only once cluster id
+KAFKA_CLUSTER_ID=$(/opt/kafka/bin/kafka-storage.sh random-uuid)
+KAFKA_CLUSTER_ID=$KAFKA_CLUSTER_ID
+# 2. kafka systemd service
 cat > /etc/systemd/system/kafka.service << EOF
 [Unit]
 Description=Apache Kafka server
@@ -235,8 +241,7 @@ User=kafka
 Group=kafka
 Environment=KAFKA_HOME=/opt/kafka
 Environment=KAFKA_HEAP_OPTS="-Xms2G -Xmx2G"
-#Environment=KAFKA_CLUSTER_ID=$KAFKA_HOME/bin/kafka-storage.sh random-uuid
-Environment=KAFKA_CLUSTER_ID=gcE_EPWtRlCEcmBm-BoPqw
+Environment=KAFKA_CLUSTER_ID=7hakKVZCQ0aRnOKAmdPmEw
 ExecStartPre==$KAFKA_HOME/bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/server.properties --ignore-formatted
 ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
 ExecStop=$KAFKA_HOME/bin/kafka-server-stop.sh 

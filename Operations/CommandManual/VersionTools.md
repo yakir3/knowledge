@@ -82,6 +82,9 @@ git cherry-pick 4c805e2
 
 ##### version control
 ```bash
+# 查看当前版本
+git rev-parse HEAD
+
 # 回退上一个版本
 git reset --hard HEAD^ 
 # 回退两个版本

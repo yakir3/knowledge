@@ -8,17 +8,19 @@
 
 
 # topic
-./kafka-topics.sh --bootstrap-server localhost:9092 --descibe --topic myTopic
-./kafka-topics.sh --bootstrap-server localhost:9092 --list
 # adding topics by special partition and replication 
 ./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic myTopic --replication-factor 1 --partitions 1 [--config x=y]
 # modifying a topic partition with manual
 ./kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic myTopic --partitions 3
+# select topic
+./kafka-topics.sh --bootstrap-server localhost:9092 --descibe --topic myTopic
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
 
 
-# consumer groups
-./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --descibe --group myGroup [--members] [--verbose]
-./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+# production messages
+./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic myTopic
+first event
+second event
 
 
 # consumer messages
@@ -27,12 +29,13 @@
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic myTopic --from-beginning
 
 
-# production messages
-./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic myTopic
+# consumer groups
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --descibe --group myGroup [--members] [--verbose]
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
 
 
 # metadata quorum tool
-./kafka-metadata-quorum.sh --bootstrap-server localhost:port describe --status
+./kafka-metadata-quorum.sh --bootstrap-server localhost:9092 describe --status
 ```
 
 ##### RocketMQ

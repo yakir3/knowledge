@@ -37,23 +37,52 @@
 
     - name: Ansible buildin debug
       ansible.builtin.debug:
+        # var: "{{ ansible_facts }}"
         msg: "debug msg"
 
-    - name: import tasks when syntax
+    - name: Ansible buildin template
+      ansible.builtin.template:
+        scr: templates/test.j2
+        dest: /tmp/hostname
+        mode: 0644
+
+    - name: Ansible system fact setup info
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts['default_ipv4']['address'] }}"
+
+    - name: Ansible playbook vars: inventory_hostname, ansible_play_batch
+      ansible.builtin.debug:
+        #msg: "{{ ansible_play_batch }}"
+        #msg: "{{ ansible_play_batch|length }}"
+        msg: "{{ ansible_play_batch.index(inventory_hostname) }}"
+
+    - name: Ansible builtin shell
+      ansible.builtin.shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
+
+    - name: Ansible builtin shell register
+      ansible.builtin.shell: cat /tmp/test.conf
+      register: file_contents
+    - ansible.builtin.shell: echo "/tmp/test.conf contains 'hi'"
+      when: file_contents.stdout.find('hi') != -1
+
+    - name: Ansible builtin command
+      ansible.builtin.command: echo "I've got '{{ foo }}' and am not afraid to use it!"
+      when: foo is defined
+
+    - name: Ansible builtin fail
+      fail: 
+        msg: "Bailing out. this play requires variable foo"
+      when: foo is undefined
+
+    - name: Import tasks when syntax
       import_tasks: Debian.yml
       when: ansible_os_family == "Debian"
-    - name: include tasks with loop syntax
-      include_tasks: "{{item}}.yaml"
+
+    - name: Include tasks with loop syntax
+      include_tasks: "{{ item }}.yaml"
       loop:
         - i1
         - i2
-
-    - name: system fact
-      ansible.builtin.debug:
-        msg: {{ ansible_facts["default_ipv4"]["address"] }}
-    - name: custom fact
-      ansible.builtin.debug:
-        var: ansible_local.forbidden.forbid
 
   # role settings
   roles:
@@ -67,11 +96,11 @@
       factfile: forbidden.fact
       one: aaa 
       two: bbb
+
   # environment settings
   environment:
     http_proxy: http://example.com:8080
     PATH: /opt/go/bin:{{ ansible_env.PATH }}
-
 ---
 # Usage:
 #   ansible-playbook playbooks/example.yml --start-at-task "Attempt and graceful roll back demo"

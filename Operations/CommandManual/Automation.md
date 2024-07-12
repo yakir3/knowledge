@@ -184,7 +184,6 @@ tasks:
 tasks:
   - shell: cat /some/path/to/file.json
     register: result
-
   - set_fact:
       myvar: "{{ result.stdout | from_json }}"
 ```

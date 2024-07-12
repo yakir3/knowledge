@@ -1,0 +1,12 @@
+- name: CentOS | Install java17
+  package:
+    name: java-17-openjdk
+    update_cache: true
+  when: ansible_distribution == "CentOS"
+
+- name: Ubuntu | Install java17
+  package:
+    name: openjdk-17-jdk
+    #name: default-jre
+    update_cache: true
+  when: ansible_distribution == "Ubuntu"

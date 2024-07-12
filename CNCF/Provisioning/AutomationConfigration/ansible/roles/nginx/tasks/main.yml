@@ -1,7 +1,9 @@
 ---
 # tasks file for nginx
-- name: Install Dependencies for Nginx
-  package: name={{ item }} state=present
+- name: Installing Dependencies for Nginx
+  package: 
+    name: {{ item }}
+    state: present
   loop:
     - libssl-dev
     - libpcre3-dev
@@ -9,40 +11,71 @@
     - libgeoip-dev
     - libjson-c-dev
 
-- name: Synchronize Nginx
+
+- name: Installing Nginx
   block:
-    - name: copy nginx.tar.gz package and nginx.service file
-      copy: src={{ item.src }}  dest={{ item.dest }} owner=root group=root mode=0644
+    - name: Copy nginx.tar.gz package and nginx.service file
+      copy:
+        src: {{ item.src }}
+        dest: {{ item.dest }}
+        owner: nginx
+        group: nginx
+        mode: 0644
       loop:
         - { src: nginx.tar.gz, dest: /tmp/nginx.tar.gz }
         - { src: nginx.service, dest: /etc/systemd/system/nginx.service }
-    - name: unarchive nginx package
-      unarchive: src=/tmp/nginx.tar.gz  dest=/usr/local/ group=root owner=root mode=0755 remote_src=True
-    - name: delete tmp file
-      file: path=/tmp/nginx.tar.gz state=absent
 
-- name: Settings Nginx
+    - name: Unarchive nginx package
+      unarchive: 
+        src: /tmp/nginx.tar.gz
+        dest: /usr/local/
+        group: nginx
+        owner: nginx
+        mode: 0755
+        remote_src: true
+
+    - name: Delete tmp file
+      file: 
+        path: /tmp/nginx.tar.gz
+        state: absent
+
+
+- name: Configure Nginx
   block:
-    - name: set nginx directory and binary file permission
-      file: path={{ item.path }} owner={{ item.user }} group={{ item.group }} mode={{ item.mode }} state={{ item.state }} recurse={{ item.recurse }}
+    - name: Set nginx directory and binary file permission
+      file: 
+        path: {{ item.path }}
+        owner: {{ item.owner }}
+        group: {{ item.group }}
+        mode: {{ item.mode }}
+        state: {{ item.state }}
+        recurse: {{ item.recurse }}
       loop:
-        - { path: /usr/local/nginx/, mode: '0755', user: tomcat, group: tomcat, state: directory, recurse: yes }
-        - { path: /usr/local/nginx/sbin/nginx, mode: '4755', user: root, group: root, state: file, recurse: no }
-    - name: add system library path /usr/local/nginx/lib/
+        - { path: /usr/local/nginx/, mode: '0755', owner: nginx, group: nginx, state: directory, recurse: yes }
+        - { path: /usr/local/nginx/sbin/nginx, mode: '4755', owner: nginx, group: nginx, state: file, recurse: no }
+
+    - name: Add system library path /usr/local/nginx/lib/
       command: ldconfig /usr/local/nginx/lib/
 
-- name: Logrotate for Nginx
-  block:
-    - name: upload nginx logrotate file 
-      copy: src=nginx  dest=/opt/cron/nginx owner=root group=root mode=644
-    - name: add nginx logrotate to crontab
-      cron: name='logroate nginx' minute='58' hour='23' job='/usr/sbin/logrotate -f /opt/cron/nginx >> /opt/cron/cron.log 2>&1'
+    - name: Add nginx logrotate file 
+      copy:
+        src: nginx
+        dest: /opt/cron/nginx
+        owner: nginx
+        group: nginx
+        mode: 0644
+
+    - name: Add nginx logrotate to crontab
+      cron: 
+        name: 'logroate nginx'
+        hour: '23'
+        minute: '59'
+        job: '/usr/sbin/logrotate -f /opt/cron/nginx >> /opt/cron/cron.log 2>&1'
+
 
 - name: Controls systemd services for nginx
-  block:
-    - name: run daemon-reload, start, boot nginx
-      systemd:
-        name: nginx
-        state: started
-        enabled: yes
-        daemon_reload: yes
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+    daemon_reload: yes
