@@ -7,13 +7,17 @@
 # 使用 --entity-default 参数为调整整个集群的动态配置
 
 
+# cluster
+./kafka-cluster.sh cluster-id --bootstrap-server localhost:9092
+
+
 # topic
 # adding topics by special partition and replication 
 ./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic myTopic --replication-factor 1 --partitions 1 [--config x=y]
 # modifying a topic partition with manual
 ./kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic myTopic --partitions 3
 # select topic
-./kafka-topics.sh --bootstrap-server localhost:9092 --descibe --topic myTopic
+./kafka-topics.sh --bootstrap-server localhost:9092 --topic myTopic --descibe
 ./kafka-topics.sh --bootstrap-server localhost:9092 --list
 
 

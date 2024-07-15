@@ -51,19 +51,19 @@ After=network-online.target
 
 [Service]
 Type=simple
+User=elasticsearch
+Group=elasticsearch
 RuntimeDirectory=elasticsearch
-PrivateTmp=true
 Environment=ES_HOME=/opt/elasticsearch
 Environment=ES_PATH_CONF=/opt/elasticsearch/config
 Environment=PID_DIR=/opt/elasticsearch/logs
 Environment=ES_SD_NOTIFY=true
 EnvironmentFile=-/etc/default/elasticsearch
 WorkingDirectory=/opt/elasticsearch
-User=elasticsearch
-Group=elasticsearch
 ExecStart=/opt/elasticsearch/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet
 StandardOutput=journal
 StandardError=inherit
+PrivateTmp=true
 LimitNOFILE=65535
 LimitNPROC=4096
 LimitAS=infinity

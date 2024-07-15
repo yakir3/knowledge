@@ -242,9 +242,9 @@ Group=kafka
 Environment=KAFKA_HOME=/opt/kafka
 Environment=KAFKA_HEAP_OPTS="-Xms2G -Xmx2G"
 Environment=KAFKA_CLUSTER_ID=7hakKVZCQ0aRnOKAmdPmEw
-ExecStartPre==$KAFKA_HOME/bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c $KAFKA_HOME/config/kraft/server.properties --ignore-formatted
-ExecStart=$KAFKA_HOME/bin/kafka-server-start.sh -daemon $KAFKA_HOME/config/kraft/server.properties
-ExecStop=$KAFKA_HOME/bin/kafka-server-stop.sh 
+ExecStartPre=/opt/kafka/bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c /opt/kafka/config/kraft/server.properties --ignore-formatted
+ExecStart=/opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/kraft/server.properties
+ExecStop=/opt/kafka/bin/kafka-server-stop.sh 
 KillSignal=SIGTERM
 KillMode=mixed
 SendSIGKILL=no

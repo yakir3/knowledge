@@ -2,7 +2,7 @@
 # vars file for kafka
 # basic settings
 kafka_deploy_path: /opt/kafka
-kafka_cluster_uuid: "7hakKVZCQ0aRnOKAmdPmxx"
+#kafka_cluster_uuid: "7hakKVZCQ0aRnOKAmdPmxx"
 
 # server.properties settings
 host_ip: "{{ ansible_default_ipv4['address'] }}"
