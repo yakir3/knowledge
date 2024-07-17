@@ -1,4 +1,6 @@
-# Go
+# Bash
+
+# Golang
 Golang/**/**/*.exe
 Golang/**/**/*.exe~
 Golang/**/**/*.dll
@@ -8,6 +10,9 @@ Golang/**/**/*.test
 Golang/**/**/*.out
 Golang/**/**/go.work
 Golang/**/**/go.work.sum
+
+
+# Lua
 
 
 # Node.js
