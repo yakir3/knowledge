@@ -178,11 +178,30 @@ select * from pg_tables;
 
 #### redis
 ```bash
-# redis cluster 
-# pattern search key
-redis-cli -h host -a password -c --scan --pattern "mykey*"
-# batch delete key
-redis-cli -h host -a password -c --scan --pattern "mykey*" |xargs -I {} redis-cli  -h host -a password del {}
+# common
+# redis-cli [-h host] [-p port] [-a password] [-c]
+# Examples:
+  cat /etc/passwd | redis-cli -x set mypasswd
+  redis-cli -D "" --raw dump key > key.dump && redis-cli -X dump_tag restore key2 0 dump_tag replace < key.dump
+  redis-cli -r 100 lpush mylist x
+  redis-cli -r 100 -i 1 info | grep used_memory_human:
+  redis-cli --quoted-input set '"null-\x00-separated"' value
+  redis-cli --eval myscript.lua key1 key2 , arg1 arg2 arg3
+  redis-cli --scan --pattern '*:12345*'
+# Batch delete key
+redis-cli -h redis_host -a redis_password --scan --pattern "mykey*" |xargs -I {} redis-cli  -h host -a redis_password del {}
 
 
+# -c Enable cluster mode (follow -ASK and -MOVED redirections).
+redis-cli -h redis_host -p redis_port -a redis_password -c CLUSTER NODES
+redis-cli -h redis_host -p redis_port -a redis_password -c CLUSTER INFO
+redis-cli -h redis_host -p redis_port -a redis_password -c CLUSTER FORGET xxx
+
+
+# Cluster Manager command and arguments
+redis-cli --cluster help
+redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 --cluster-replicas 0
+redis-cli --cluster check 127.0.0.1:7001
+redis-cli --cluster reshard 127.0.0.1:7001
+redis-cli --cluster rebalance 127.0.0.1:7001
 ```

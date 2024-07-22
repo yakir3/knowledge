@@ -9,6 +9,10 @@ openssl x509 -dates -text -noout -in xxx.crt
 # email test
 openssl s_client -connect mail.example.com:25
 openssl s_client -starttls smtp -connect mail.example.com:25
+
+# generate key and crt
+openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -days 3650 -nodes -subj "/C=HK/ST=HK/L=HK/O=Example Inc/OU=IT/CN=*.com"
+
 ```
 
 ##### sar

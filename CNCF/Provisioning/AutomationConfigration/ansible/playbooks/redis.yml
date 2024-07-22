@@ -1,0 +1,14 @@
+---
+# Usage: 
+# single mode
+#   ansible-playbook -e "hosts_var=10.0.10.12" playbook/redis.yml
+# cluster mode
+#   ansible-playbook -e "hosts_var=10.0.10.12,10.0.10.13,10.0.10.14" playbook/redis.yml
+
+- hosts: "{{ hosts_var }}"
+  remote_user: root
+  become: yes
+  become_method: su
+  #gather_facts: false
+  roles:
+    - { role: redis }

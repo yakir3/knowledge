@@ -200,23 +200,29 @@ After=network.target
 Wants=network-online.target
  
 [Service]
-Type=forking
-User=kafka
-Group=kafka
-ExecStartPre=
-ExecStart=/opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/server.properties
+Environment=KAFKA_HOME=/opt/kafka
+Environment=KAFKA_HEAP_OPTS="-Xms2G -Xmx2G"
+ExecStartPre=/opt/kafka/bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c /opt/kafka/config/kraft/server.properties --ignore-formatted
+ExecStart=/opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/kraft/server.properties
 ExecStop=/opt/kafka/bin/kafka-server-stop.sh 
 KillSignal=SIGTERM
 KillMode=mixed
-SendSIGKILL=no
-SuccessExitStatus=143
-TimeoutStartSec=60
-TimeoutStopSec=5
-Restart=on-failure
-RestartSec=10s
 LimitNOFILE=655350
 LimitNPROC=655350
- 
+NoNewPrivileges=yes
+#PrivateTmp=yes
+Restart=on-failure
+RestartSec=10s
+SendSIGKILL=no
+SuccessExitStatus=143
+Type=forking
+TimeoutStartSec=60
+TimeoutStopSec=5
+UMask=0077
+User=kafka
+Group=kafka
+WorkingDirectory=/opt/kafka
+
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -236,26 +242,29 @@ After=network.target
 Wants=network-online.target
  
 [Service]
-Type=forking
-User=kafka
-Group=kafka
 Environment=KAFKA_HOME=/opt/kafka
 Environment=KAFKA_HEAP_OPTS="-Xms2G -Xmx2G"
 Environment=KAFKA_CLUSTER_ID=7hakKVZCQ0aRnOKAmdPmEw
 ExecStartPre=/opt/kafka/bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c /opt/kafka/config/kraft/server.properties --ignore-formatted
 ExecStart=/opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/kraft/server.properties
-ExecStop=/opt/kafka/bin/kafka-server-stop.sh 
+ExecStop=/opt/kafka/bin/kafka-server-stop.sh
+LimitNOFILE=655350
+LimitNPROC=65535
+NoNewPrivileges=yes
 KillSignal=SIGTERM
 KillMode=mixed
-SendSIGKILL=no
-SuccessExitStatus=143
-TimeoutStartSec=60
-TimeoutStopSec=5
 Restart=on-failure
 RestartSec=10s
-LimitNOFILE=655350
-LimitNPROC=655350
- 
+SendSIGKILL=no
+SuccessExitStatus=143
+Type=forking
+TimeoutStartSec=60
+TimeoutStopSec=5
+UMask=0077
+User=kafka
+Group=kafka
+WorkingDirectory=/opt/kafka
+
 [Install]
 WantedBy=multi-user.target
 EOF
@@ -270,14 +279,7 @@ systemctl enable kafka.service
 ##### Verify
 [[StreamingMessaging#Kafka|Kafka Command]]
 
-```bash
-# 创建 topic
-./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --create --topic yakir-test
-# 查看分区副本信息
-./bin/kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --describe 
-```
-
-#### Deploy On Container
+#### Deploy By Container
 ##### Run On Docker
 ```bash
 docker pull apache/kafka:3.7.1

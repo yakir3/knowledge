@@ -37,10 +37,11 @@ bin  lib  lib64
 # select container ip
 docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' yakir-test
 
-
 # reverse checking Dockerfile content
 docker history db6effbaf70b --format {{.CreatedBy}} --no-trunc=true |sed "s#/bin/sh -c \#(nop) *##g" |tac
 
+# commit
+docker commmit -m 'commit message' container_id repository/xxx/xxx:tag
 
 # build image
 docker build -t yakir/test:latest -f APP-META/Dockerfile .
