@@ -1,2 +1,7 @@
 ---
 # tasks file for redis
+- import_tasks: install.yml
+- import_tasks: configure.yml
+
+- import_tasks: cluster.yml
+  when: redis_cluster_enabled == "yes"

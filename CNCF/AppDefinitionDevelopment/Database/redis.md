@@ -30,10 +30,10 @@ cp /usr/local/src/redis-7.0.11/redis.conf /opt/redis/redis.conf
 ## 2. fake cluster mode
 mkdir -p /opt/redis/{7001..7003}
 cp /usr/local/src/redis-7.0.11/redis.conf /opt/redis/7001/redis.conf && cp /usr/local/src/redis-7.0.11/redis.conf /opt/redis/7002/redis.conf && cp /usr/local/src/redis-7.0.11/redis.conf /opt/redis/7003/redis.conf
-/opt/redis/bin/redis-server /opt/redis/7001/redis.conf --port 7001 --pidfile ./7001/redis.pid --logfile ./7001/redis.log --dir /opt/redis/7001
-/opt/redis/bin/redis-server /opt/redis/7002/redis.conf --port 7002 --pidfile ./7002/redis.pid --logfile ./7002/redis.log --dir /opt/redis/7002
-/opt/redis/bin/redis-server /opt/redis/7003/redis.conf --port 7003 --pidfile ./7003/redis.pid --logfile ./7003/redis.log --dir /opt/redis/7003
-/opt/redis/bin/redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 --cluster-replicas 0 
+./bin/redis-server /opt/redis/7001/redis.conf --bind 127.0.0.1 --port 7001 --daemonize yes --pidfile ./redis.pid --logfile ./redis.log --dir /opt/redis/7001 --cluster-enabled yes
+./bin/redis-server /opt/redis/7002/redis.conf --bind 127.0.0.1 --port 7002 --daemonize yes --pidfile ./redis.pid --logfile ./redis.log --dir /opt/redis/7002 --cluster-enabled yes
+./bin/redis-server /opt/redis/7003/redis.conf --bind 127.0.0.1 --port 7003 --daemonize yes --pidfile ./redis.pid --logfile ./redis.log --dir /opt/redis/7003 --cluster-enabled yes
+./bin/redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 --cluster-replicas 0 --cluster-yes
 ```
 
 ##### [[sc-redis|Config]] and Boot

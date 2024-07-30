@@ -4,14 +4,15 @@
 apt install openssl
 
 # get crt info
-openssl x509 -dates -text -noout -in xxx.crt
+openssl x509 -dates -noout -in example.com.crt
+openssl x509 -dates -text -noout -in example.com.crt
 
 # email test
 openssl s_client -connect mail.example.com:25
 openssl s_client -starttls smtp -connect mail.example.com:25
 
 # generate key and crt
-openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -days 3650 -nodes -subj "/C=HK/ST=HK/L=HK/O=Example Inc/OU=IT/CN=*.com"
+openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -days 3650 -nodes -subj "/C=HK/ST=HK/L=HK/O=Example Inc/OU=IT/CN=*.example.com"
 
 ```
 
@@ -19,7 +20,8 @@ openssl req -x509 -newkey rsa:2048 -keyout server.key -out server.crt -days 3650
 ```bash
 # install 
 apt install sysstat
-# use
+
+# example
 sar [options] [delay [count]]
 sar -r 1 10
 

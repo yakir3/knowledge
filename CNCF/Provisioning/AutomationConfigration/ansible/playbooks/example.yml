@@ -74,12 +74,12 @@
         msg: "Bailing out. this play requires variable foo"
       when: foo is undefined
 
-    - name: Import tasks when syntax
-      import_tasks: Debian.yml
+    # Import tasks when syntax
+    - import_tasks: Debian.yml
       when: ansible_os_family == "Debian"
 
-    - name: Include tasks with loop syntax
-      include_tasks: "{{ item }}.yaml"
+    # Include tasks with loop syntax
+    - include_tasks: "{{ item }}.yaml"
       loop:
         - i1
         - i2
