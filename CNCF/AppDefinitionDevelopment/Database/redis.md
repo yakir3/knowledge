@@ -1,7 +1,7 @@
 #### Introduction
 ...
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # dependencies
@@ -189,7 +189,7 @@ kubectl -n middleware get service |grep redis
 
 
 >Reference:
->1. [Official Document址](https://redis.io/docs/getting-started/)
+>1. [Official Document](https://redis.io/docs/getting-started/)
 >2. [Redis Github](https://github.com/redis/redis)
 >3. [Redis Download Releases](https://download.redis.io/releases/)
 >4. [Redis 集群方案](https://segmentfault.com/a/1190000022028642)

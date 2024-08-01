@@ -2,22 +2,27 @@
 ...
 
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # download source
-wget https://dist.apache.org/repos/dist/release/rocketmq/5.1.4/rocketmq-all-5.1.4-source-release.zip
-unzip rocketmq-all-5.1.4-source-release.zip
-cd rocketmq-all-5.1.4-source-release
+cd /usr/local/src/
+wget https://dist.apache.org/repos/dist/release/rocketmq/5.3.0/rocketmq-all-5.3.0-source-release.zip
+unzip rocketmq-all-5.3.0-source-release.zip && rm -f rocketmq-all-5.3.0-source-release.zip
+cd rocketmq-all-5.3.0-source-release
 
-# compile 
+# compile and install
 mvn -Prelease-all -DskipTests -Dspotbugs.skip=true clean install -U
-cp -aR distribution/target/rocketmq-5.1.4/rocketmq-5.1.4 /opt/rocketmq-5.1.4
+cp -aR distribution/target/rocketmq-5.3.0/rocketmq-5.3.0 /opt/rocketmq-5.3.0
+
+# soft link
+ln -svf /opt/rocketmq-5.3.0 /opt/rocketmq
+cd /opt/rocketmq
 
 # postinstallation
-export ROCKETMQ_HOME=/opt/rocketmq-5.1.4/
-# export JAVA_HOME=
-export PATH=$PATH:/opt/rocketmq-5.1.4/bin
+export ROCKETMQ_HOME=/opt/rocketmq
+#export JAVA_HOME=/opt/jdk21
+export PATH=$PATH:/opt/rocketmq/bin
 
 # local mode
 # option1: single replication
@@ -44,19 +49,85 @@ export PATH=$PATH:/opt/rocketmq-5.1.4/bin
 # shutdown
 ./bin/mqshutdown broker
 ./bin/mqshutdown namesrv
-
 ```
 
 ##### Config and Boot
-##### [[sc-kafka|RocketMQ Config]]
-
+###### Config
 ```bash
-# config 
-#
+# master config
+vim conf/2m-2s-sync/broker-a.properties
+vim conf/2m-2s-sync/broker-b.properties
+# slave config
+vim conf/2m-2s-sync/broker-a-s.properties
+vim conf/2m-2s-sync/broker-b-s.properties
 
-# boot 
+###
+# common config
+brokerClusterName=DefaultCluster
+deleteWhen=04
+fileReservedTime=48
+brokerRole=SYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+#namesrvAddr=
+#listenPort=11011
+#autoCreateTopicEnable=true
+#autoCreateSubscriptionGroup=true
+#mapedFileSizeCommitLog=1073741824
+#mapedFileSizeConsumeQueue=300000
+#diskMaxUsedSpaceRatio=88
+
+# broker-a
+brokerName=broker-a
+brokerId=0
+#storePathRootDir=/opt/rocketmq/store
+#storePathCommitLog=/opt/rocketmq/store/commitlog
+#storePathConsumeQueue=/opt/rocketmq/store/consumequeue
+#storePathIndex=/opt/rocketmq/store/index
+#storeCheckpoint=/opt/rocketmq/store/checkpoint
+#abortFile=/opt/rocketmq/store/abort
+
+# broker-b
+brokerName=broker-b
+brokerId=0
+
+# broker-a-s
+brokerName=broker-a
+brokerId=0
+
+# broker-b-s
+brokerName=broker-b
+brokerId=0
+###
+```
+
+###### Boot(systemd)
+```bash
 cat > /etc/systemd/system/rocketmq.service << "EOF"
-...
+[Unit]
+Description=Rocketmq
+Documentation=https://rocketmq.apache.org/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStartPre=
+ExecStart=
+LimitNOFILE=655350
+LimitNPROC=65535
+NoNewPrivileges=yes
+#PrivateTmp=yes
+Restart=on-failure
+RestartSec=10s
+Type=notify
+TimeoutStartSec=infinity
+TimeoutStopSec=infinity
+UMask=0077
+User=rocketmq
+Group=rocketmq
+WorkingDirectory=/opt/rocketmq
+
+[Install]
+WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
@@ -73,7 +144,6 @@ export NAMESRV_ADDR=localhost:9876
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Producer
 # consume
 ./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer
-
 ```
 
 ##### Troubleshooting
@@ -83,8 +153,8 @@ export NAMESRV_ADDR=localhost:9876
 ```
 
 
-#### Deploy by Container
-##### Run by Docker
+#### Deploy By Container
+##### Run On Docker
 ```bash
 # pull image
 docker pull apache/rocketmq:5.1.4
@@ -94,16 +164,14 @@ docker run -it --net=host apache/rocketmq ./mqnamesrv
 
 # start broker
 docker run -it --net=host --mount source=/tmp/store,target=/home/rocketmq/store apache/rocketmq ./mqbroker -n localhost:9876
-
-
 ```
 
-##### Run by Helm Operator
+##### Run On Helm
 ```bash
 # rocketmq operator
 # https://artifacthub.io/packages/olm/community-operators/rocketmq-operator
-
 ```
+
 
 
 >Reference:

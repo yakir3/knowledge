@@ -2,7 +2,7 @@
 ...
 
 
-#### Deploy by Container
+#### Deploy By Container
 ##### Run by Binary
 install and verify
 ```bash
@@ -112,7 +112,7 @@ vault kv put -mount=secret creds password="my-long-password"
 
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add hashicorp https://helm.releases.hashicorp.com

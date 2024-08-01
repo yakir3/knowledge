@@ -1,7 +1,7 @@
 #### Introduction
 ...
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # Ubuntu Package install
@@ -40,13 +40,13 @@ fluentd -c fluentd.conf --dry-run
 ```
 
 
-#### Deploy by Container
+#### Deploy By Container
 ##### Run by Resource
 ```bash
 # https://docs.fluentd.org/container-deployment/kubernetes
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add fluent https://fluent.github.io/helm-charts

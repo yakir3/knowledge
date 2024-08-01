@@ -3,7 +3,7 @@
 ...
 
 
-#### Deploy by Container
+#### Deploy By Container
 ##### Run by Resource
 ```bash
 # version
@@ -16,7 +16,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/${
 
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add argo https://argoproj.github.io/argo-helm
@@ -74,7 +74,7 @@ argocd app get guestbook
 ...
 
 
-#### Deploy by Container
+#### Deploy By Container
 ##### Run by Resource
 ```bash
 # version
@@ -95,7 +95,7 @@ kubectl patch deployment \
 ```
 
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add argo https://argoproj.github.io/argo-helm

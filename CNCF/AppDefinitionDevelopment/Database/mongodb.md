@@ -2,7 +2,7 @@
 ...
 
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # dependencies
@@ -93,8 +93,8 @@ apt install libcurl4-openssl-dev
 ```
 
 
-#### Deploy by Container
-##### Run by Docker
+#### Deploy By Container
+##### Run On Docker
 ```bash
 # WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!
 cat /proc/cpuinfo |grep flags |grep avx
@@ -110,7 +110,7 @@ docker run --name mongo -d mongodb/mongodb-community-server:latest
 docker exec -it mongo mongosh
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

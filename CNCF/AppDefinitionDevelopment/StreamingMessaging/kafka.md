@@ -1,7 +1,7 @@
 #### Introduction
 ...
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ###### ZooKeeper Mode
 [[zookeeper|zookeeper-deploy]]

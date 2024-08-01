@@ -1,4 +1,4 @@
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # Ubuntu Package install

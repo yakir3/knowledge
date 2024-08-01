@@ -2,7 +2,7 @@
 ...
 
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # download source
@@ -125,15 +125,15 @@ mc cat myminio/mybucket/1.txt
 ```
 
 
-#### Deploy by Container
-##### Run by Docker
+#### Deploy By Container
+##### Run On Docker
 ```bash
 # single node test
 docker run -p 9000:9000 -p 9001:9001 quay.io/minio/minio server /data --console-address ":9001"
 
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add minio https://helm.min.io/

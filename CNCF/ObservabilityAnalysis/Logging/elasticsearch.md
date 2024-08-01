@@ -1,4 +1,4 @@
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # download and decompression
@@ -98,7 +98,7 @@ systemctl start elasticsearch.service
 systemctl enable elasticsearch.service
 ```
 
-#### Deploy by Container
+#### Deploy By Container
 ##### Run on Helm
 ```bash
 # add and update repo

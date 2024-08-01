@@ -1,4 +1,4 @@
-### Build Install
+### Install
 ```bash
 # centos
 yum install -y make gcc zlib-devel bzip2-devel openssl-devel ncurses-devel libffi-devel

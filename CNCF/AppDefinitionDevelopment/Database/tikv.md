@@ -2,7 +2,7 @@
 ...
 
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # create dir
@@ -79,13 +79,13 @@ print(client.get(b'foo')) # b'baz'
 ```
 
 
-#### Deploy by Container
-##### Run by Docker
+#### Deploy By Container
+##### Run On Docker
 ```bash
 # not yet
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # not yet
 ```

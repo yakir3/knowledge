@@ -2,7 +2,7 @@
 ...
 
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # dependencies: install erlang
@@ -84,8 +84,8 @@ Erlang (SMP,ASYNC_THREADS) (BEAM) emulator version 13.2.2.2
 ```
 
 
-#### Deploy by Container
-##### Run by Docker
+#### Deploy By Container
+##### Run On Docker
 ```bash
 # pull image
 docker pull rabbitmq:3
@@ -100,7 +100,7 @@ docker exec -it rabbitmq sh
 
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

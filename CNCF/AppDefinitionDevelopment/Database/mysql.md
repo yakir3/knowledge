@@ -2,7 +2,7 @@
 ...
 
 
-#### Deploy by Binaries
+#### Deploy By Binaries
 ##### Quick Start
 ```bash
 # download source with boost lib
@@ -72,13 +72,13 @@ apt install pkg-config
 ```
 
 
-#### Deploy by Container
+#### Deploy By Container
 ##### Run by Resource
 ```bash
 #
 ```
 
-##### Run by Helm
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
