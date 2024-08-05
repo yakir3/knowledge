@@ -51,5 +51,5 @@ kubectl -n cattle-system get pod
 
 
 > Reference:
-> 1. [官方文档](https://github.com/rancher/rke)
-> 2. [官方 github 地址](https://github.com/rancher/rke)
+> 1. [Official Website](https://github.com/rancher/rke)
+> 2. [Repository](https://github.com/rancher/rke)

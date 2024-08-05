@@ -105,5 +105,5 @@ Harbor12345
 
 
 > Reference:
-> 1. [官方文档](https://docs.gitlab.com/)
-> 2. [官方 github 地址](https://github.com/gitlabhq/gitlabhq)
+> 1. [Official Website](https://docs.gitlab.com/)
+> 2. [Repository](https://github.com/gitlabhq/gitlabhq)

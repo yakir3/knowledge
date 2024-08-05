@@ -45,7 +45,7 @@ systemctl enable td-agent-bit.service
 ```
 
 
-#### Deploy by Kubernetes
+#### Deploy by Container
 ##### 相关概念
 Kubernetes 管理 nodes 集群，因此我们的日志代理工具需要在每个节点上运行以从每个 POD 收集日志，因此Fluent Bit 被部署为 DaemonSet(在集群的每个 node 上运行的 POD)。
 当 Fluent Bit 运行时，它将读取，解析和过滤每个 POD 的日志，并将使用以下信息(元数据)丰富每条数据:
@@ -534,6 +534,5 @@ output {
 
 
 >Reference:
->1. [fluent-bit 官方文档](https://hulining.gitbook.io/fluentbit/pipeline/filters/kubernetes)
->2. [项目官方 github 地址](https://github.com/fluent/fluent-bit)
- 
+>1. [Official Website](https://hulining.gitbook.io/fluentbit/pipeline/filters/kubernetes)
+>2. [github 地址](https://github.com/fluent/fluent-bit)

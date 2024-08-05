@@ -227,6 +227,9 @@ xxx
 system init
 deploy middleware
 
+
+helm + gitlab (package install middleware)
+
 #### Platform
 ##### Alibaba Cloud
 + CDN

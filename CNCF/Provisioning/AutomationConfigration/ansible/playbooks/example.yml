@@ -74,11 +74,10 @@
         msg: "Bailing out. this play requires variable foo"
       when: foo is undefined
 
-    # Import tasks when syntax
+    # All import* statements are pre-processed at the time playbooks are parsed.
+    # All include* statements are processed as they are encountered during the execution of the playbook.
     - import_tasks: Debian.yml
       when: ansible_os_family == "Debian"
-
-    # Include tasks with loop syntax
     - include_tasks: "{{ item }}.yaml"
       loop:
         - i1

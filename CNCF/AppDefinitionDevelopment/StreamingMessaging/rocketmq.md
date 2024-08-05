@@ -5,15 +5,19 @@
 #### Deploy By Binaries
 ##### Quick Start
 ```bash
-# download source
+# option1: compile source install
 cd /usr/local/src/
 wget https://dist.apache.org/repos/dist/release/rocketmq/5.3.0/rocketmq-all-5.3.0-source-release.zip
 unzip rocketmq-all-5.3.0-source-release.zip && rm -f rocketmq-all-5.3.0-source-release.zip
 cd rocketmq-all-5.3.0-source-release
-
-# compile and install
 mvn -Prelease-all -DskipTests -Dspotbugs.skip=true clean install -U
 cp -aR distribution/target/rocketmq-5.3.0/rocketmq-5.3.0 /opt/rocketmq-5.3.0
+
+# options2: download bin install
+cd /usr/local/src/
+wget https://dist.apache.org/repos/dist/release/rocketmq/5.3.0/rocketmq-all-5.3.0-bin-release.zip
+unzip rocketmq-all-5.3.0-bin-release.zip && rm -f rocketmq-all-5.3.0-bin-release.zip
+cp -aR rocketmq-all-5.3.0-bin-release /opt/rocketmq-5.3.0
 
 # soft link
 ln -svf /opt/rocketmq-5.3.0 /opt/rocketmq
@@ -30,10 +34,10 @@ export PATH=$PATH:/opt/rocketmq/bin
 ./bin/mqbroker -n localhost:9876 --enable-proxy
 # option2: 2m-2s-sync
 ./bin/mqnamesrv
-./bin/mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a.properties --enable-proxy
-./bin/mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a-s.properties --enable-proxy
-./bin/mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b.properties --enable-proxy
-./bin/mqbroker -n 192.168.1.1:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b-s.properties --enable-proxy
+./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a.properties --enable-proxy
+./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a-s.properties --enable-proxy
+./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b.properties --enable-proxy
+./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b-s.properties --enable-proxy
 
 # cluster mode(deployment on different machines)
 # start multiple nameserver
@@ -175,5 +179,5 @@ docker run -it --net=host --mount source=/tmp/store,target=/home/rocketmq/store 
 
 
 >Reference:
-> 1. [Official Document](https://rocketmq.apache.org/)
+> 1. [Repository](https://rocketmq.apache.org/)
 > 2. [RocketMQ Github](https://github.com/apache/rocketmq)

@@ -126,5 +126,5 @@ StorageClass
 
 
 >Reference:
-> 1. [Kubernetes Official Documentation](https://kubernetes.io/)
-> 2. [Kubernetes GitHub](https://github.com/kubernetes/kubernetes)
+> 1. [Repository](https://kubernetes.io/)
+> 2. [Repository](https://github.com/kubernetes/kubernetes)

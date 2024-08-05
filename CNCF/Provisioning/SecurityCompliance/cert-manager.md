@@ -3,17 +3,14 @@
 
 
 
-#### Deployment
-##### Deploy On Kubernetes
-**deploy by kubenertes manifest**
-```bash
-# install operator
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+#### Deploy By Container
 
+##### Run On Docker
+```bash
+# 
 ```
 
-**deploy by helm**
-[[cc-helm|helm常用命令]]
+##### Run On Helm
 ```bash
 # install crds resources
 # if installCRDS is true, don't need to apply
@@ -32,9 +29,15 @@ vim values.yaml
 installCRDs: true
 
 helm -n cert-manager install cert-manager .
+
+
+# helm-operator
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+
 ```
 
 
-> Reference:
-> 1. [官方 github 地址](https://github.com/cert-manager/cert-manager)
-> 2. [官方文档](https://cert-manager.io/docs/)
+
+>Reference:
+>1. [Repository](https://cert-manager.io/)
+>2. [Repository](https://github.com/cert-manager/cert-manager)

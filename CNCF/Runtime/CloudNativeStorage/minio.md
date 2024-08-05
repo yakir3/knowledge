@@ -160,5 +160,5 @@ mc ls myminio/mybucket
 
 
 > Reference:
-> 1. [Minio Official Doc](https://min.io/docs/minio/kubernetes/upstream/)
-> 2. [Minio GitHub](https://github.com/minio/minio)
+> 1. [Repository](https://min.io/docs/minio/kubernetes/upstream/)
+> 2. [Repository](https://github.com/minio/minio)

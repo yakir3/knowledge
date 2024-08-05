@@ -97,7 +97,7 @@ helm -n middleware install mysql .
 
 
 > Reference:
-> 1. [官方文档](https://www.mysql.com/)
-> 2. [GitHub 地址](https://github.com/mysql/mysql-server)
+> 1. [Official Website](https://www.mysql.com/)
+> 2. [Repository](https://github.com/mysql/mysql-server)
 > 3. [Download](https://dev.mysql.com/downloads/)
 > 4. [apt 安装方式](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/)

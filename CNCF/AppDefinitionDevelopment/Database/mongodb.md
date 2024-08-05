@@ -129,6 +129,6 @@ helm -n middleware install mongodb .
 
 
 > Reference:
-> 1. [官方文档](https://www.mongodb.com/docs/manual/administration/install-on-linux/)
-> 2. [GitHub 地址](https://github.com/mongodb/mongo)
+> 1. [Official Website](https://www.mongodb.com/docs/manual/administration/install-on-linux/)
+> 2. [Repository](https://github.com/mongodb/mongo)
 > 3. [apt 安装方式](https://www.postgresql.org/download/linux/ubuntu/)

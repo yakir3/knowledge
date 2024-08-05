@@ -46,5 +46,5 @@ sh startup.sh
 
 
 > Reference:
-> 1. [官方文档](https://nacos.io/zh-cn/docs/quick-start.html)
-> 2. [官方 github 地址](https://github.com/alibaba/nacos)
+> 1. [Official Website](https://nacos.io/zh-cn/docs/quick-start.html)
+> 2. [Repository](https://github.com/alibaba/nacos)

@@ -1,4 +1,7 @@
-### 二进制部署
+#### Introduction
+...
+
+#### Deploy By Binaries
 ```bash
 # 1.download and decompression
 https://www.elastic.co/downloads/logstash
@@ -10,9 +13,11 @@ vim config/logstash.conf
 # 3.run
 bin/logstash -f logstash.conf
 ```
-[[sc-logstash|logstash常用配置]]
 
-### helm 部署
+[[sc-logstash|Logstash Config]]
+
+#### Deploy By Container
+##### Run On Helm
 ```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co
@@ -38,6 +43,8 @@ helm -n logging install logstash .
 
 ```
 
-> Reference:
-> 1、官方 github 地址 = https://github.com/elastic/logstash
-> 2、官方 helm 安装指引 = https://github.com/elastic/helm-charts/blob/main/logstash/README.md
+
+
+>Reference:
+>1. [Repository](https://istio.io/)
+>2. [Repository](https://github.com/istio/istio)

@@ -131,5 +131,5 @@ helm -n provisioning install vault .
 
 
 > Reference:
-> 1. [Vault 官方文档](https://developer.hashicorp.com/vault/docs?product_intent=vault)
-> 2. [Vault GitHub](https://github.com/hashicorp/vault)
+> 1. [Official Website](https://developer.hashicorp.com/vault/docs?product_intent=vault)
+> 2. [Repository](https://github.com/hashicorp/vault)

@@ -60,5 +60,5 @@ Harbor12345
 
 
 > Reference:
-> 1. [官方文档](https://goharbor.io/docs/2.8.0/install-config/)
-> 2. [官方 github 地址](https://github.com/goharbor/harbor)
+> 1. [Official Website](https://goharbor.io/docs/2.8.0/install-config/)
+> 2. [Repository](https://github.com/goharbor/harbor)

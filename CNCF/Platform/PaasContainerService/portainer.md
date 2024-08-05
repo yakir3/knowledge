@@ -99,5 +99,5 @@ kubectl -n middleware exec -it zookeeper-0 -- zkServer.sh status
 
 
 > Reference:
-> 1. [官方文档](https://www.portainer.io/)
-> 2. [官方 github 地址](https://github.com/portainer/portainer)
+> 1. [Official Website](https://www.portainer.io/)
+> 2. [Repository](https://github.com/portainer/portainer)

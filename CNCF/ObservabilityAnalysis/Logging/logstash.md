@@ -87,6 +87,6 @@ helm -n logging install logstash .
 ```
 
 >Reference:
->1. [Logstash Official Documentation](https://www.elastic.co/guide/en/logstash/current/introduction.html)
->2. [Logstash helm chart](https://github.com/elastic/helm-charts/blob/main/logstash/README.md)
+>1. [Repository](https://www.elastic.co/guide/en/logstash/current/introduction.html)
+>2. [helm chart](https://github.com/elastic/helm-charts/blob/main/logstash/README.md)
 >3. [apt installing](https://www.elastic.co/guide/en/logstash/current/installing-logstash.html)

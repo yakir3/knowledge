@@ -300,9 +300,9 @@ metadata:
 
 
 >Reference:
->1. [Official Prometheus Doc](https://prometheus.io/docs/introduction/overview/)
->2. [Prometheus Github](https://github.com/prometheus/prometheus)
->3. [Prometheus Download](https://prometheus.io/download/)
+>1. [Repository](https://prometheus.io/docs/introduction/overview/)
+>2. [Github](https://github.com/prometheus/prometheus)
+>3. [Download](https://prometheus.io/download/)
 >4. [中文社区文档](https://icloudnative.io/prometheus/)
 >5. [InfluxDB Doc](https://docs.influxdata.com/influxdb/v1.8/introduction/get-started/)
 >6. [redis-exporter](https://github.com/oliver006/redis_exporter)

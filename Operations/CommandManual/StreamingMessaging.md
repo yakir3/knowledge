@@ -44,29 +44,29 @@ second event
 
 ##### RocketMQ
 ```bash
-# help
-./mqadmin -h
-./mqadmin {command} {args}
+# common
+# ./mqadmin {command} {args}
 # args
--b brokerIp:port
+-b brokerName
 -c clusterName
--h
--n nameserver:9876
+-n nameServer
 -t topicName
 
+# tool
+export NAMESRV_ADDR=localhost:9876
+./tools.sh org.apache.rocketmq.example.quickstart.Producer ; sleep 3
+./tools.sh org.apache.rocketmq.example.quickstart.Consumer
 
 
 # topic
-./mqadmin updateTopic 
-./mqadmin deleteTopic
 ./mqadmin topicList -n rocketmq-nameserver:9876
-./mqadmin topicStatus
-./mqadmin topicClusterList -t topicName -n rocketmq-nameserver:9876
-
+./mqadmin topicStatus -t myTopic -n rocketmq-nameserver:9876
+./mqadmin updateTopic -t myTopic -n rocketmq-nameserver:9876 -c clusterName
+./mqadmin deleteTopic -t myTopic -n rocketmq-nameserver:9876
+./mqadmin topicClusterList -t myTopic -n rocketmq-nameserver:9876
 
 # cluster
-./mqadmin clusterList
-
+./mqadmin clusterList -n rocketmq-nameserver:9876
 
 # message
 ./mqadmin queryMsgById -i msgId -n rocketmq-nameserver:9876
@@ -75,8 +75,6 @@ second event
 ./mqadmin sendMessage -t topicName -b brokerName -p yakirTest -n rocketmq-nameserver:9876
 ./mqadmin consumeMessage -t topicName -b brokerName -o offset -i queueId -g consumerGroup
 
-
 # consumer
-./mqadmin consumerStatus
-
+./mqadmin consumerStatus -g consumerGroupName -n rocketmq-nameserver:9876
 ```

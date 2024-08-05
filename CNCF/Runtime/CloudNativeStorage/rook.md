@@ -2,7 +2,7 @@
 ...
 
 
-#### Deployment
+#### Deploy By Container
 ##### Run On Docker
 [[cc-docker|Docker常用命令]]
 ```bash
@@ -83,6 +83,7 @@ kubectl -n rook-ceph apply -f pvc-test.yaml
 ```
 
 
-> Reference:
-> 1. [官方文档](https://rook.io/)
-> 2. [官方 github 地址](https://github.com/rook/rook)
+
+>Reference:
+>1. [Repository](https://rook.io/)
+>2. [Repository](https://github.com/rook/rook)

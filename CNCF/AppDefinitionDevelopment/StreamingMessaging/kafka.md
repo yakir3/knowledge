@@ -334,8 +334,8 @@ kafka 需要使用持久化存储配置，k8s 本身不支持 nfs 做 storagecla
 
 
 >Reference:
->1. [Official Document](https://kafka.apache.org/documentation/)
->2. [Kafka Github](https://github.com/apache/kafka)
+>1. [Repository](https://kafka.apache.org/documentation/)
+>2. [Repository](https://github.com/apache/kafka)
 >3. [storageclass 存储类官方说明](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)
 >4. [nfs-server 驱动部署方式](https://blog.51cto.com/smbands/4903841)
 >5. [nfs 驱动 helm 安装](https://artifacthub.io/packages/helm/nfs-subdir-external-provisioner/nfs-subdir-external-provisioner)

@@ -88,5 +88,5 @@ mxP4KKfGtn6hJ8IF2zMMLt
 
 
 > Reference:
-> 1. [官方文档](https://www.jenkins.io/doc/book/installing/)
-> 2. [官方 github 地址](https://github.com/jenkinsci/jenkins)
+> 1. [Official Website](https://www.jenkins.io/doc/book/installing/)
+> 2. [Repository](https://github.com/jenkinsci/jenkins)

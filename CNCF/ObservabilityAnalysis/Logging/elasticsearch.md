@@ -130,7 +130,7 @@ helm -n logging install elasticsearch .
 
 
 >Reference:
-> 1. [Official Document](https://www.elastic.co/docs)
+> 1. [Repository](https://www.elastic.co/docs)
 > 2. [Elasticsearch Github](https://github.com/elastic/elasticsearch)
 > 3. [Official elastic-cloud-kubernetes](https://www.elastic.co/downloads/elastic-cloud-kubernetes)
 > 4. Elasticsearch UI: [cerebro](https://github.com/lmenezes/cerebro)

@@ -207,7 +207,7 @@ helm -n ingress-nginx install ingress-nginx .
 
 
 > Reference:
-> 1. [官方文档](https://nginx.org/en/docs/)
+> 1. [Official Website](https://nginx.org/en/docs/)
 > 2. [Openrestry Github](https://github.com/openresty)
 > 3. [Luajit Download](https://luajit.org/download.html)
 > 4. [ingress-nginx controller](https://kubernetes.github.io/ingress-nginx/deploy/)

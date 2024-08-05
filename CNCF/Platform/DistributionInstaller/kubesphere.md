@@ -47,5 +47,5 @@ kubectl -n middleware exec -it zookeeper-0 -- zkServer.sh status
 
 
 > Reference:
-> 1. [官方文档](https://www.kubesphere.io/zh/)
-> 2. [官方 github 地址](https://github.com/kubesphere/kubesphere)
+> 1. [Official Website](https://www.kubesphere.io/zh/)
+> 2. [Repository](https://github.com/kubesphere/kubesphere)
