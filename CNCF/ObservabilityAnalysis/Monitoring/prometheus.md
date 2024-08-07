@@ -71,7 +71,7 @@ job_service:rpc_durations_seconds_count:avg_rate5m
 
 
 #### Deploy On Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 mkdir /opt/prometheus
 cat > /opt/prometheus/prometheus.yml << "EOF"
@@ -85,7 +85,7 @@ docker run --name prometheus --rm -p 9090:9090 -v /opt/prometheus/prometheus.yml
 
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts

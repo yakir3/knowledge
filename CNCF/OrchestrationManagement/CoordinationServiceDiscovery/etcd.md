@@ -64,7 +64,7 @@ systemctl start etcd.service
 systemctl enable etcd.service
 ```
 
-##### Run On Docker
+##### Run in Docker
 [[cc-docker|Docker常用命令]]
 ```bash
 rm -rf /tmp/etcd-data.tmp && mkdir -p /tmp/etcd-data.tmp && \

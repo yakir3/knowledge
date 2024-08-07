@@ -126,14 +126,14 @@ mc cat myminio/mybucket/1.txt
 
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 # single node test
 docker run -p 9000:9000 -p 9001:9001 quay.io/minio/minio server /data --console-address ":9001"
 
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add minio https://helm.min.io/

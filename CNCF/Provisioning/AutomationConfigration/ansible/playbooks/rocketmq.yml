@@ -1,9 +1,8 @@
 ---
 # Usage: 
-# standalone
-#   ansible-playbook -e "hosts_var=10.0.10.12" playbook/rocketmq.yml
+# 2m-2s-sync mode
 #   ansible-playbook -e "hosts_var=10.0.10.12,10.0.10.13" playbook/rocketmq.yml
-# cluster
+# failover mode
 #   ansible-playbook -e "hosts_var=10.0.10.12,10.0.10.13,10.0.10.14" playbook/rocketmq.yml
 
 - hosts: "{{ hosts_var }}"

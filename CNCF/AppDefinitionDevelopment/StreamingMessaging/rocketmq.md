@@ -32,23 +32,28 @@ export PATH=$PATH:/opt/rocketmq/bin
 # option1: single replication
 ./bin/mqnamesrv
 ./bin/mqbroker -n localhost:9876 --enable-proxy
-# option2: 2m-2s-sync
+# option2: synchronization 2m-2s-sync
 ./bin/mqnamesrv
 ./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a.properties --enable-proxy
 ./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a-s.properties --enable-proxy
 ./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b.properties --enable-proxy
 ./bin/mqbroker -n localhost:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b-s.properties --enable-proxy
+# option3: asynchronous 2m-2s-async
+...
 
-# cluster mode(deployment on different machines)
-# start multiple nameserver
+# cluster mode
+# option1: synchronization 2m-2s-sync
 ./bin/mqnamesrv
-# start broker: 2 master 2 slave with synchronous replication
-./bin/mqbroker -n 192.168.1.1:9876,192.168.1.2:9876,192.168.1.3:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a.properties
-./bin/mqbroker -n 192.168.1.1:9876,192.168.1.2:9876,192.168.1.3:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a-s.properties
-./bin/mqbroker -n 192.168.1.1:9876,192.168.1.2:9876,192.168.1.3:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b.properties
-./bin/mqbroker -n 192.168.1.1:9876,192.168.1.2:9876,192.168.1.3:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b-s.properties
-# start multiple proxy
-./bin/mqproxy -n 192.168.1.1:9876,192.168.1.2:9876,192.168.1.3:9876
+./bin/mqbroker -n 192.168.1.1:9876;192.161.2:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a.properties
+./bin/mqbroker -n 192.168.1.1:9876;192.161.2:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-a-s.properties
+./bin/mqbroker -n 192.168.1.1:9876;192.161.2:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b.properties
+./bin/mqbroker -n 192.168.1.1:9876;192.161.2:9876 -c $ROCKETMQ_HOME/conf/2m-2s-sync/broker-b-s.properties
+./bin/mqproxy -n 192.168.1.1:9876;192.161.2:9876 -pc $ROCKETMQ_HOME/conf/2m-2s-sync/proxyConfig.json
+# option2: asynchronous 2m-2s-async
+...
+
+# failover mode
+...
 
 # shutdown
 ./bin/mqshutdown broker
@@ -57,56 +62,86 @@ export PATH=$PATH:/opt/rocketmq/bin
 
 ##### Config and Boot
 ###### Config
+**Local Mode**
 ```bash
-# master config
-vim conf/2m-2s-sync/broker-a.properties
-vim conf/2m-2s-sync/broker-b.properties
-# slave config
-vim conf/2m-2s-sync/broker-a-s.properties
-vim conf/2m-2s-sync/broker-b-s.properties
+# namesrv config
+cat > /opt/rocketmq/conf/2m-2s-sync/nameserver.conf << "EOF"
+namesrvAddr=10.0.0.x
+EOF
 
-###
-# common config
+# master config
+cat > /opt/rocketmq/conf/2m-2s-sync/broker-a.properties << "EOF"
 brokerClusterName=DefaultCluster
+brokerName=broker-a
+brokerId=0
+namesrvAddr=10.0.0.1:9876;10.0.0.2:9876
+bindAddress=10.0.0.1
+listenPort=6888
+storePathRootDir=/opt/rocketmq/store
 deleteWhen=04
+diskMaxUsedSpaceRatio=85
 fileReservedTime=48
 brokerRole=SYNC_MASTER
 flushDiskType=ASYNC_FLUSH
-#namesrvAddr=
-#listenPort=11011
-#autoCreateTopicEnable=true
-#autoCreateSubscriptionGroup=true
-#mapedFileSizeCommitLog=1073741824
-#mapedFileSizeConsumeQueue=300000
-#diskMaxUsedSpaceRatio=88
-
-# broker-a
-brokerName=broker-a
-brokerId=0
-#storePathRootDir=/opt/rocketmq/store
-#storePathCommitLog=/opt/rocketmq/store/commitlog
-#storePathConsumeQueue=/opt/rocketmq/store/consumequeue
-#storePathIndex=/opt/rocketmq/store/index
-#storeCheckpoint=/opt/rocketmq/store/checkpoint
-#abortFile=/opt/rocketmq/store/abort
-
-# broker-b
+EOF
+cat > /opt/rocketmq/conf/2m-2s-sync/broker-b.properties << "EOF"
+brokerClusterName=DefaultCluster
 brokerName=broker-b
 brokerId=0
+namesrvAddr=10.0.0.1:9876;10.0.0.2:9876
+bindAddress=10.0.0.1
+listenPort=6888
+storePathRootDir=/opt/rocketmq/store
+deleteWhen=04
+diskMaxUsedSpaceRatio=85
+fileReservedTime=48
+brokerRole=SYNC_MASTER
+flushDiskType=ASYNC_FLUSH
+EOF
 
-# broker-a-s
+# slave config
+cat > /opt/rocketmq/conf/2m-2s-sync/broker-a-s.properties << "EOF"
+brokerClusterName=DefaultCluster
 brokerName=broker-a
-brokerId=0
-
-# broker-b-s
+brokerId=1
+namesrvAddr=10.0.0.1:9876;10.0.0.2:9876
+bindAddress=10.0.0.1
+listenPort=7888
+storePathRootDir=/opt/rocketmq/store-s
+deleteWhen=04
+diskMaxUsedSpaceRatio=85
+fileReservedTime=48
+brokerRole=SLAVE
+flushDiskType=ASYNC_FLUSH
+EOF
+cat > /opt/rocketmq/conf/2m-2s-sync/broker-b-s.properties << "EOF"
+brokerClusterName=DefaultCluster
 brokerName=broker-b
-brokerId=0
-###
+brokerId=1
+namesrvAddr=10.0.0.1:9876;10.0.0.2:9876
+bindAddress=10.0.0.1
+listenPort=7888
+storePathRootDir=/opt/rocketmq/store-s
+deleteWhen=04
+diskMaxUsedSpaceRatio=85
+fileReservedTime=48
+brokerRole=SLAVE
+flushDiskType=ASYNC_FLUSH
+EOF
+```
+
+**Failover Mode**
+```bash
+# namesrv and controller config
+
+# broker config
 ```
 
 ###### Boot(systemd)
+**Local Mode**
 ```bash
-cat > /etc/systemd/system/rocketmq.service << "EOF"
+# namesrv
+cat > /etc/systemd/system/rocketmq-namesrv.service << "EOF"
 [Unit]
 Description=Rocketmq
 Documentation=https://rocketmq.apache.org/docs/
@@ -114,17 +149,18 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStartPre=
-ExecStart=
+#ExecStartPre=/opt/rocketmq/bin/runserver.sh
+ExecStart=/opt/rocketmq/bin/mqnamesrv
 LimitNOFILE=655350
 LimitNPROC=65535
 NoNewPrivileges=yes
 #PrivateTmp=yes
 Restart=on-failure
 RestartSec=10s
-Type=notify
-TimeoutStartSec=infinity
-TimeoutStopSec=infinity
+SuccessExitStatus=143
+Type=simple
+TimeoutStartSec=60
+TimeoutStopSec=30
 UMask=0077
 User=rocketmq
 Group=rocketmq
@@ -134,9 +170,76 @@ WorkingDirectory=/opt/rocketmq
 WantedBy=multi-user.target
 EOF
 
+
+# master
+cat > /etc/systemd/system/rocketmq-master.service << "EOF"
+[Unit]
+Description=Rocketmq
+Documentation=https://rocketmq.apache.org/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/opt/rocketmq/bin/mqbroker -c /opt/rocketmq/conf/2m-2s-sync/broker-m.properties
+LimitNOFILE=655350
+LimitNPROC=65535
+NoNewPrivileges=yes
+#PrivateTmp=yes
+Restart=on-failure
+RestartSec=10s
+Type=simple
+TimeoutStartSec=60
+TimeoutStopSec=30
+UMask=0077
+User=rocketmq
+Group=rocketmq
+WorkingDirectory=/opt/rocketmq
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# slave
+cat > /etc/systemd/system/rocketmq-slave.service << "EOF"
+[Unit]
+Description=Rocketmq
+Documentation=https://rocketmq.apache.org/docs/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/opt/rocketmq/bin/mqbroker -c /opt/rocketmq/conf/2m-2s-sync/broker-s.properties
+LimitNOFILE=655350
+LimitNPROC=65535
+NoNewPrivileges=yes
+#PrivateTmp=yes
+Restart=on-failure
+RestartSec=10s
+Type=simple
+TimeoutStartSec=60
+TimeoutStopSec=30
+UMask=0077
+User=rocketmq
+Group=rocketmq
+WorkingDirectory=/opt/rocketmq
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+
 systemctl daemon-reload
-systemctl start rocketmq.service
-systemctl enable rocketmq.service
+systemctl start rocketmq-namesrv.service
+systemctl start rocketmq-master.service
+systemctl start rocketmq-slave.service
+systemctl enable rocketmq-master.service
+systemctl enable rocketmq-slave.service
+systemctl enable rocketmq-namesrv.service
+```
+
+**Failover Mode**
+```bash
+#
 ```
 
 ##### Verify
@@ -145,9 +248,9 @@ systemctl enable rocketmq.service
 export NAMESRV_ADDR=localhost:9876
 
 # produce 
-./bin/tools.sh org.apache.rocketmq.example.quickstart.Producer
+./tools.sh org.apache.rocketmq.example.quickstart.Producer ; sleep 3
 # consume
-./bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer
+./tools.sh org.apache.rocketmq.example.quickstart.Consumer
 ```
 
 ##### Troubleshooting
@@ -158,10 +261,10 @@ export NAMESRV_ADDR=localhost:9876
 
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 # pull image
-docker pull apache/rocketmq:5.1.4
+docker pull apache/rocketmq:5.3.0
 
 # start nameserver
 docker run -it --net=host apache/rocketmq ./mqnamesrv
@@ -170,7 +273,7 @@ docker run -it --net=host apache/rocketmq ./mqnamesrv
 docker run -it --net=host --mount source=/tmp/store,target=/home/rocketmq/store apache/rocketmq ./mqbroker -n localhost:9876
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # rocketmq operator
 # https://artifacthub.io/packages/olm/community-operators/rocketmq-operator

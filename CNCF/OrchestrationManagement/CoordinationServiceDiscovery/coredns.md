@@ -44,7 +44,7 @@ systemctl start coredns.service
 systemctl enable coredns.service
 ```
 
-##### Run On Docker
+##### Run in Docker
 [[cc-docker|Docker常用命令]]
 ```bash
 # https://hub.docker.com/r/coredns/coredns/tags

@@ -121,7 +121,7 @@ apt install libsystemd-dev
 ```
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 # Standlone
 docker run --rm --name redis \
@@ -136,7 +136,7 @@ docker run --rm --name redis-cluster \
   -d bitnami/redis-cluster
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

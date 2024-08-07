@@ -59,7 +59,7 @@ systemctl enable .service
 # https://docs.fluentd.org/container-deployment/kubernetes
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co

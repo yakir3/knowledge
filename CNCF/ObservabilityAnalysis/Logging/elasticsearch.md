@@ -50,32 +50,32 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-Type=simple
-User=elasticsearch
-Group=elasticsearch
-RuntimeDirectory=elasticsearch
 Environment=ES_HOME=/opt/elasticsearch
 Environment=ES_PATH_CONF=/opt/elasticsearch/config
 Environment=PID_DIR=/opt/elasticsearch/logs
 Environment=ES_SD_NOTIFY=true
 EnvironmentFile=-/etc/default/elasticsearch
-WorkingDirectory=/opt/elasticsearch
 ExecStart=/opt/elasticsearch/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet
-StandardOutput=journal
-StandardError=inherit
-PrivateTmp=true
 LimitNOFILE=65535
 LimitNPROC=4096
 LimitAS=infinity
 LimitFSIZE=infinity
-TimeoutStopSec=0
 KillSignal=SIGTERM
 KillMode=process
+PrivateTmp=yes
+Restart=on-failure
+RestartSec=5s
+RuntimeDirectory=elasticsearch
 SendSIGKILL=no
+StandardError=inherit
+StandardOutput=journal
 SuccessExitStatus=143
 TimeoutStartSec=60
-Restart=always
-RestartSec=3s
+TimeoutStopSec=30
+Type=simple
+User=elasticsearch
+Group=elasticsearch
+WorkingDirectory=/opt/elasticsearch
 
 [Install]
 WantedBy=multi-user.target

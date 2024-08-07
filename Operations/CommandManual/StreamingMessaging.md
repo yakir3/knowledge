@@ -52,29 +52,31 @@ second event
 -n nameServer
 -t topicName
 
-# tool
-export NAMESRV_ADDR=localhost:9876
-./tools.sh org.apache.rocketmq.example.quickstart.Producer ; sleep 3
-./tools.sh org.apache.rocketmq.example.quickstart.Consumer
-
+# broker
+./mqadmin brokerStatus -b brokerAddr -n 'namersrvName:9876'
 
 # topic
-./mqadmin topicList -n rocketmq-nameserver:9876
-./mqadmin topicStatus -t myTopic -n rocketmq-nameserver:9876
-./mqadmin updateTopic -t myTopic -n rocketmq-nameserver:9876 -c clusterName
-./mqadmin deleteTopic -t myTopic -n rocketmq-nameserver:9876
-./mqadmin topicClusterList -t myTopic -n rocketmq-nameserver:9876
+./mqadmin topicList -n 'namersrvName:9876'
+./mqadmin topicStatus -t myTopic -n 'namersrvName:9876'
+./mqadmin updateTopic -t myTopic -n 'namersrvName:9876' -c clusterName
+./mqadmin deleteTopic -t myTopic -n 'namersrvName:9876'
+./mqadmin topicClusterList -t myTopic -n 'namersrvName:9876'
 
 # cluster
-./mqadmin clusterList -n rocketmq-nameserver:9876
+./mqadmin clusterList -n 'namersrvName:9876'
 
 # message
-./mqadmin queryMsgById -i msgId -n rocketmq-nameserver:9876
-./mqadmin queryMsgByKey -k msgKey -n rocketmq-nameserver:9876
-./mqadmin queryMsgByOffset -t topicName -b brokerName -i queueId -o offsetValue -n rocketmq-nameserver:9876
-./mqadmin sendMessage -t topicName -b brokerName -p yakirTest -n rocketmq-nameserver:9876
+./mqadmin queryMsgById -i msgId -n 'namersrvName:9876'
+./mqadmin queryMsgByKey -k msgKey -n 'namersrvName:9876'
+./mqadmin queryMsgByOffset -t topicName -b brokerName -i queueId -o offsetValue -n 'namersrvName:9876'
+./mqadmin sendMessage -t topicName -b brokerName -p yakirTest -n 'namersrvName:9876'
 ./mqadmin consumeMessage -t topicName -b brokerName -o offset -i queueId -g consumerGroup
 
 # consumer
-./mqadmin consumerStatus -g consumerGroupName -n rocketmq-nameserver:9876
+./mqadmin consumerStatus -g consumerGroupName -n 'namersrvName:9876'
+
+# controller
+./mqadmin getControllerMetaData -a localhost:9878
+./mqadmin getSyncStateSet -a localhost:9878 -b broker-a
+./mqadmin getBrokerEpoch -n localhost:9876 -b broker-a
 ```

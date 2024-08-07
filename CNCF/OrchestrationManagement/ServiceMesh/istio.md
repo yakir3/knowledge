@@ -17,7 +17,7 @@ bin/logstash -f logstash.conf
 [[sc-logstash|Logstash Config]]
 
 #### Deploy By Container
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add elastic https://helm.elastic.co

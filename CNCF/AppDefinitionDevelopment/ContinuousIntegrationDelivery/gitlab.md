@@ -19,7 +19,7 @@ GITLAB_ROOT_PASSWORD="passwOrd123" EXTERNAL_URL="http://gitlab.yakir.com" apt in
 cat /etc/gitlab/initial_root_password
 ```
 
-##### Run On Docker
+##### Run in Docker
 [[cc-docker|Docker常用命令]]
 ```bash
 # run container

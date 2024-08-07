@@ -85,7 +85,7 @@ Erlang (SMP,ASYNC_THREADS) (BEAM) emulator version 13.2.2.2
 
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 # pull image
 docker pull rabbitmq:3
@@ -100,7 +100,7 @@ docker exec -it rabbitmq sh
 
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

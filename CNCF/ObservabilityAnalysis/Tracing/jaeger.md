@@ -5,7 +5,7 @@
 https://www.jaegertracing.io/docs/1.45/#about
 
 #### Deployment
-##### Run On Docker
+##### Run in Docker
 all-in-one 部署，用于测试环境
 ```bash
 docker run -d --name jaeger \

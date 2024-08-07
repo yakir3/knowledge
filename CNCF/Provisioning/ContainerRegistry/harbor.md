@@ -3,7 +3,7 @@
 
 
 #### Deployment
-##### Run On Docker
+##### Run in Docker
 ```bash
 # download offline or online installer and verify
 # configure HTTPS Access to Harbor

@@ -78,7 +78,7 @@ apt install pkg-config
 #
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

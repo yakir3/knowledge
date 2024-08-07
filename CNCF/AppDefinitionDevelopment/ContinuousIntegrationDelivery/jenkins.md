@@ -20,7 +20,7 @@ cat /opt/jenkins-config/secrets/initialAdminPassword
 # https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
 ```
 
-##### Run On Docker
+##### Run in Docker
 [[cc-docker|Docker常用命令]]
 ```bash
 # create bridge network

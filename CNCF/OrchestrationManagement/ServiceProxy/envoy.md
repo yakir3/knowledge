@@ -20,7 +20,7 @@ EOF
 ./envoy -c /opt/envoy/config.yaml
 ```
 
-##### Run On Docker
+##### Run in Docker
 [[cc-docker|Docker常用命令]]
 ```bash
 # run by docker or docker-compose

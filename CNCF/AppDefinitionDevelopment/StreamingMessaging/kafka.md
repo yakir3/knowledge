@@ -50,9 +50,8 @@ export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
 
 ##### [[sc-kafka|Config]] and Boot
 ###### Config
+**ZooKeeper Mode**
 ```bash
-# zookeeper mode
-# zookeeper config
 cat > config/zookeeper.properties << "EOF"
 # 初始延迟时间（心跳时间单位）
 tickTime=2000
@@ -69,7 +68,7 @@ clientPort=2181
 maxClientCnxns=300
 admin.enableServer=false
 EOF
-# kafka config
+
 cat > config/server.properties << "EOF"
 ############################# Server Basics #############################
 # single mode
@@ -124,9 +123,10 @@ zookeeper.connection.timeout.ms=18000
 group.initial.rebalance.delay.ms=0
 # group.initial.rebalance.delay.ms=3  # prod setting
 EOF
+```
 
-
-# kraft mode
+**Kraft Mode**
+```bash
 cat > config/kraft/server.properties << "EOF"
 ############################# Server Basics #############################
 process.roles=broker,controller
@@ -185,8 +185,8 @@ EOF
 ```
 
 ###### Boot(systemd)
+**ZooKeeper Mode**
 ```bash
-# Zookeeper mode
 # 1. generate zookeeper id
 echo 0 > /opt/kafka/zk-data/myid
 echo 1 > /opt/kafka/zk-data/myid
@@ -217,7 +217,7 @@ SendSIGKILL=no
 SuccessExitStatus=143
 Type=forking
 TimeoutStartSec=60
-TimeoutStopSec=5
+TimeoutStopSec=30
 UMask=0077
 User=kafka
 Group=kafka
@@ -226,10 +226,10 @@ WorkingDirectory=/opt/kafka
 [Install]
 WantedBy=multi-user.target
 EOF
+```
 
-
-
-# Kraft mode
+**Kraft Mode**
+```bash
 # 1. generate only once cluster id
 KAFKA_CLUSTER_ID=$(/opt/kafka/bin/kafka-storage.sh random-uuid)
 KAFKA_CLUSTER_ID=$KAFKA_CLUSTER_ID
@@ -280,7 +280,7 @@ systemctl enable kafka.service
 [[StreamingMessaging#Kafka|Kafka Command]]
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 docker pull apache/kafka:3.7.1
 docker run -p 9092:9092 apache/kafka:3.7.1
@@ -289,7 +289,8 @@ docker run -p 9092:9092 apache/kafka:3.7.1
 # https://hub.docker.com/r/bitnami/kafka
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
+###### Helm Charts
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

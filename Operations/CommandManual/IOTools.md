@@ -25,7 +25,6 @@ fio -filename=/var/test.file -direct=1 -iodepth 1 -thread -rw=randrw -rwmixread=
 
 ```
 
-
 #### iostat
 ```bash
 # install

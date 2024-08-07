@@ -16,7 +16,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/${
 
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add argo https://argoproj.github.io/argo-helm
@@ -95,7 +95,7 @@ kubectl patch deployment \
 ```
 
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add argo https://argoproj.github.io/argo-helm

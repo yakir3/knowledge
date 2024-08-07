@@ -94,7 +94,7 @@ apt install libcurl4-openssl-dev
 
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 # WARNING: MongoDB 5.0+ requires a CPU with AVX support, and your current system does not appear to have that!
 cat /proc/cpuinfo |grep flags |grep avx
@@ -110,7 +110,7 @@ docker run --name mongo -d mongodb/mongodb-community-server:latest
 docker exec -it mongo mongosh
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add bitnami https://charts.bitnami.com/bitnami

@@ -5,12 +5,12 @@
 
 #### Deploy By Container
 
-##### Run On Docker
+##### Run in Docker
 ```bash
 # 
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # install crds resources
 # if installCRDS is true, don't need to apply

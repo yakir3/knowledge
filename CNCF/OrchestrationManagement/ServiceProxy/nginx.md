@@ -167,10 +167,10 @@ cp -ar lua-resty-lrucache/lib/resty/* /usr/local/luajit2/share/luajit-2.1.0-beta
 ```
 
 #### Deploy On Container
-##### Run On Docker
+##### Run in Docker
 
 
-##### Run On Helm
+##### Run in Kubernetes
 >k8s 集群建议使用 ingress-nginx-controller
 ```bash
 ### for Nginx

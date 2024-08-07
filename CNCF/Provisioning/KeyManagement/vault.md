@@ -112,7 +112,7 @@ vault kv put -mount=secret creds password="my-long-password"
 
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add hashicorp https://helm.releases.hashicorp.com

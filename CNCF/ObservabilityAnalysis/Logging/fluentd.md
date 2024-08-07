@@ -46,7 +46,7 @@ fluentd -c fluentd.conf --dry-run
 # https://docs.fluentd.org/container-deployment/kubernetes
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # add and update repo
 helm repo add fluent https://fluent.github.io/helm-charts

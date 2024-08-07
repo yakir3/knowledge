@@ -80,12 +80,12 @@ print(client.get(b'foo')) # b'baz'
 
 
 #### Deploy By Container
-##### Run On Docker
+##### Run in Docker
 ```bash
 # not yet
 ```
 
-##### Run On Helm
+##### Run in Kubernetes
 ```bash
 # not yet
 ```

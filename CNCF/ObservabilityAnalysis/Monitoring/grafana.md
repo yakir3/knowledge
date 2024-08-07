@@ -31,7 +31,7 @@ systemctl enable grafana-server.service
 ```
 
 #### Deploy On Container
-##### Run On Docker
+##### Run in Docker
 pull images
 ```bash
 # default based images: Alpine
