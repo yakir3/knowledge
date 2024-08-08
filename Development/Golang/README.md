@@ -83,7 +83,6 @@ func main() {
 
 ##### For
 ```go
-
 var names [3]int = [3]int{1,2,3}
 var names = [...]string{"a","b","c"}
 for k,v := range names {
