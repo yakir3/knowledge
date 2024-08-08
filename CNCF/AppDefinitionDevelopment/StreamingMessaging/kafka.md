@@ -297,28 +297,20 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm update
 
 # get charts package
-helm fetch bitnami/kafka --version=20.0.6  --untar
+helm fetch bitnami/kafka --untar --version=29.3.5
 cd kafka
 
 # configure and run
 vim values.yaml
 global:
   storageClass: nfs-client
-config: |-
-  ...
-heapOpts: -Xmx1024m -Xms1024m
-defaultReplicationFactor: 3
-offsetsTopicReplicationFactor: 3
-transactionStateLogReplicationFactor: 3
-transactionStateLogMinIsr: 2
-numPartitions: 3
-replicaCount: 3
-# zookeeper mode
-zookeeper:
-  enabled: true
-# kraft mode
-kraft:
-  enabled: true
+heapOpts: -Xmx1 -Xms1024m
+extraConfigYaml:
+  default.replication.factor: 3
+  offsets.topic.replication.factor: 3
+  transaction.state.log.replication.factor: 3
+  transaction.state.log.min.isr: 2
+  num.partitions: 3
 
 # install
 helm -n middleware install kafka .

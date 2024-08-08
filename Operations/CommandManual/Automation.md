@@ -340,23 +340,34 @@ ansible-playbook playbooks/example.yml --step
 
 #### ansible-vault
 ```bash
-# file
+# playbook operation
 ansible-vault create playbooks/new.yml
-ansible-vault encrypt playbooks/example.yml
+ansible-vault edit playbooks/new.yml
 ansible-vault view playbooks/example.yml
+ansible-vault encrypt playbooks/example.yml
 ansible-vault decrypt playbooks/example.yml
---vault-id
---vault-password-file
-
-# use encrypt playbook
-ansible-vault encrypt --vault-id playbook@prompt playbooks/example.yml
-ansible-playbook playbooks/example.yml --ask-vault-pass
 
 
-# string
-ansible-vault encrypt_string 'pwd123' --name 'root_password'
-#write vars to playbook
-ansible-playbook playbooks/example.yml --ask-vault-pass
+# option1: --ask-vault-pass or --vault-id 
+# --ask-vault-pass
+ansible-vault encrypt_string pwd123 --name root_password
+ansible-playbook playbooks/example.yml --start-at-task "Vault task" --ask-vault-pass
+# --vault-id (recommend)
+ansible-vault encrypt_string pwd123 --name root_password --vault-id prompt
+#ansible-vault encrypt_string pwd123 --name root_password --vault-id example@prompt
+ansible-playbook playbooks/example.yml --vault-id prompt
+
+
+# option2: --vault-password-file or --vault-id
+# --vault-password-file
+ansible-vault encrypt playbooks/example.yml
+echo "your_vault_pwd" > pwd.vault
+ansible-playbook playbooks/example.yml --vault-password-file pwd.vault
+# --vault-id (recommend)
+ansible-vault encrypt playbooks/example.yml --vault-id pwd.vault
+#ansible-vault encrypt playbooks/example.yml --vault-id example@pwd.vault
+echo "your_vault_pwd" > pwd.vault
+ansible-playbook playbooks/example.yml --vault-id pwd.vault
 ```
 
 ### saltstack
