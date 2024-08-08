@@ -12,8 +12,8 @@ broker_jvm_memory: "-Xms2g -Xmx2g"
 
 # properties config settings
 cluster_name: DefaultCluster
-master_broker_name: broker-m
-slave_broker_name: broker-s
+master_broker_name: "broker-m{{ ansible_play_batch.index(host_ip) }}"
+slave_broker_name: "broker-s{{ ansible_play_batch.index(host_ip) }}"
 namesrv_addr: "{% for index in range(ansible_play_batch|length) %}{{ ansible_play_batch[index] }}:9876{% if not loop.last %};{% endif %}{% endfor %}"
 bind_addr: "{{ host_ip }}"
 namesrv_port: 9876

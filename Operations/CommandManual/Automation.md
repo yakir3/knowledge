@@ -1,4 +1,16 @@
 ### ansible
+##### inventory
+```bash
+# initial: for initalize the system
+inventories/initial.host
+
+# test hosts
+inventories/test.host
+
+# production hosts
+inventories/prod.host
+```
+
 #### ansible(ad-hoc modules)
 ```bash
 # command usage
@@ -69,7 +81,8 @@ ansible test -B 300 -P 2 -a "sleep 30"
 ansible test -m async_status -a "jid=488359678239.2844"
 ```
 
-#### vars && fact && template
+#### vars fact template
+
 ##### vars
 ```bash
 # how to define
@@ -347,31 +360,153 @@ ansible-playbook playbooks/example.yml --ask-vault-pass
 ```
 
 ### saltstack
-#### module
+##### minion keys
 ```bash
-# command module
-salt '*' cmd.run 'ls /tmp'
-salt '*' cp.get_file salt://nginx/files/nginx.conf /tmp/nginx.conf
+# select all keys
+salt-key -L
 
+# accept key
+salt-key -a db1
+salt-key -A
 
-# doc module
-salt 'node1' sys.doc saltutil
+# delete key
+salt-key -d web1
+salt-key -d 'web*'
+salt-key -D
+
+# verify
+salt '*' test.version
+salt '*' test.ping
+
 ```
 
-#### state
+##### match minion
 ```bash
-# show state sls
+# regular 
+salt '*' test.ping
+salt 'web0[3-7]' test.ping
+
+# regex pcre 
+salt -E 'web*|db*' test.ping 
+
+# list 
+salt -L 'node1,node2' test.ping
+
+# grains 
+salt -G 'os:Ubuntu' test.version
+
+# grains pcre 
+salt -P 'os:Arch.*' test.ping
+
+# custom groups 
+cat /etc/salt/master.d/nodegroups.conf
+nodegroups:
+   FRONTEND: L@frontend1,frontend2,frontend3
+   BACKEND: L@backend1,backend2,backend3
+salt -N FRONTEND test.ping
+
+# compound 
+salt -C 'G@roles:apps or I@myname:yakir' test.ping
+
+# pillar
+salt -I 'myname:yakir' test.ping
+
+# CIDR 
+salt -S '192.168.1.0/24' test.ping
+```
+
+#### module
+```bash
+# doc
+salt 'node1' sys.doc
+salt 'node1' sys.doc saltutil
+salt 'node1' sys.doc pkg[.install]
+
+# pkg
+salt 'node1' pkg.install wget
+
+# cmd
+salt 'node1' cmd.run "ls /opt"
+
+# cp
+salt 'node1' cp.get_file salt://tmp/files/1.conf /tmp/1.conf
+salt 'node1' cp.get_file salt://{{grains.os}}/vimrc /etc/vimrc template=jinja
+salt 'node1' cp.get_dir salt://tmp/dir /tmp/dir
+
+# custom module
+mkdir /srv/salt/base/_modules
+tee > /srv/salt/base/_modules/mydisk.py << "EOF"
+def df():
+    return __salt__['cmd.run']('df -h')
+EOF
+salt '*' saltutil.sync_modules
+salt 'node1' mydisk.df
+```
+
+#### state structure
+```bash
+# state sls files
+tee > /srv/salt/base/package/tree.sls << "EOF"
+install_tree_now:
+  pkg.installed:
+    - pkgs:
+      - tree
+EOF
+tee > /srv/salt/base/package/nginx.sls << "EOF"
+install_tree_now:
+  pkg.installed:
+    - pkgs:
+      - nginx
+EOF
+tee > /srv/salt/base/tmp/init.sls << "EOF"
+apache:
+  pkg.installed:
+    - pkgs:
+      - httpd
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://tmp/files/httpd.conf
+  service.running:
+    - name: httpd
+    - reload: true
+    - enable: truej
+    - watch:
+      - file: apache
+EOF
+
+
+# show state sls 
 salt 'node1' state.show_highstate [saltenv=dev]
 salt 'node1' state.show_sls template [saltenv=dev]
 salt 'node1' cp.list_states [saltenv=dev]
 
 
-# execute state
-salt 'node1' state.sls core.init [saltenv=dev] [test=True]
-
-
-# top highstate
+# execute top high state sls 
+tee > /srv/salt/base/top.sls << "EOF"
+base:
+  'node1':
+    - package.tree
+    - package.nginx
+  'node2':
+    - tmp
+  'frontend'
+    - match: nodegroup
+    - nginx
+  'os:Ubuntu':
+    - match: grain
+    - apache
+dev:
+  'webserver*dev*':
+    - webserver
+  'db*dev*':
+    - db
+EOF
 salt 'node1' state.highstate [--batch 10%|10] [test=True]
+
+
+# execute regular state sls
+salt '*' state.sls tmp[.init] [saltenv=dev] [test=True]
+salt '*' state.sls package.nginx [saltenv=dev] [test=True]
 ```
 
 #### grains
@@ -381,6 +516,69 @@ salt '*' saltutil.sync_grains
 salt '*' grains.ls
 salt '*' grains.items
 salt '*' grains.item username
+
+
+# default cache dir
+/var/cache/salt/master/minions/node1/data.p
+
+# listening grains
+salt '*' grains.ls
+    - os
+    - username
+    ...
+salt '*' grains.items
+    os:
+        Ubuntu
+    osrelease:
+        20.04
+    ...
+
+# target with grains
+salt -G 'os:Ubuntu' test.version
+salt -G 'host:node1' grains.item os
+salt -G 'ip_interfaces:ens160:172.22.3.*' test.ping
+
+
+# defining custom grains:
+# in master
+# option1 (save to minion /etc/salt/grains)
+salt minion01 grains.setval roles "['web','app1','dev']"
+# option2 (save to minion /var/cache/salt/minion/extmods/grains)
+mkdir /srv/salt/base/_grains
+tee > /srv/salt/base/_grains/mem.py << "EOF"
+def my_grains():
+    grains = {}
+    grains['my_bool'] = True
+    grains['my_str'] = 'str_test'
+    return grains
+EOF
+salt minion01 saltutil.sync_grains
+
+# in minion
+# option1
+tee > /etc/salt/minion.d/grains.conf << "EOF"
+grains: 
+  roles: app1
+  project: frontend
+EOF
+systemctl restart salt-minion
+# option2
+tee > /etc/salt/grains << "EOF"
+roles: app1
+project: frontend
+EOF
+salt minion01 saltutil.sync_grains
+
+# test
+salt minion01 grains.item roles project
+salt minion01 grains.item my_bool my_str
+salt -G 'roles:app1' test.ping
+
+
+# use state sls with grains
+{{ salt['grains.get']('os') }}
+{{ salt['grains.get']('os', ‘Debian’) }}
+
 ```
 
 #### pillar
@@ -389,4 +587,52 @@ salt '*' saltutil.refresh_pillar [pillarenv=base|dev|prod]
 salt '*' pillar.ls
 salt '*' pillar.items
 salt '*' pillar.item mysql
+
+# pillar_roots
+tee > /srv/salt/pillar/mypillar.sls << "EOF"
+{% if grains['fqdn'] == 'node1' %}
+myname: yakir
+{% elif grains['fqdn'] == 'node2' %}
+myname: andy
+{% endif %}
+port: 80
+EOF
+
+tee > /srv/salt/pillar/top.sls << "EOF"
+base:
+  '*':
+    - mypillar
+dev:
+  'os:Debian':
+    - match: grain
+    - vim
+test:
+  '* and not G@os: Debian':
+    - match: compound
+    - emacs
+EOF
+
+salt '*' pillar.items
+salt '*' saltutil.refresh_pillar
+salt '*' pillar.item myname port
+
+# use pillar by sls file
+tee > /srv/salt/base/tmp/init.sls << "EOF"
+apache:
+  pkg.installed:
+    - pkgs:
+      - {{ pillar['myname'] }}
+  service.running:
+    - name: httpd
+    - reload: true
+    - enable: true
+    - watch:
+      - file: /etc/httpd/conf/httpd.conf
+
+/etc/httpd/conf/httpd.conf:
+  file.managed:
+    - source: salt://apache/httpd.conf
+EOF
+
+salt '*' state.sls tmp.init
 ```

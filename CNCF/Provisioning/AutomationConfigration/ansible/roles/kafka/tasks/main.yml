@@ -1,85 +1,11 @@
 ---
 # tasks file for kafka
-- name: Make sure java is installed
-  block:
-    - name: Checking java command
-      command: java --version
+- name: Pre-check | check if kafka_root_path exists
+  stat: 
+    path: "{{ kafka_root_path }}"
+  register: kafka_root_path_result
 
-    #- name: Checking user kafka
-    #  command: id kafka
-  rescue:
-    - name: Install java
-      import_tasks: install_java.yml
+- include_tasks: install.yml
+  when: not kafka_root_path_result.stat.exists
 
-
-- name: Installing kafka
-  block:
-    - name: Copy kafka package to remote tmp dir
-      copy:
-        src: kafka_2.12-3.5.0.tgz
-        dest: /tmp/kafka_2.12-3.5.0.tgz
-
-    - name: Unarchive kafka package
-      unarchive:
-        src: /tmp/kafka_2.12-3.5.0.tgz
-        dest: /opt/
-        owner: kafka
-        group: kafka
-        mode: 0755
-        remote_src: true
-
-    - name: Create kafka symbolic link
-      file: 
-        src: /opt/kafka_2.12-3.5.0
-        dest: "{{ kafka_deploy_path }}"
-        owner: kafka
-        group: kafka
-        state: link
-
-    - name: Delete tmp file
-      file:
-        path: /tmp/kafka_2.12-3.5.0.tgz
-        state: absent
-
-
-- name: Configure kafka
-  block:
-    - name: Generate a cluster uuid
-      command: bin/kafka-storage.sh random-uuid
-      args:
-        chdir: "{{ kafka_deploy_path }}"
-      register: kafka_cluster_uuid
-      when: kafka_cluster_uuid is not defined
-      run_once: true
-
-    - name: Copy server.properties and kafka.service file 
-      template:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-        owner: kafka
-        group: kafka
-        mode: '0644'
-      loop:
-        - { src: server.properties.j2, dest: "{{ kafka_deploy_path }}/conf/kraft/server.properties" }
-        - { src: kafka.service.j2, dest: /etc/systemd/system/kafka.service }
-
-
-- name: Start and check kafka as systemd service
-  block:
-    - name: Starting service
-      systemd:
-        name: kafka
-        daemon_reload: yes
-        state: started
-        enabled: yes
-
-    - name: Checking kafka ports
-      wait_for:
-        connect_timeout: 3
-        delay: 30
-        host: "{{ host_ip }}"
-        port: 9092
-        #port: "{{ item }}"
-        state: started
-        #timeout: 3
-      #loop: [9092, 9093]
+- include_tasks: configure.yml

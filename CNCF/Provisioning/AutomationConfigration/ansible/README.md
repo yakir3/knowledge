@@ -59,8 +59,8 @@ ssh-copy-id ...
 ```
 
 
-#### Use
-##### INVENTORY
+#### [[Automation#ansible|How to use]]
+##### inventory
 ```bash
 # initial: for initalize the system
 inventories/initial.host
@@ -72,17 +72,23 @@ inventories/test.host
 inventories/prod.host
 ```
 
-##### [[Automation#ansible|Common]]
-+ ad-hoc(modules)
-+ vars && fact && template
-+ ansible-console
-+ ansible-doc
-+ ansible-galaxy
-+ ansible-lint
-+ ansible-playbook
-+ ansible-vault
+##### ad-hoc(modules)
 
-##### Plugins && api
+##### vars fact template
+
+##### ansible-console
+
+##### ansible-doc
+
+##### ansible-galaxy
+
+##### ansible-lint
+
+##### ansible-playbook
+
+##### ansible-vault
+
+##### plugins && api
 ```bash
 ```
 

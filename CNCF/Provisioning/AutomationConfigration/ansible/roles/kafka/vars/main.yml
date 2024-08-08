@@ -1,7 +1,7 @@
 ---
 # vars file for kafka
 # basic settings
-kafka_deploy_path: /opt/kafka
+kafka_root_path: /opt/kafka
 #kafka_cluster_uuid: "7hakKVZCQ0aRnOKAmdPmxx"
 
 # server.properties settings
@@ -13,3 +13,4 @@ controller_ips: "{% for index in range(host_ips|length) %}{{ index + 1 }}@{{ hos
 
 # kafka.service settings
 jvm_memory_opts: "-Xms2G -Xmx2G"
+kafka_config: "{{ kafka_deploy_path }}/conf/kraft/server.properties"
